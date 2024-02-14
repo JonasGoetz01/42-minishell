@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ctrl-c.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/13 18:47:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/02/14 19:00:36 by jgotz            ###   ########.fr       */
+/*   Created: 2024/02/14 18:57:16 by jgotz             #+#    #+#             */
+/*   Updated: 2024/02/14 18:57:37 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-#define BUFFER_SIZE 100
-
-int	main(void)
+void	handle_sigint(int sig)
 {
-	signal(SIGINT, handle_sigint);
-	while (1)
-	{
-		if (show_prompt())
-			break ;
-	}
-	return (0);
+	(void)sig;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }

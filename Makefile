@@ -1,36 +1,38 @@
-NAME = minishell
+NAME := minishell
 
-INCLUDES = -I lib/libft -I inc
+CC := cc
+CFLAGS := -Wextra -Wall -Werror
+LDFLAGS := -lreadline
 
-CC = cc
+SRCDIR := src/
 
-SRCDIR = src/
-SRCS = $(SRCDIR)main.c
-OBJS	:= ${SRCS:.c=.o}
+SOURCES := $(SRCDIR)main.c \
+		   $(SRCDIR)buildins/change_dir.c \
+		   $(SRCDIR)buildins/get_dir.c \
+		   $(SRCDIR)prompt/prompt.c \
+		   $(SRCDIR)signals/ctrl-c.c
 
-CFLAGS = -Wall -Wextra -Werror
+OBJECTS := $(SOURCES:.c=.o)
 
-LIBS = lib/libft/libft.a
+LIBFT := lib/libft
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
-
-$(NAME): $(OBJS) libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
-
-libft:
-	make -C lib/libft
+$(NAME): $(OBJECTS)
+	make -C $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME) -L $(LIBFT) -lft
 
 clean:
-	make clean -C lib/libft
-	rm -f $(OBJS)
-
+	make -C $(LIBFT) clean
+	rm -f $(OBJECTS)
+	
 fclean: clean
-	make fclean -C lib/libft
+	make -C $(LIBFT) fclean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re libft
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+.PHONY: all clean fclean re
