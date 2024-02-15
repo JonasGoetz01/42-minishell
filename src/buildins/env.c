@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/13 18:47:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/02/15 12:22:49 by jgotz            ###   ########.fr       */
+/*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
+/*   Updated: 2024/02/14 21:11:25 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
-#define BUFFER_SIZE 100
-
-int	main(int argc, char **argv, char **envv)
+void	print_envs(char **envv)
 {
-	(void)argc;
-	(void)argv;
-	signal(SIGINT, handle_sigint);
-	while (1)
+	while (*envv)
 	{
-		if (show_prompt(envv))
-			break ;
+		printf("%s\n", *envv);
+		envv++;
 	}
-	return (0);
 }

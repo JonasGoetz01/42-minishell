@@ -9,6 +9,7 @@ SRCDIR := src/
 SOURCES := $(SRCDIR)main.c \
 		   $(SRCDIR)buildins/change_dir.c \
 		   $(SRCDIR)buildins/get_dir.c \
+		   $(SRCDIR)buildins/env.c \
 		   $(SRCDIR)prompt/prompt.c \
 		   $(SRCDIR)signals/ctrl-c.c
 
