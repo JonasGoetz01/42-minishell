@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/02/14 18:57:46 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:09:58 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../lib/libft/libft.h"
+# include "colors.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdio.h>
@@ -44,12 +45,14 @@ typedef struct s_node
 	struct s_node	*right;
 }					t_node;
 
-int					show_prompt(void);
+int					show_prompt(char **envv);
 
 char				*get_current_dir(void);
 
 void				change_dir(char *path);
 
 void				handle_sigint(int sig);
+
+void				print_envs(char **envv);
 
 #endif
