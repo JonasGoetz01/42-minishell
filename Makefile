@@ -1,7 +1,7 @@
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wextra -Wall -Werror
+CFLAGS := -Wextra -Wall -Werror -g
 LDFLAGS := -lreadline
 
 SRCDIR := src/
@@ -11,6 +11,7 @@ SOURCES := $(SRCDIR)main.c \
 		   $(SRCDIR)buildins/get_dir.c \
 		   $(SRCDIR)buildins/env.c \
 		   $(SRCDIR)prompt/prompt.c \
+		   $(SRCDIR)input_parsing/tokenize.c \
 		   $(SRCDIR)signals/ctrl-c.c
 
 OBJECTS := $(SOURCES:.c=.o)
