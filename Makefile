@@ -12,6 +12,7 @@ SOURCES := $(SRCDIR)main.c \
 		   $(SRCDIR)buildins/env.c \
 		   $(SRCDIR)prompt/prompt.c \
 		   $(SRCDIR)input_parsing/tokenize.c \
+		   $(SRCDIR)input_parsing/stack_utils.c \
 		   $(SRCDIR)signals/ctrl-c.c
 
 OBJECTS := $(SOURCES:.c=.o)

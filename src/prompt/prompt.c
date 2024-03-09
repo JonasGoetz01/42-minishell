@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/02/22 13:05:52 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 12:52:39 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 int	show_prompt(char **envv)
 {
-	char		*input;
-	char		*prompt;
-	char		**inputs;
-	int			num_tokens;
-	t_token		*tokens;
-	t_ast_node	*ast_node;
-	int			depth;
+	char	*input;
+	char	*prompt;
+	char	**inputs;
+	int		num_tokens;
+	t_token	*tokens;
+	t_stack	*stack;
 
 	prompt = ft_strjoin(get_current_dir(), KGRN);
 	prompt = ft_strjoin(prompt, "❯ ");
@@ -37,9 +36,9 @@ int	show_prompt(char **envv)
 	else if (ft_strncmp(inputs[0], "env", 3) == 0)
 		print_envs(envv);
 	tokens = tokenize(input, &num_tokens);
-	depth = 0;
-	ast_node = buildAST(tokens, num_tokens, &depth);
-	printAST(ast_node, depth);
+	print_tokens(tokens, num_tokens);
+	stack = toPostFix(tokens, num_tokens);
+	print_stack(stack);
 	free(input);
 	return (0);
 }
