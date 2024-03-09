@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/09 12:50:34 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 14:27:03 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ typedef struct s_token
 	int				value;
 }					t_token;
 
+typedef struct s_stack
+{
+	struct s_token	*array;
+	size_t			capacity;
+	size_t			size;
+}					t_stack;
+
 int					show_prompt(char **envv);
 
 char				*get_current_dir(void);
@@ -57,5 +64,11 @@ void				print_tokens(t_token *tokens, int numTokens);
 
 t_token				*tokenize(const char *input, int *numTokens);
 t_stack				*toPostFix(t_token *tokens, int numTokens);
+
+t_token				pop(t_stack *stack);
+void				push(t_stack *stack, t_token token);
+t_stack				*createStack(size_t capacity);
+t_token				*postfixFromTokens(t_token *tokens, int numTokens,
+						int *postfixSize);
 
 #endif

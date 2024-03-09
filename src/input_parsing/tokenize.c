@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:25:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/09 13:41:13 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 14:24:12 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,93 +104,73 @@ void	print_tokens(t_token *tokens, int numTokens)
 	printf("\n");
 }
 
-void	print_stack(t_stack *stack)
+t_token	*postfixFromTokens(t_token *tokens, int numTokens, int *postfixSize)
 {
-	while (stack->next != NULL)
-	{
-		print_tokens((t_token *)stack->value, 1);
-		stack = stack->next;
-	}
-}
+	t_stack	*stack;
+	t_token	*postfix;
+	int		postfixIndex;
+	t_token	token;
 
-int	isGreaterOrEqual(t_token *t1, t_token *t2)
-{
-	if (t2 == NULL)
-		return (0);
-	if (t1->type == TOKEN_DIV || t1->type == TOKEN_MULT)
+	stack = createStack(numTokens);
+	postfix = (t_token *)malloc(numTokens * sizeof(t_token));
+	postfixIndex = 0;
+	for (int i = 0; i < numTokens; i++)
 	{
-		return (1);
-	}
-	if (t1->type == TOKEN_MINUS || t1->type == TOKEN_PLUS)
-	{
-		if (t2->type == TOKEN_MINUS || t2->type == TOKEN_PLUS)
-			return (1);
-	}
-	return (0);
-}
-
-int	isOperator(t_token *token)
-{
-	if (token->type == TOKEN_MINUS || token->type == TOKEN_PLUS
-		|| token->type == TOKEN_MULT || token->type == TOKEN_DIV)
-		return (1);
-	return (0);
-}
-
-void	processToken(t_token *token, t_stack *postFix, t_stack *opStack)
-{
-	t_token	*top_element;
-	t_token	*toPop;
-
-	if (token->type == TOKEN_NUMBER)
-		add(postFix, token);
-	if (isOperator(token))
-	{
-		top_element = (t_token *)top(opStack)->value;
-		while (isGreaterOrEqual(token, top_element))
+		token = tokens[i];
+		switch (token.type)
 		{
-			toPop = (t_token *)pop(opStack)->value;
-			add(postFix, toPop);
-			top_element = (t_token *)top(opStack)->value;
-		}
-		add(opStack, token);
-		if (token->type == TOKEN_BRACKET_L)
-			add(opStack, token);
-		if (token->type == TOKEN_BRACKET_R)
-		{
-			while (((t_token *)top(opStack)->value)->type != TOKEN_BRACKET_L)
+		case TOKEN_NUMBER:
+			postfix[postfixIndex++] = token;
+			break ;
+		case TOKEN_PLUS:
+		case TOKEN_MINUS:
+		case TOKEN_MULT:
+		case TOKEN_DIV:
+			while (stack->size > 0 && (stack->array[stack->size
+					- 1].type == TOKEN_PLUS || stack->array[stack->size
+					- 1].type == TOKEN_MINUS || stack->array[stack->size
+					- 1].type == TOKEN_MULT || stack->array[stack->size
+					- 1].type == TOKEN_DIV))
 			{
-				toPop = (t_token *)pop(opStack)->value;
-				add(postFix, toPop);
+				postfix[postfixIndex++] = pop(stack);
 			}
-			pop(opStack);
+			push(stack, token);
+			break ;
+		case TOKEN_BRACKET_L:
+			push(stack, token);
+			break ;
+		case TOKEN_BRACKET_R:
+			while (stack->size > 0 && stack->array[stack->size
+				- 1].type != TOKEN_BRACKET_L)
+			{
+				postfix[postfixIndex++] = pop(stack);
+			}
+			if (stack->size == 0)
+			{
+				fprintf(stderr, "Mismatched parentheses.\n");
+				exit(EXIT_FAILURE);
+			}
+			pop(stack); // Discard the left bracket
+			break ;
+		default:
+			fprintf(stderr, "Invalid token.\n");
+			exit(EXIT_FAILURE);
 		}
 	}
-}
-
-t_stack	*toPostFix(t_token *tokens, int numTokens)
-{
-	int		i;
-	t_stack	*postFix;
-	t_stack	*opStack;
-	t_token	*token;
-	t_stack	*op;
-
-	postFix = malloc(sizeof(t_stack));
-	opStack = malloc(sizeof(t_stack));
-	postFix->value = NULL;
-	opStack->value = NULL;
-	for (i = 0; i < numTokens; i++)
+	while (stack->size > 0)
 	{
-		token = &tokens[i];
-		processToken(token, postFix, opStack);
+		if (stack->array[stack->size - 1].type == TOKEN_BRACKET_L
+			|| stack->array[stack->size - 1].type == TOKEN_BRACKET_R)
+		{
+			fprintf(stderr, "Mismatched parentheses.\n");
+			exit(EXIT_FAILURE);
+		}
+		postfix[postfixIndex++] = pop(stack);
 	}
-	while (stack_len(opStack) > 0)
-	{
-		op = pop(opStack);
-		add(postFix, op->value);
-	}
-	return (postFix);
+	*postfixSize = postfixIndex;
+	free(stack->array);
+	free(stack);
+	return (postfix);
 }
 
 // 1 + 2 * 3 / ( 4 + 5 )

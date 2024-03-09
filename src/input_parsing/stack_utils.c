@@ -6,76 +6,55 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 15:20:29 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/09 13:39:45 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 14:32:18 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	stack_len(t_stack *stack)
+t_stack	*createStack(size_t capacity)
 {
-	int		i;
-	t_stack	*current;
+	t_stack	*stack;
 
-	if (stack == NULL || stack->value == NULL)
-		return (0);
-	i = 0;
-	current = stack;
-	while (current != NULL)
+	stack = (t_stack *)malloc(sizeof(t_stack));
+	if (stack == NULL)
 	{
-		i++;
-		current = current->next;
+		fprintf(stderr, "Memory allocation failed.\n");
+		exit(EXIT_FAILURE);
 	}
-	return (i);
+	stack->array = (t_token *)malloc(capacity * sizeof(t_token));
+	if (stack->array == NULL)
+	{
+		fprintf(stderr, "Memory allocation failed.\n");
+		exit(EXIT_FAILURE);
+	}
+	stack->capacity = capacity;
+	stack->size = 0;
+	return (stack);
 }
 
-/// removes the last element of a  stack and returns it.
-t_stack	*pop(t_stack *stack)
+void	push(t_stack *stack, t_token token)
 {
-	t_stack	*current;
-	t_stack	*last;
-
-	current = stack;
-	last = NULL;
-	while (current->next != NULL)
+	if (stack->size == stack->capacity)
 	{
-		last = current;
-		current = current->next;
+		stack->capacity *= 2;
+		stack->array = (t_token *)realloc(stack->array, stack->capacity
+				* sizeof(t_token));
+		if (stack->array == NULL)
+		{
+			fprintf(stderr, "Memory allocation failed.\n");
+			exit(EXIT_FAILURE);
+		}
 	}
-	if (last != NULL)
-		last->next = NULL;
-	return (current);
+	stack->array[stack->size++] = token;
 }
 
-void	add(t_stack *stack, void *data)
+t_token	pop(t_stack *stack)
 {
-	t_stack	*current;
-	t_stack	*next;
-
-	current = stack;
-	if (current->value == NULL)
+	if (stack->size == 0)
 	{
-		current = (t_stack *)malloc(sizeof(t_stack));
-		current->next = NULL;
-		current->prev = NULL;
-		current->value = data;
-		return ;
+		fprintf(stderr, "Stack underflow.\n");
+		exit(EXIT_FAILURE);
 	}
-	while (current->next != NULL)
-		current = current->next;
-	next = (t_stack *)malloc(sizeof(t_stack));
-	next->value = data;
-	next->next = NULL;
-	next->prev = current;
-	current->next = next;
-}
-
-t_stack	*top(t_stack *stack)
-{
-	t_stack	*current;
-
-	current = stack;
-	while (current->next != NULL)
-		current = current->next;
-	return (current);
+	return (stack->array[--stack->size]);
 }

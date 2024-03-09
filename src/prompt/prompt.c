@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/09 12:52:39 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 14:28:30 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	show_prompt(char **envv)
 	char	**inputs;
 	int		num_tokens;
 	t_token	*tokens;
-	t_stack	*stack;
+	t_token	*stack;
+	int		postFixSize;
 
 	prompt = ft_strjoin(get_current_dir(), KGRN);
 	prompt = ft_strjoin(prompt, "❯ ");
@@ -37,8 +38,8 @@ int	show_prompt(char **envv)
 		print_envs(envv);
 	tokens = tokenize(input, &num_tokens);
 	print_tokens(tokens, num_tokens);
-	stack = toPostFix(tokens, num_tokens);
-	print_stack(stack);
+	stack = postfixFromTokens(tokens, num_tokens, &postFixSize);
+	print_tokens(stack, postFixSize);
 	free(input);
 	return (0);
 }
