@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:25:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/09 14:24:12 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 14:33:55 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_token	*tokenize(const char *input, int *numTokens)
 	while (token != NULL)
 	{
 		tokens = realloc(tokens, (count + 1) * sizeof(t_token));
-		// tokens[count].value = strdup(token);
 		if (strcmp(token, "+") == 0)
 		{
 			tokens[count].type = TOKEN_PLUS;

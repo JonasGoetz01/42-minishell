@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/09 14:27:03 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/09 15:33:04 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../lib/libft/libft.h"
 # include "colors.h"
-# include "stack.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdio.h>
@@ -58,6 +57,7 @@ char				*get_current_dir(void);
 void				change_dir(char *path);
 
 void				handle_sigint(int sig);
+void				handle_sigquit(int sig);
 
 void				print_envs(char **envv);
 void				print_tokens(t_token *tokens, int numTokens);
