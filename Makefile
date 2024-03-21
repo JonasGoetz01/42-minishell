@@ -2,7 +2,7 @@ NAME := minishell
 
 CC := cc
 CFLAGS := -Wextra -Wall -Werror -g
-LDFLAGS := -lreadline
+LDFLAGS := -lreadline -lft
 
 SRCDIR := src/
 
@@ -26,7 +26,7 @@ all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME) -L $(LIBFT) -lft
+	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME) -L $(LIBFT) 
 
 clean:
 	make -C $(LIBFT) clean
