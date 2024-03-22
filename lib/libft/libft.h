@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:40:40 by jgotz             #+#    #+#             */
-/*   Updated: 2023/10/09 09:47:47 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/22 11:26:29 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,29 +52,3 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 int		ft_atoi(const char *str);
 
 #endif
-
-/* ft_atoi.c \
-ft_calloc.c \
-ft_itoa.c \
-ft_memchr.c \
-ft_memcmp.c \
-ft_memcpy.c \
-ft_memmove.c \
-ft_memset.c \
-ft_putchar_fd.c \
-ft_putendl_fd.c \
-ft_putnbr_fd.c \
-ft_putstr_fd.c \
-ft_split.c \
-ft_strchr.c \
-ft_strdup.c \
-ft_striteri.c \
-ft_strjoin.c \
-ft_strlcat.c \
-ft_strlcpy.c \
-ft_strmapi.c \
-ft_strncmp.c \
-ft_strnstr.c \
-ft_strrchr.c \
-ft_strtrim.c \
-ft_substr.c */

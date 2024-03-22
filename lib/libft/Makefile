@@ -38,7 +38,7 @@ ft_toupper.c
 
 OBJECTS	= ${SOURCES:.c=.o}
 
-INCLUDES	= libft.h
+INCLUDES	= ./
 
 CFLAGS	= -Wall -Wextra -Werror
 

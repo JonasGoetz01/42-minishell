@@ -1,7 +1,7 @@
 NAME := minishell
 
 CC := cc
-CFLAGS := -Wextra -Wall -Werror -g
+CFLAGS := -Wextra -Wall -Werror -g -fsanitize=address -O1
 LDFLAGS := -lreadline -lft
 
 SRCDIR := src/
@@ -37,6 +37,9 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+test:
+	valgrind --leak-check=full ./$(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
