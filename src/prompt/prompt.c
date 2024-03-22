@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/22 11:19:56 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/22 12:39:58 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int	show_prompt(char **envv)
 	input = readline(prompt);
 	if (!input)
 		return (1);
+	if (input[0] == '\0')
+	{
+		free(input);
+		return (0);
+	}
 	add_history(input);
 	if (validator(input))
 	{
