@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/22 12:39:58 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/25 14:25:57 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,34 @@ void	process_input(char *input, char **envv)
 	free(input);
 }
 
+char	*build_prompt(void)
+{
+	char	*prompt;
+
+	prompt = ft_strdup("");
+	prompt = ft_strjoin(prompt, KGRN); // Green color
+	prompt = ft_strjoin(prompt, "👤 "); // User icon
+	prompt = ft_strjoin(prompt, get_env("USER"));
+	prompt = ft_strjoin(prompt, KNRM); // Reset color
+	prompt = ft_strjoin(prompt, "@");
+	prompt = ft_strjoin(prompt, KMAG); // Magenta color
+	prompt = ft_strjoin(prompt, get_hostname());
+	prompt = ft_strjoin(prompt, KNRM); // Reset color
+	prompt = ft_strjoin(prompt, "\n");
+	prompt = ft_strjoin(prompt, KBLU); // Blue color
+	prompt = ft_strjoin(prompt, get_current_dir());
+	prompt = ft_strjoin(prompt, KGRN);  // Green color
+	prompt = ft_strjoin(prompt, " ❯ "); // Arrow icon
+	prompt = ft_strjoin(prompt, KNRM);  // Reset color
+	return (prompt);
+}
+
 int	show_prompt(char **envv)
 {
 	char	*input;
 	char	*prompt;
 
-	prompt = ft_strjoin(get_current_dir(), KGRN);
-	prompt = ft_strjoin(prompt, "❯ ");
-	prompt = ft_strjoin(prompt, KNRM);
+	prompt = build_prompt();
 	input = readline(prompt);
 	if (!input)
 		return (1);

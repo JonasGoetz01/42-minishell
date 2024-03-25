@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/12 17:13:30 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/25 12:53:50 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 # include <readline/history.h>
 # include <readline/readline.h>
+
+# define MAX_BUFFER_SIZE 4096
 
 typedef enum e_token_type
 {
@@ -61,9 +63,12 @@ void				handle_sigint(int sig);
 void				handle_sigquit(int sig);
 
 void				print_envs(char **envv);
+char				*get_env(char *env);
+char				*get_hostname(void);
 void				print_tokens(t_token *tokens);
 void				print_tokens_value(t_token *tokens);
 void				remove_unused_spaces(t_token *tokens);
+char				*execute_command(const char *command);
 
 t_token				*tokenize(const char *input);
 t_stack				*toPostFix(t_token *tokens, int numTokens);

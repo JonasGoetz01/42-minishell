@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/22 11:20:29 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/25 12:26:42 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void	print_welcome_message(void)
 	printf("\x1b[0m\n\n");
 	printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tDont panic shell\n\n");
 	printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tpgrossma & jgotz\n\n\n");
+	printf("\n✨ Hello, ");
+	printf("%s", get_env("USER"));
+	printf(" ✨\n");
 	fflush(stdout);
 }
 

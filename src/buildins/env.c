@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
-/*   Updated: 2024/02/14 21:11:25 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/25 12:25:42 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,9 @@ void	print_envs(char **envv)
 		printf("%s\n", *envv);
 		envv++;
 	}
+}
+
+char	*get_env(char *env)
+{
+	return (getenv(env));
 }

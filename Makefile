@@ -10,6 +10,8 @@ SOURCES := $(SRCDIR)main.c \
 		   $(SRCDIR)buildins/change_dir.c \
 		   $(SRCDIR)buildins/get_dir.c \
 		   $(SRCDIR)buildins/env.c \
+		   $(SRCDIR)buildins/get_hostname.c \
+		   $(SRCDIR)buildins/exec_command.c \
 		   $(SRCDIR)prompt/prompt.c \
 		   $(SRCDIR)input_parsing/tokenize.c \
 		   $(SRCDIR)input_parsing/stack_utils.c \
