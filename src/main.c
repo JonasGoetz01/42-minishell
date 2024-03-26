@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/25 12:26:42 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/25 15:18:30 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,30 @@
 
 void	print_welcome_message(void)
 {
+	char	*pgrossma;
+	char	*jgotz;
+
+	pgrossma = "https://profile.intra.42.fr/users/pgrossma";
+	jgotz = "https://profile.intra.42.fr/users/jgotz";
 	char *pastel_colors[] = {
-		"\x1b[38;2;255;204;204m", // pastel red
-		"\x1b[38;2;255;229;204m", // pastel orange
-		"\x1b[38;2;255;242;204m", // pastel yellow
-		"\x1b[38;2;204;255;204m", // pastel green
-		"\x1b[38;2;204;255;255m", // pastel cyan
-		"\x1b[38;2;204;204;255m", // pastel blue
-		"\x1b[38;2;255;204;255m", // pastel magenta
+		"\x1b[38;2;255;204;204m",
+		"\x1b[38;2;255;229;204m",
+		"\x1b[38;2;255;242;204m",
+		"\x1b[38;2;204;255;204m",
+		"\x1b[38;2;204;255;255m",
+		"\x1b[38;2;204;204;255m",
+		"\x1b[38;2;255;204;255m",
 	};
-	printf("\x1b[2J");
-	printf("%s", pastel_colors[0]);
-	printf("%s\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t██████  ██████  ███████ ██   ██\n",
-		pastel_colors[1]);
-	printf("%s\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t██   ██ ██   ██ ██      ██   ██\n",
-		pastel_colors[2]);
-	printf("%s\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t██   ██ ██████  ███████ ███████\n",
-		pastel_colors[3]);
-	printf("%s\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t██   ██ ██           ██ ██   ██\n",
-		pastel_colors[4]);
-	printf("%s\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t██████  ██      ███████ ██   ██\n",
-		pastel_colors[5]);
-	printf("\x1b[0m\n\n");
-	printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tDont panic shell\n\n");
-	printf("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tpgrossma & jgotz\n\n\n");
-	printf("\n✨ Hello, ");
-	printf("%s", get_env("USER"));
-	printf(" ✨\n");
+	printf("\x1b[2J%s", pastel_colors[0]);
+	printf("%s\t██████  ██████  ███████ ██   ██\n", pastel_colors[1]);
+	printf("%s\t██   ██ ██   ██ ██      ██   ██\n", pastel_colors[2]);
+	printf("%s\t██   ██ ██████  ███████ ███████\n", pastel_colors[3]);
+	printf("%s\t██   ██ ██           ██ ██   ██\n", pastel_colors[4]);
+	printf("%s\t██████  ██      ███████ ██   ██\n", pastel_colors[5]);
+	printf("\x1b[0m\n\n\t\tDont panic shell\n\n");
+	printf("\t\t\e]8;;%s\apgrossma\e]8;;\a && \e]8;;%s\ajgotz\e]8;;\a\n\n\n",
+		pgrossma, jgotz);
+	printf("\n✨ Hello, %s ✨\n", get_env("USER"));
 	fflush(stdout);
 }
 

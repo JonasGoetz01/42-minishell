@@ -6,144 +6,224 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:25:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/13 15:36:52 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/26 14:16:47 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+t_ast_node	*create_ast_node(int type, char *value)
+{
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (node != NULL)
+	{
+		node->type = type;
+		node->value = strdup(value);
+		node->left = NULL;
+		node->right = NULL;
+	}
+	return (node);
+}
+
+t_ast_node	*parse_tokens_to_ast(t_token *tokens)
+{
+	t_ast_node	*root;
+	t_ast_node	*current_node;
+	t_token		*current_token;
+	t_ast_node	*new_node;
+	int			current_precedence;
+
+	root = NULL;
+	current_node = NULL;
+	current_token = tokens;
+	while (current_token != NULL)
+	{
+		new_node = create_ast_node(current_token->type, current_token->value);
+		current_precedence = precedence(*current_token);
+		if (root == NULL || current_precedence > precedence_node(root))
+			root = new_node;
+		else
+		{
+			current_node = root;
+			while (current_node->right != NULL
+				&& current_precedence <= precedence_node(current_node->right))
+				current_node = current_node->right;
+			new_node->left = current_node->right;
+			current_node->right = new_node;
+		}
+		current_token = current_token->next;
+	}
+	return (root);
+}
+
+void	print_ast_execution_order(t_ast_node *root)
+{
+	if (root == NULL)
+	{
+		return ;
+	}
+	printf("%s\n", root->value);
+	print_ast_execution_order(root->left);
+	print_ast_execution_order(root->right);
+}
+
+// length of the token
+// figures out the length of the token by checking for delimiters
+int	token_length(const char *input, const char *delimiters)
+{
+	int	length;
+
+	length = 0;
+	while (input[length] != '\0' && !ft_strchr(delimiters, input[length]))
+	{
+		length++;
+	}
+	return (length);
+}
+
 t_token	*tokenize(const char *input)
 {
-	const char		*delimiters = "+-*/()";
 	t_token			*tokens;
 	t_token			*current;
+	const char		*delimiters = "+-*/()<>|&\"'; ";
 	char			*value;
 	t_token_type	type;
 	t_token			*new_token;
+	int				i;
+	int				tokenLen;
 
 	tokens = NULL;
 	current = NULL;
-	for (int i = 0; input[i] != '\0'; i++)
+	i = 0;
+	while (input[i] != '\0')
 	{
-		if (input[i] == ' ' && (input[i - 1] == '\'' || input[i - 1] == '\"'
-				|| input[i + 1] == '\'' || input[i + 1] == '\"'))
+		if (ft_strchr(delimiters, input[i]))
 		{
-			continue ;
-		}
-		else if (strchr(delimiters, input[i]) != NULL || !isdigit(input[i + 1])
-			|| input[i] == ' ')
-		{
-			value = malloc(2 * sizeof(char));
-			value[0] = input[i];
-			value[1] = '\0';
-			switch (input[i])
-			{
-			case '+':
+			value = ft_substr(input, i, 1);
+			if (input[i] == '+')
 				type = TOKEN_PLUS;
-				break ;
-			case '-':
+			else if (input[i] == '-')
 				type = TOKEN_MINUS;
-				break ;
-			case '*':
+			else if (input[i] == '*')
 				type = TOKEN_MULT;
-				break ;
-			case '/':
+			else if (input[i] == '/')
 				type = TOKEN_DIV;
-				break ;
-			case '(':
+			else if (input[i] == '(')
 				type = TOKEN_BRACKET_L;
-				break ;
-			case ')':
+			else if (input[i] == ')')
 				type = TOKEN_BRACKET_R;
-				break ;
-			default:
-				type = TOKEN_NUMBER;
-			}
-			new_token = create_token(type, value);
-			if (new_token != NULL)
+			else if (input[i] == '<')
 			{
-				if (tokens == NULL)
+				if (input[i + 1] == '<')
 				{
-					tokens = new_token;
-					current = tokens;
+					type = TOKEN_DOUBLE_LESS;
+					value = ft_substr(input, i, 2);
+					i++;
 				}
 				else
-				{
-					current->next = new_token;
-					current = current->next;
-				}
+					type = TOKEN_LESS;
 			}
+			else if (input[i] == '>')
+			{
+				if (input[i + 1] == '>')
+				{
+					type = TOKEN_DOUBLE_GREATER;
+					value = ft_substr(input, i, 2);
+					i++;
+				}
+				else
+					type = TOKEN_GREATER;
+			}
+			else if (input[i] == '|')
+			{
+				if (input[i + 1] == '|')
+				{
+					type = TOKEN_DOUBLE_PIPE;
+					value = ft_substr(input, i, 2);
+					i++;
+				}
+				else
+					type = TOKEN_PIPE;
+			}
+			else if (input[i] == '&')
+			{
+				if (input[i + 1] == '&')
+				{
+					type = TOKEN_DOUBLE_AMPERSAND;
+					value = ft_substr(input, i, 2);
+					i++;
+				}
+				else
+					type = TOKEN_AMPERSAND;
+			}
+			else if (input[i] == '\"')
+			{
+				type = TOKEN_DOUBLE_QUOTE;
+				value = ft_substr(input, i, 1);
+				// Include the double quote in the value
+			}
+			else if (input[i] == '\'')
+			{
+				type = TOKEN_SINGLE_QUOTE;
+				value = ft_substr(input, i, 1);
+				// Include the single quote in the value
+			}
+			else if (input[i] == ';')
+				type = TOKEN_SEMICOLON;
+			else
+				type = TOKEN_NUMBER;
+			new_token = create_token(type, value);
+			append_token(&tokens, new_token);
+			i++; // Increment i since we've already processed this character
 		}
 		else
 		{
-			value = malloc(sizeof(char));
-			value[0] = input[i];
-			for (int j = i + 1; isdigit(input[j]); j++)
-			{
-				value = realloc(value, (j - i + 2) * sizeof(char));
-				value[j - i] = input[j];
-				value[j - i + 1] = '\0';
-				i = j;
-			}
+			tokenLen = token_length(input + i, delimiters);
+			value = ft_substr(input, i, tokenLen);
 			new_token = create_token(TOKEN_NUMBER, value);
-			if (new_token != NULL)
-			{
-				if (tokens == NULL)
-				{
-					tokens = new_token;
-					current = tokens;
-				}
-				else
-				{
-					current->next = new_token;
-					current = current->next;
-				}
-			}
+			append_token(&tokens, new_token);
+			i += tokenLen; // Increment i by token length
 		}
 	}
 	return (tokens);
 }
 
+//
 // Spaces should only stay there if they are after a quote or double quote
-void	remove_unused_spaces(t_token *tokens)
+void	remove_unused_spaces(t_token **tokens)
 {
-	t_token	*prev;
 	t_token	*current;
-	t_token	*temp;
+	t_token	*next;
+	t_token	*old;
+	t_token	*prev;
 
 	prev = NULL;
-	current = tokens;
+	current = *tokens;
 	while (current != NULL)
 	{
-		if (current->type == TOKEN_NUMBER && strcmp(current->value, " ") == 0)
+		next = current->next;
+		if (current->type == TOKEN_DOUBLE_QUOTE
+			|| current->type == TOKEN_SINGLE_QUOTE)
 		{
-			// If the space is after a left bracket, leave it,
-			// otherwise, remove it from the tokens
-			if (prev != NULL && prev->type == TOKEN_BRACKET_L)
-			{
-				prev = current;
-				current = current->next;
-			}
+			while (next != NULL && next->type != current->type)
+				next = next->next;
+		}
+		else if (current->type == TOKEN_NUMBER && ft_strchr(current->value,
+				' '))
+		{
+			old = current;
+			current = next;
+			free(old->value);
+			free(old);
+			if (prev == NULL)
+				*tokens = current;
 			else
-			{
-				temp = current;
-				if (prev == NULL)
-				{ // if current is the head
-					tokens = current->next;
-					current = current->next;
-				}
-				else
-				{
-					prev->next = current->next;
-					current = current->next;
-				}
-				free(temp->value);
-				free(temp);
-				continue ; // Skip moving current pointer forward
-			}
+				prev->next = current;
 		}
 		prev = current;
-		current = current->next;
+		current = next;
 	}
 }
 
@@ -157,67 +237,44 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
-void	print_tokens_value(t_token *tokens)
-{
-	t_token	*current;
-
-	current = tokens;
-	while (current != NULL)
-	{
-		if (current->type == TOKEN_NUMBER)
-		{
-			printf("%s", current->value);
-		}
-		else
-		{
-			switch (current->type)
-			{
-			case TOKEN_PLUS:
-				printf("+");
-				break ;
-			case TOKEN_MINUS:
-				printf("-");
-				break ;
-			case TOKEN_MULT:
-				printf("*");
-				break ;
-			case TOKEN_DIV:
-				printf("/");
-				break ;
-			case TOKEN_BRACKET_L:
-				printf("(");
-				break ;
-			case TOKEN_BRACKET_R:
-				printf(")");
-				break ;
-			default:
-				break ;
-			}
-		}
-		current = current->next;
-	}
-	printf("\n");
-}
-
 int	isOperator(t_token token)
 {
-	return (token.type == TOKEN_PLUS || token.type == TOKEN_MINUS
-		|| token.type == TOKEN_MULT || token.type == TOKEN_DIV);
+	return (token.type == TOKEN_AMPERSAND || token.type == TOKEN_BRACKET_L
+		|| token.type == TOKEN_BRACKET_R || token.type == TOKEN_DOUBLE_AMPERSAND
+		|| token.type == TOKEN_DOUBLE_GREATER || token.type == TOKEN_DOUBLE_LESS
+		|| token.type == TOKEN_DOUBLE_PIPE || token.type == TOKEN_GREATER
+		|| token.type == TOKEN_LESS || token.type == TOKEN_PIPE
+		|| token.type == TOKEN_SEMICOLON);
 }
 
+// Prio A:
+// Parentheses ()
+// Prio B:
+// Redirection >, <, >>, <<
+// Prio C:
+// Pipe |
+// Prio D:
+// Logical AND && and Logical OR ||
 int	precedence(t_token token)
 {
-	switch (token.type)
-	{
-	case TOKEN_PLUS:
-	case TOKEN_MINUS:
+	if (token.type == TOKEN_BRACKET_L || token.type == TOKEN_BRACKET_R)
+		return (0);
+	else if (token.type == TOKEN_DOUBLE_GREATER
+		|| token.type == TOKEN_DOUBLE_LESS || token.type == TOKEN_GREATER
+		|| token.type == TOKEN_LESS)
 		return (1);
-	case TOKEN_MULT:
-	case TOKEN_DIV:
+	else if (token.type == TOKEN_DOUBLE_PIPE || token.type == TOKEN_PIPE)
 		return (2);
-	default:
-		return (0); // Assuming parentheses have the highest precedence
-	}
+	else if (token.type == TOKEN_DOUBLE_AMPERSAND
+		|| token.type == TOKEN_AMPERSAND)
+		return (3);
+	else
+		return (-1);
+}
+
+int	precedence_node(t_ast_node *node)
+{
+	return (precedence(*create_token(node->type, node->value)));
 }
 
 t_token	*postfixFromTokens(t_token *tokens)
@@ -234,20 +291,18 @@ t_token	*postfixFromTokens(t_token *tokens)
 		switch (current->type)
 		{
 		case TOKEN_NUMBER:
-			append_token(&postfix, create_token(TOKEN_NUMBER, current->value));
-			break ;
-		case TOKEN_PLUS:
-		case TOKEN_MINUS:
-		case TOKEN_MULT:
-		case TOKEN_DIV:
-			while (stack->size > 0 && isOperator(peek(stack))
-				&& precedence(*current) <= precedence(peek(stack)))
-			{
-				append_token(&postfix, create_token(peek(stack).type,
-						peek(stack).value));
-				pop(stack);
-			}
-			push(stack, *current);
+		case TOKEN_DOUBLE_GREATER:
+		case TOKEN_DOUBLE_LESS:
+		case TOKEN_GREATER:
+		case TOKEN_LESS:
+		case TOKEN_DOUBLE_PIPE:
+		case TOKEN_PIPE:
+		case TOKEN_DOUBLE_AMPERSAND:
+		case TOKEN_AMPERSAND:
+		case TOKEN_SEMICOLON:
+		case TOKEN_DOUBLE_QUOTE:
+		case TOKEN_SINGLE_QUOTE:
+			append_token(&postfix, create_token(current->type, current->value));
 			break ;
 		case TOKEN_BRACKET_L:
 			push(stack, *current);
@@ -264,7 +319,7 @@ t_token	*postfixFromTokens(t_token *tokens)
 				fprintf(stderr, "Mismatched parentheses.\n");
 				exit(EXIT_FAILURE);
 			}
-			pop(stack); // Discard the left bracket
+			pop(stack); // Discard the left parenthesis
 			break ;
 		default:
 			fprintf(stderr, "Invalid token.\n");
@@ -287,5 +342,3 @@ t_token	*postfixFromTokens(t_token *tokens)
 	freeStack(stack);
 	return (postfix);
 }
-
-// 1 + 2 * 3 / ( 4 + 5 )

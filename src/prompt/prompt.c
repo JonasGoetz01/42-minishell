@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/25 14:25:57 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/26 14:16:57 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	process_input(char *input, char **envv)
 {
-	char	**inputs;
-	t_token	*tokens;
-	t_token	*stack;
+	char		**inputs;
+	t_token		*tokens;
+	t_ast_node	*root;
 
+	// t_token		*stack;
 	printf("You entered: %s\n", input);
 	setenv("PWD", get_current_dir(), 1);
 	inputs = ft_split(input, ' ');
@@ -27,11 +28,12 @@ void	process_input(char *input, char **envv)
 		print_envs(envv);
 	tokens = tokenize(input);
 	print_tokens(tokens);
-	remove_unused_spaces(tokens);
+	remove_unused_spaces(&tokens);
 	print_tokens(tokens);
-	print_tokens_value(tokens);
-	stack = postfixFromTokens(tokens);
-	print_tokens(stack);
+	root = parse_tokens_to_ast(tokens);
+	print_ast_execution_order(root);
+	// stack = postfixFromTokens(tokens);
+	// print_tokens(stack);
 	free(input);
 }
 
