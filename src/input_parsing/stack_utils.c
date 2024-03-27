@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 15:20:29 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/11 20:10:15 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/27 14:55:06 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	push(t_stack *stack, t_token token)
 
 t_token	pop(t_stack *stack)
 {
-		t_token dummy_token;
+	t_token dummy_token;
 
 	if (stack->size > 0)
 	{
@@ -65,7 +65,7 @@ t_token	pop(t_stack *stack)
 
 t_token	peek(const t_stack *stack)
 {
-		t_token dummy_token;
+	t_token dummy_token;
 
 	if (stack->size > 0)
 	{

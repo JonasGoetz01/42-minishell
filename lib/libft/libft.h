@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:40:40 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/22 11:26:29 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/27 15:08:08 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 int		ft_atoi(const char *str);
+void	ft_free_array(void **array);
 
 #endif

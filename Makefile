@@ -9,7 +9,8 @@ VPATH	:=	src \
 			src/buildins \
 			src/prompt \
 			src/input_parsing \
-			src/signals
+			src/signals \
+			src/utils
 
 SOURCES	:=	main.c \
 			change_dir.c \
@@ -23,7 +24,8 @@ SOURCES	:=	main.c \
 			input_validator.c \
 			expander.c \
 			token_utils.c \
-			ctrl.c
+			ctrl.c \
+			fd_utils.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

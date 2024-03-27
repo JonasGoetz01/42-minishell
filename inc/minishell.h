@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/26 14:16:35 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/03/27 15:30:59 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 
 # include "../lib/libft/libft.h"
 # include "colors.h"
+# include "buildins.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/select.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define EXIT_ERROR 1
 
@@ -111,5 +113,8 @@ t_token					*create_token(t_token_type type, char *value);
 void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
+
+void					ft_close_fd(int *fd);
+void					ft_close_pipes(t_cmd *cmd);
 
 #endif
