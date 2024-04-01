@@ -1,5 +1,5 @@
-#ifndef BUILDINS_H
- #define BUILDINS_H
+#ifndef PIPES_H
+ #define PIPES_H
 
  #include <sys/types.h>
 
@@ -14,15 +14,5 @@ typedef struct s_process
 	char	**args;
 	pid_t	pid;
 }			t_process;
-
-typedef struct s_command
-{
-	char		*limiter;
-	int			fd_in;
-	int			fd_out;
-	int			process_len;
-	int			start_arg;
-	t_process	**processes;
-}				t_cmd;
 
 #endif

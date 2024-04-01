@@ -10,7 +10,8 @@ VPATH	:=	src \
 			src/prompt \
 			src/input_parsing \
 			src/signals \
-			src/utils
+			src/utils \
+			src/exec
 
 SOURCES	:=	main.c \
 			change_dir.c \
@@ -25,7 +26,8 @@ SOURCES	:=	main.c \
 			expander.c \
 			token_utils.c \
 			ctrl.c \
-			fd_utils.c
+			fd_utils.c \
+			exec_process.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
@@ -50,7 +52,7 @@ test:
 	valgrind --leak-check=full ./$(NAME)
 
 $(OBJDIR)/%.o: %.c
-	mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: all clean fclean re

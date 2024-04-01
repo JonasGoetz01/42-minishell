@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:27:53 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/03/27 15:30:59 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/01 13:38:56 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,12 @@ void	ft_close_fd(int *fd)
 	*fd = -1;
 }
 
-void	ft_close_pipes(t_cmd *cmd)
+void	ft_close_pipes(t_process *process)
 {
-	int	ind;
-
-	if (!cmd->processes)
+	if (!process)
 		return ;
-	ind = 0;
-	while (cmd->processes[ind])
-	{
-		ft_close_fd(&cmd->processes[ind]->pipe_fd_in[PIPE_READ]);
-		ft_close_fd(&cmd->processes[ind]->pipe_fd_in[PIPE_WRITE]);
-		ft_close_fd(&cmd->processes[ind]->pipe_fd_out[PIPE_READ]);
-		ft_close_fd(&cmd->processes[ind]->pipe_fd_out[PIPE_WRITE]);
-		ind++;
-	}
+	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
+	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
+	ft_close_fd(&process->pipe_fd_out[PIPE_READ]);
+	ft_close_fd(&process->pipe_fd_out[PIPE_WRITE]);
 }

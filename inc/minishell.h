@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/27 15:30:59 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/01 13:37:36 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "../lib/libft/libft.h"
 # include "colors.h"
-# include "buildins.h"
+# include "pipes.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdio.h>
@@ -115,6 +115,5 @@ void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
 
 void					ft_close_fd(int *fd);
-void					ft_close_pipes(t_cmd *cmd);
 
 #endif
