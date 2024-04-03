@@ -2,6 +2,7 @@ minishell
 obj/
 lib/libft/libft.a
 lib/libft/*.o
-
+*/**/*.o
+*/**/*.a
 .vscode/
 .DS_Store
