@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/26 14:16:57 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/04/03 15:09:11 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ void	process_input(char *input, char **envv)
 	tokens = tokenize(input);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	print_tokens(tokens);
 	root = parse_tokens_to_ast(tokens);
 	print_ast_execution_order(root);
+	ft_execute_tokens(tokens);
+	print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
 	free(input);

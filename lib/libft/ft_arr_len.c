@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_arr_size.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 21:26:06 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/02/19 17:31:40 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/04/03 14:03:13 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/03 14:24:48 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_array(void **array)
+size_t	ft_arr_len(char **arr)
 {
-	size_t	i;
+	size_t	count;
 
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		array[i] = NULL;
-		i++;
-	}
-	free(array);
+	if (!arr)
+		return (0);
+	count = 0;
+	while (arr[count])
+		count++;
+	return (count);
 }

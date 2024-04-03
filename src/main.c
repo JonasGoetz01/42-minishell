@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/01 13:41:28 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:08:33 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ int	main(int argc, char **argv, char **envv)
 	(void)argc;
 	(void)argv;
 	(void)envv;
-	// signal(SIGINT, handle_sigint);
-	// signal(SIGQUIT, SIG_IGN);
-	// print_welcome_message();
-	// while (1)
-	// {
-	// 	if (show_prompt(envv))
-	// 		break ;
-	// }
-	// return (0);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	print_welcome_message();
+	while (1)
+	{
+		if (show_prompt(envv))
+			break ;
+	}
+	return (0);
 
 }

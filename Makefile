@@ -27,7 +27,10 @@ SOURCES	:=	main.c \
 			token_utils.c \
 			ctrl.c \
 			fd_utils.c \
-			exec_process.c
+			exec_process.c \
+			org_tokens.c \
+			exec_tokens.c \
+			parse_process.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
