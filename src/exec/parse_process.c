@@ -6,17 +6,17 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 13:46:37 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/03 15:08:11 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:15:21 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_process	*ft_create_process(const char *cmd, char **args)
+t_process	*ft_create_process(char *cmd, char **args)
 {
 	t_process	*process;
 
-	process = malloc(sizeof(process));
+	process = malloc(sizeof(t_process));
 	process->cmd = cmd;
 	process->args = args;
 	process->pipe_fd_in[PIPE_READ] = -1;
@@ -27,7 +27,7 @@ t_process	*ft_create_process(const char *cmd, char **args)
 	return (process);
 }
 
-char	*ft_check_cmd_path(char **dirs, const char *cmd, int ind)
+char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 {
 	char	*cmd_path;
 	char	*tmp;
@@ -52,7 +52,7 @@ char	*ft_check_cmd_path(char **dirs, const char *cmd, int ind)
 	return (NULL);
 }
 
-char	*ft_get_cmd_path(const char *cmd, char *path)
+char	*ft_get_cmd_path(char *cmd, char *path)
 {
 	char	**dirs;
 	char	*cmd_path;

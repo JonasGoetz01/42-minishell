@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 13:48:25 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/03 14:34:42 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:43:23 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ char	**ft_arr_create_len(size_t len)
 	arr = malloc(sizeof(char *) * len);
 	if (!arr)
 		return (NULL);
-	arr[0] = NULL;
+	arr[len - 1] = NULL;
 	return (arr);
 }

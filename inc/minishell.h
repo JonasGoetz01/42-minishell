@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/02 16:03:29 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:15:38 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,6 @@ void					ft_close_fd(int *fd);
 void		ft_org_tokens(t_token *token);
 bool		ft_execute_process(t_process *process, char **envp);
 void		ft_execute_tokens(t_token *token);
-t_process	*ft_create_process(const char *cmd, char **args);
+t_process	*ft_create_process(char *cmd, char **args);
 
 #endif
