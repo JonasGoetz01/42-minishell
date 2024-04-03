@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/02 16:03:29 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:43:25 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 # include "exec.h"
 # include <fcntl.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/select.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 # define EXIT_ERROR 1
 
@@ -33,12 +33,7 @@
 
 typedef enum e_token_type
 {
-	TOKEN_NUMBER,
 	TOKEN_WORD,
-	TOKEN_PLUS,
-	TOKEN_MINUS,
-	TOKEN_MULT,
-	TOKEN_DIV,
 	TOKEN_BRACKET_L,
 	TOKEN_BRACKET_R,
 	TOKEN_DOUBLE_LESS,
@@ -63,11 +58,9 @@ typedef struct s_token
 	struct s_token		*next;
 }						t_token;
 
-typedef struct s_stack
+typedef struct s_stack_new
 {
-	struct s_token		*array;
-	size_t				capacity;
-	size_t				size;
+	t_token				*top;
 }						t_stack;
 
 typedef struct s_ast_node
@@ -95,19 +88,10 @@ void					remove_unused_spaces(t_token **tokens);
 char					*execute_command(const char *command);
 
 t_token					*tokenize(const char *input);
-t_stack					*toPostFix(t_token *tokens, int numTokens);
-t_ast_node				*parse_tokens_to_ast(t_token *tokens);
-void					print_ast_execution_order(t_ast_node *root);
 
 t_token					*postfixFromTokens(t_token *tokens);
 int						precedence_node(t_ast_node *node);
 int						precedence(t_token token);
-
-t_stack					*createStack(size_t capacity);
-void					push(t_stack *stack, t_token token);
-t_token					pop(t_stack *stack);
-t_token					peek(const t_stack *stack);
-void					freeStack(t_stack *stack);
 
 int						validator(char *input);
 
@@ -119,9 +103,17 @@ void					ft_expand_tokens(t_token *tokens);
 
 void					ft_close_fd(int *fd);
 
-void		ft_org_tokens(t_token *token);
-bool		ft_execute_process(t_process *process, char **envp);
-void		ft_execute_tokens(t_token *token);
-t_process	*ft_create_process(const char *cmd, char **args);
+void					ft_org_tokens(t_token *token);
+bool					ft_execute_process(t_process *process, char **envp);
+void					ft_execute_tokens(t_token *token);
+t_process				*ft_create_process(const char *cmd, char **args);
+
+//----
+t_stack				*create_stack(void);
+void					stack_push(t_stack *stack, t_token token);
+t_token					stack_pop(t_stack *stack);
+t_token					stack_pop(t_stack *stack);
+t_token					stack_peek(t_stack *stack);
+int						stack_is_not_empty(t_stack *stack);
 
 #endif

@@ -3,71 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:25:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/02 16:05:47 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:43:27 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_ast_node	*create_ast_node(int type, char *value)
-{
-	t_ast_node	*node;
+// t_ast_node	*create_ast_node(int type, char *value)
+// {
+// 	t_ast_node	*node;
 
-	node = malloc(sizeof(t_ast_node));
-	if (node != NULL)
-	{
-		node->type = type;
-		node->value = strdup(value);
-		node->left = NULL;
-		node->right = NULL;
-	}
-	return (node);
-}
+// 	node = malloc(sizeof(t_ast_node));
+// 	if (node != NULL)
+// 	{
+// 		node->type = type;
+// 		node->value = strdup(value);
+// 		node->left = NULL;
+// 		node->right = NULL;
+// 	}
+// 	return (node);
+// }
 
-t_ast_node	*parse_tokens_to_ast(t_token *tokens)
-{
-	t_ast_node	*root;
-	t_ast_node	*current_node;
-	t_token		*current_token;
-	t_ast_node	*new_node;
-	int			current_precedence;
+// t_ast_node	*parse_tokens_to_ast(t_token *tokens)
+// {
+// 	t_ast_node	*root;
+// 	t_ast_node	*current_node;
+// 	t_token		*current_token;
+// 	t_ast_node	*new_node;
+// 	int			current_precedence;
 
-	root = NULL;
-	current_node = NULL;
-	current_token = tokens;
-	while (current_token != NULL)
-	{
-		new_node = create_ast_node(current_token->type, current_token->value);
-		current_precedence = precedence(*current_token);
-		if (root == NULL || current_precedence > precedence_node(root))
-			root = new_node;
-		else
-		{
-			current_node = root;
-			while (current_node->right != NULL
-				&& current_precedence <= precedence_node(current_node->right))
-				current_node = current_node->right;
-			new_node->left = current_node->right;
-			current_node->right = new_node;
-		}
-		current_token = current_token->next;
-	}
-	return (root);
-}
+// 	root = NULL;
+// 	current_node = NULL;
+// 	current_token = tokens;
+// 	while (current_token != NULL)
+// 	{
+// 		new_node = create_ast_node(current_token->type, current_token->value);
+// 		current_precedence = precedence(*current_token);
+// 		if (root == NULL || current_precedence > precedence_node(root))
+// 			root = new_node;
+// 		else
+// 		{
+// 			current_node = root;
+// 			while (current_node->right != NULL
+// 				&& current_precedence <= precedence_node(current_node->right))
+// 				current_node = current_node->right;
+// 			new_node->left = current_node->right;
+// 			current_node->right = new_node;
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// 	return (root);
+// }
 
-void	print_ast_execution_order(t_ast_node *root)
-{
-	if (root == NULL)
-	{
-		return ;
-	}
-	printf("%s\n", root->value);
-	print_ast_execution_order(root->left);
-	print_ast_execution_order(root->right);
-}
+// void	print_ast_execution_order(t_ast_node *root)
+// {
+// 	if (root == NULL)
+// 	{
+// 		return ;
+// 	}
+// 	printf("%s\n", root->value);
+// 	print_ast_execution_order(root->left);
+// 	print_ast_execution_order(root->right);
+// }
 
 // length of the token
 // figures out the length of the token by checking for delimiters
@@ -102,15 +102,7 @@ t_token	*tokenize(const char *input)
 		if (ft_strchr(delimiters, input[i]))
 		{
 			value = ft_substr(input, i, 1);
-			if (input[i] == '+')
-				type = TOKEN_PLUS;
-			else if (input[i] == '-')
-				type = TOKEN_MINUS;
-			else if (input[i] == '*')
-				type = TOKEN_MULT;
-			else if (input[i] == '/')
-				type = TOKEN_DIV;
-			else if (input[i] == '(')
+			if (input[i] == '(')
 				type = TOKEN_BRACKET_L;
 			else if (input[i] == ')')
 				type = TOKEN_BRACKET_R;
@@ -173,7 +165,7 @@ t_token	*tokenize(const char *input)
 			else if (input[i] == ';')
 				type = TOKEN_SEMICOLON;
 			else
-				type = TOKEN_NUMBER;
+				type = TOKEN_WORD;
 			new_token = create_token(type, value);
 			append_token(&tokens, new_token);
 			i++; // Increment i since we've already processed this character
@@ -210,8 +202,7 @@ void	remove_unused_spaces(t_token **tokens)
 			while (next != NULL && next->type != current->type)
 				next = next->next;
 		}
-		else if (current->type == TOKEN_NUMBER && ft_strchr(current->value,
-				' '))
+		else if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
 			old = current;
 			current = next;
@@ -279,66 +270,52 @@ int	precedence_node(t_ast_node *node)
 
 t_token	*postfixFromTokens(t_token *tokens)
 {
+	t_token		*current_token;
 	t_stack	*stack;
-	t_token	*postfix;
-	t_token	*current;
+	t_token		*output_queue;
 
-	stack = createStack(token_count(tokens));
-	postfix = NULL;
-	current = tokens;
-	while (current != NULL)
+	stack = create_stack();
+	output_queue = NULL;
+	current_token = tokens;
+	while (current_token != NULL)
 	{
-		switch (current->type)
+		if (current_token->type == TOKEN_WORD)
 		{
-		case TOKEN_NUMBER:
-		case TOKEN_DOUBLE_GREATER:
-		case TOKEN_DOUBLE_LESS:
-		case TOKEN_GREATER:
-		case TOKEN_LESS:
-		case TOKEN_DOUBLE_PIPE:
-		case TOKEN_PIPE:
-		case TOKEN_DOUBLE_AMPERSAND:
-		case TOKEN_AMPERSAND:
-		case TOKEN_SEMICOLON:
-		case TOKEN_DOUBLE_QUOTE:
-		case TOKEN_SINGLE_QUOTE:
-			append_token(&postfix, create_token(current->type, current->value));
-			break ;
-		case TOKEN_BRACKET_L:
-			push(stack, *current);
-			break ;
-		case TOKEN_BRACKET_R:
-			while (stack->size > 0 && peek(stack).type != TOKEN_BRACKET_L)
-			{
-				append_token(&postfix, create_token(peek(stack).type,
-						peek(stack).value));
-				pop(stack);
-			}
-			if (stack->size == 0 || peek(stack).type != TOKEN_BRACKET_L)
-			{
-				fprintf(stderr, "Mismatched parentheses.\n");
-				exit(EXIT_FAILURE);
-			}
-			pop(stack); // Discard the left parenthesis
-			break ;
-		default:
-			fprintf(stderr, "Invalid token.\n");
-			exit(EXIT_FAILURE);
+			append_token(&output_queue, create_token(current_token->type,
+					current_token->value));
 		}
-		current = current->next;
+		else if (isOperator(*current_token))
+		{
+			while (stack_is_not_empty(stack)
+				&& precedence(stack_peek(stack)) >= precedence(*current_token))
+			{
+				append_token(&output_queue, create_token(stack_peek(stack).type,
+						stack_pop(stack).value));
+			}
+			stack_push(stack, *current_token);
+		}
+		else if (current_token->type == TOKEN_BRACKET_L)
+		{
+			stack_push(stack, *current_token);
+		}
+		else if (current_token->type == TOKEN_BRACKET_R)
+		{
+			while (stack_is_not_empty(stack)
+				&& stack_peek(stack).type != TOKEN_BRACKET_L)
+			{
+				append_token(&output_queue, create_token(stack_peek(stack).type,
+						stack_pop(stack).value));
+			}
+			stack_pop(stack);
+		}
+		current_token = current_token->next;
 	}
-	while (stack->size > 0)
+	while (stack_is_not_empty(stack))
 	{
-		if (peek(stack).type == TOKEN_BRACKET_L
-			|| peek(stack).type == TOKEN_BRACKET_R)
-		{
-			fprintf(stderr, "Mismatched parentheses.\n");
-			exit(EXIT_FAILURE);
-		}
-		append_token(&postfix, create_token(peek(stack).type,
-				peek(stack).value));
-		pop(stack);
+		append_token(&output_queue, create_token(stack_peek(stack).type,
+				stack_pop(stack).value));
 	}
-	freeStack(stack);
-	return (postfix);
+	free(stack->top);
+	free(stack);
+	return (output_queue);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/02 16:00:34 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:47:01 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	process_input(char *input, char **envv)
 {
-	char		**inputs;
-	t_token		*tokens;
-	t_ast_node	*root;
+	char	**inputs;
+	t_token	*tokens;
+	t_token	*root;
 
 	// t_token		*stack;
 	printf("You entered: %s\n", input);
@@ -30,10 +30,10 @@ void	process_input(char *input, char **envv)
 	ft_expand_tokens(tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	root = parse_tokens_to_ast(tokens);
-	print_ast_execution_order(root);
-	ft_execute_tokens(tokens);
-	print_tokens(tokens);
+	root = postfixFromTokens(tokens);
+	print_tokens(root);
+	// ft_execute_tokens(tokens);
+	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
 	free(input);

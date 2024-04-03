@@ -3,85 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   stack_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 15:20:29 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/27 14:55:06 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:43:27 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_stack	*createStack(size_t capacity)
+t_stack	*create_stack(void)
 {
 	t_stack	*stack;
 
 	stack = (t_stack *)malloc(sizeof(t_stack));
-	if (stack != NULL)
+	if (stack == NULL)
 	{
-		stack->array = (t_token *)malloc(capacity * sizeof(t_token));
-		if (stack->array != NULL)
-		{
-			stack->capacity = capacity;
-			stack->size = 0;
-		}
-		else
-		{
-			free(stack);
-			stack = NULL;
-		}
+		// Handle memory allocation error
+		exit(EXIT_FAILURE);
 	}
+	stack->top = NULL;
 	return (stack);
 }
 
-void	push(t_stack *stack, t_token token)
+void	stack_push(t_stack *stack, t_token token)
 {
-	if (stack->size < stack->capacity)
+	t_token	*new_token;
+
+	new_token = (t_token *)malloc(sizeof(t_token));
+	if (new_token == NULL)
 	{
-		stack->array[stack->size++] = token;
+		// Handle memory allocation error
+		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		fprintf(stderr, "Stack overflow.\n");
-	}
+	new_token->type = token.type;
+	new_token->value = token.value;
+	new_token->next = stack->top;
+	stack->top = new_token;
 }
 
-t_token	pop(t_stack *stack)
+t_token	stack_pop(t_stack *stack)
 {
-	t_token dummy_token;
+	t_token	popped_token;
+	t_token	*temp;
 
-	if (stack->size > 0)
+	if (stack->top == NULL)
 	{
-		return (stack->array[--stack->size]);
+		// Handle empty stack error
+		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		fprintf(stderr, "Stack underflow.\n");
-		// Return a dummy token to indicate error
-		dummy_token.type = -1; // Some invalid token type
-		return (dummy_token);
-	}
+	popped_token = *(stack->top);
+	temp = stack->top;
+	stack->top = stack->top->next;
+	free(temp);
+	return (popped_token);
 }
 
-t_token	peek(const t_stack *stack)
+t_token	stack_peek(t_stack *stack)
 {
-	t_token dummy_token;
-
-	if (stack->size > 0)
+	if (stack->top == NULL)
 	{
-		return (stack->array[stack->size - 1]);
+		// Handle empty stack error
+		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		fprintf(stderr, "Stack is empty.\n");
-		// Return a dummy token to indicate error
-		dummy_token.type = -1; // Some invalid token type
-		return (dummy_token);
-	}
+	return (*(stack->top));
 }
 
-void	freeStack(t_stack *stack)
+int	stack_is_not_empty(t_stack *stack)
 {
-	free(stack->array);
-	free(stack);
+	return (stack->top != NULL);
 }
