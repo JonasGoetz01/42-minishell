@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_arr_cpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/01 13:46:05 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/04/03 14:14:03 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/03 14:41:16 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "libft.h"
 
-void	print_envs(char **envv)
+bool	ft_arr_cpy(char **src, char **dst)
 {
-	while (*envv)
+	size_t	ind;
+
+	ind = 0;
+	while (src[ind])
 	{
-		printf("%s\n", *envv);
-		envv++;
+		dst[ind] = ft_strdup(src[ind]);
+		if (!dst[ind])
+		{
+			while (ind > 0)
+				free(dst[--ind]);
+			dst[0] = NULL;
+			return (false);
+		}
+		ind++;
 	}
-}
-
-char	*get_env(char *env)
-{
-	return (getenv(env));
+	dst[ind] = 0;
+	return (true);
 }

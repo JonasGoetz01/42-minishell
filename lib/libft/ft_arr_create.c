@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_arr_create.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/01 13:46:05 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/04/03 13:48:25 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/03 14:29:57 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "libft.h"
 
-void	print_envs(char **envv)
+char	**ft_arr_create()
 {
-	while (*envv)
-	{
-		printf("%s\n", *envv);
-		envv++;
-	}
-}
+	char	**arr;
 
-char	*get_env(char *env)
-{
-	return (getenv(env));
+	arr = malloc(sizeof(char *));
+	arr[0] = NULL;
+	return (arr);
 }

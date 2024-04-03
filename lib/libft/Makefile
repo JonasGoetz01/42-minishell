@@ -33,7 +33,13 @@ ft_strrchr.c \
 ft_strtrim.c \
 ft_substr.c \
 ft_tolower.c \
-ft_toupper.c
+ft_toupper.c \
+ft_arr_add.c \
+ft_arr_cpy.c \
+ft_arr_create_len.c \
+ft_arr_create.c \
+ft_arr_free.c \
+ft_arr_len.c
 
 
 OBJECTS	= ${SOURCES:.c=.o}

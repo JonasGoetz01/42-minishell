@@ -15,6 +15,7 @@
 
 # include "../lib/libft/libft.h"
 # include "colors.h"
+# include "exec.h"
 # include <fcntl.h>
 # include <signal.h>
 # include <stdio.h>
@@ -51,6 +52,8 @@ typedef enum e_token_type
 	TOKEN_DOUBLE_QUOTE,
 	TOKEN_SINGLE_QUOTE,
 	TOKEN_SEMICOLON,
+	TOKEN_CMD,
+	TOKEN_ARG
 }						t_token_type;
 
 typedef struct s_token
@@ -113,5 +116,12 @@ void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
 void					ft_expand_tokens(t_token *tokens);
+
+void					ft_close_fd(int *fd);
+
+void		ft_org_tokens(t_token *token);
+bool		ft_execute_process(t_process *process, char **envp);
+void		ft_execute_tokens(t_token *token);
+t_process	*ft_create_process(const char *cmd, char **args);
 
 #endif

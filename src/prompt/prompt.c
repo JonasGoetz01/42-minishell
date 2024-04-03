@@ -30,9 +30,10 @@ void	process_input(char *input, char **envv)
 	ft_expand_tokens(tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	print_tokens(tokens);
 	root = parse_tokens_to_ast(tokens);
 	print_ast_execution_order(root);
+	ft_execute_tokens(tokens);
+	print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
 	free(input);

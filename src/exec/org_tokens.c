@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   org_tokens.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/01 13:46:05 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/04/03 13:32:52 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/03 14:51:10 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	print_envs(char **envv)
+void	ft_org_tokens(t_token *token)
 {
-	while (*envv)
+	while (token)
 	{
-		printf("%s\n", *envv);
-		envv++;
+		if (token->type == TOKEN_WORD)
+		{
+			token->type = TOKEN_CMD;
+			token = token->next;
+			while (token && token->type == TOKEN_WORD)
+			{
+				token->type = TOKEN_ARG;
+				token = token->next;
+			}
+		}
+		else
+			token = token->next;
 	}
-}
-
-char	*get_env(char *env)
-{
-	return (getenv(env));
 }

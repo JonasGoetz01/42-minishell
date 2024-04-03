@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_arr_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/01 13:46:05 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/04/03 14:00:18 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/03 15:04:32 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "libft.h"
 
-void	print_envs(char **envv)
+char	**ft_arr_add(char *str, char **arr)
 {
-	while (*envv)
+	char	**new;
+	size_t	len;
+
+	len = ft_arr_len(arr);
+	new = ft_arr_create_len(len + 2);
+	if (!new)
+		return (NULL);
+	if (!ft_arr_cpy(arr, new))
 	{
-		printf("%s\n", *envv);
-		envv++;
+		free(new);
+		return (NULL);
 	}
-}
-
-char	*get_env(char *env)
-{
-	return (getenv(env));
+	new[len] = str;
+	new[len + 1] = NULL;
+	ft_arr_free((void **) arr);
+	return (new);
 }

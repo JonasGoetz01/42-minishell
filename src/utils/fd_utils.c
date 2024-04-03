@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   fd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 20:47:06 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/01 13:46:05 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/03/27 15:27:53 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/01 13:38:56 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	print_envs(char **envv)
+void	ft_close_fd(int *fd)
 {
-	while (*envv)
-	{
-		printf("%s\n", *envv);
-		envv++;
-	}
+	if (*fd != -1)
+		close(*fd);
+	*fd = -1;
 }
 
-char	*get_env(char *env)
+void	ft_close_pipes(t_process *process)
 {
-	return (getenv(env));
+	if (!process)
+		return ;
+	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
+	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
+	ft_close_fd(&process->pipe_fd_out[PIPE_READ]);
+	ft_close_fd(&process->pipe_fd_out[PIPE_WRITE]);
 }
