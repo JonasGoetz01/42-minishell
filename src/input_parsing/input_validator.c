@@ -6,7 +6,7 @@
 /*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 15:03:16 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/11 20:00:17 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/04/03 22:55:59 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	validator(char *input)
 			parenthesis++;
 		if (input[i] == ')')
 			parenthesis--;
-		if (input[i] == '\'' && dquote == 0)
+		if (input[i] == '\'' && i > 0 && input[i - 1] != '\\' && dquote == 0)
 			quote = !quote;
-		if (input[i] == '\"' && quote == 0)
+		if (input[i] == '\"' && i > 0 && input[i - 1] != '\\' && quote == 0)
 			dquote = !dquote;
 		i++;
 	}
