@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:25:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/03/26 14:16:47 by jgotz            ###   ########.fr       */
+/*   Updated: 2024/04/02 16:05:47 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ t_token	*tokenize(const char *input)
 		{
 			tokenLen = token_length(input + i, delimiters);
 			value = ft_substr(input, i, tokenLen);
-			new_token = create_token(TOKEN_NUMBER, value);
+			new_token = create_token(TOKEN_WORD, value);
 			append_token(&tokens, new_token);
 			i += tokenLen; // Increment i by token length
 		}

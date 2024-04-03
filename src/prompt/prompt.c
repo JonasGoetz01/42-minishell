@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 15:09:11 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:00:34 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	process_input(char *input, char **envv)
 	else if (ft_strncmp(inputs[0], "env", 3) == 0)
 		print_envs(envv);
 	tokens = tokenize(input);
+	ft_expand_tokens(tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
 	root = parse_tokens_to_ast(tokens);

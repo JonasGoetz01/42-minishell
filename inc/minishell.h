@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 15:07:25 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:03:29 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ t_token					*create_token(t_token_type type, char *value);
 void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
+void					ft_expand_tokens(t_token *tokens);
 
 void					ft_close_fd(int *fd);
 
