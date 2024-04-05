@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_tokens.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/31 18:56:49 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/03 15:07:45 by pgrossma         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 void	ft_exec_cmd(t_token *token)
@@ -20,10 +8,10 @@ void	ft_exec_cmd(t_token *token)
 
 	cmd = token->value;
 	args = ft_arr_create_len(2);
-	//ToDo Error
+	// ToDo Error
 	// if (!args)
 	args[0] = ft_strdup(cmd);
-	//ToDo Error
+	// ToDo Error
 	// if (!args[0])
 	token = token->next;
 	while (token && token->type == TOKEN_ARG)

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   input_validator.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 15:03:16 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/05 13:29:39 by jgotz            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 // checks if the input is valid
 // checks for parenthesis, quotes, and other special characters
 // returns 0 if the input is valid, 1 if it is not
