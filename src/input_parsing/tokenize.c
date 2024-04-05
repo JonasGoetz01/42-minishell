@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tokenize.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 21:25:18 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 18:43:27 by jgotz            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 // t_ast_node	*create_ast_node(int type, char *value)
@@ -270,9 +258,9 @@ int	precedence_node(t_ast_node *node)
 
 t_token	*postfixFromTokens(t_token *tokens)
 {
-	t_token		*current_token;
+	t_token	*current_token;
 	t_stack	*stack;
-	t_token		*output_queue;
+	t_token	*output_queue;
 
 	stack = create_stack();
 	output_queue = NULL;

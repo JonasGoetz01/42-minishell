@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/13 18:47:15 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 18:43:25 by jgotz            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -109,11 +97,14 @@ void					ft_execute_tokens(t_token *token);
 t_process				*ft_create_process(const char *cmd, char **args);
 
 //----
-t_stack				*create_stack(void);
+t_stack					*create_stack(void);
 void					stack_push(t_stack *stack, t_token token);
 t_token					stack_pop(t_stack *stack);
 t_token					stack_pop(t_stack *stack);
 t_token					stack_peek(t_stack *stack);
 int						stack_is_not_empty(t_stack *stack);
+
+void					*ft_recalloc(void *ptr, size_t old_size,
+							size_t new_size);
 
 #endif
