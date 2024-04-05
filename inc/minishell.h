@@ -97,11 +97,14 @@ void					ft_execute_tokens(t_token *token);
 t_process				*ft_create_process(const char *cmd, char **args);
 
 //----
-t_stack				*create_stack(void);
+t_stack					*create_stack(void);
 void					stack_push(t_stack *stack, t_token token);
 t_token					stack_pop(t_stack *stack);
 t_token					stack_pop(t_stack *stack);
 t_token					stack_peek(t_stack *stack);
 int						stack_is_not_empty(t_stack *stack);
+
+void					*ft_recalloc(void *ptr, size_t old_size,
+							size_t new_size);
 
 #endif
