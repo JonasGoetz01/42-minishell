@@ -261,16 +261,50 @@ t_token	*postfixFromTokens(t_token *tokens)
 	t_token	*current_token;
 	t_stack	*stack;
 	t_token	*output_queue;
+	int		in_single_quote;
+	int		in_double_quote;
 
 	stack = create_stack();
 	output_queue = NULL;
 	current_token = tokens;
+	in_single_quote = 0;
+	in_double_quote = 0;
 	while (current_token != NULL)
 	{
-		if (current_token->type == TOKEN_WORD)
+		if (current_token->type == TOKEN_WORD
+			|| current_token->type == TOKEN_SINGLE_QUOTE
+			|| current_token->type == TOKEN_DOUBLE_QUOTE)
 		{
-			append_token(&output_queue, create_token(current_token->type,
-					current_token->value));
+			if (current_token->type == TOKEN_SINGLE_QUOTE)
+			{
+				if (in_double_quote == 1)
+					append_token(&output_queue,
+						create_token(current_token->type,
+							current_token->value));
+				else
+					in_single_quote = !in_single_quote;
+			}
+			if (current_token->type == TOKEN_DOUBLE_QUOTE)
+			{
+				if (in_single_quote == 1)
+					append_token(&output_queue,
+						create_token(current_token->type,
+							current_token->value));
+				else
+					in_double_quote = !in_double_quote;
+			}
+			if (current_token->type == TOKEN_WORD)
+			{
+				if (current_token->value[0] == '\\')
+				{
+					if (current_token->next)
+						current_token = current_token->next;
+					else
+						break ;
+				}
+				append_token(&output_queue, create_token(current_token->type,
+						current_token->value));
+			}
 		}
 		else if (isOperator(*current_token))
 		{
