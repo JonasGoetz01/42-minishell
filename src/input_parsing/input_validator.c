@@ -26,6 +26,8 @@ int	validator(char *input)
 			quote = !quote;
 		if (input[i] == '\"' && i > 0 && input[i - 1] != '\\' && quote == 0)
 			dquote = !dquote;
+		if (input[i] == '\\' && !input[i + 1])
+			return (1);
 		i++;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
