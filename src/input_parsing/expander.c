@@ -34,3 +34,6 @@ void	ft_expand_tokens(t_token *tokens)
 		current_token = current_token->next;
 	}
 }
+
+// @TODO
+// void ft_expand_asterix(t_token *tokens)
