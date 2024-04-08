@@ -53,8 +53,7 @@ typedef struct s_stack_new
 
 typedef struct s_ast_node
 {
-	t_token_type		type;
-	char				*value;
+	t_token				*token;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 }						t_ast_node;
@@ -106,5 +105,8 @@ int						stack_is_not_empty(t_stack *stack);
 
 void					*ft_recalloc(void *ptr, size_t old_size,
 							size_t new_size);
+
+void					gen_ast(t_ast_node **root, t_token *tokens);
+void					print_ast(t_ast_node **root, int level);
 
 #endif
