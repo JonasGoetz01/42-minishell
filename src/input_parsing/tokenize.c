@@ -253,7 +253,7 @@ int	precedence(t_token token)
 
 int	precedence_node(t_ast_node *node)
 {
-	return (precedence(*create_token(node->type, node->value)));
+	return (precedence(*create_token(node->token->type, node->token->value)));
 }
 
 t_token	*postfixFromTokens(t_token *tokens)
@@ -340,4 +340,67 @@ t_token	*postfixFromTokens(t_token *tokens)
 	free(stack->top);
 	free(stack);
 	return (output_queue);
+}
+
+// walk through tokens and search for the highest precedence operator
+// -> use precedence_node for that
+// set the root of the ast to that operator
+// walk through tokens again and set the left and right nodes of the root recursively
+void	gen_ast(t_ast_node **root, t_token *tokens)
+{
+	t_token		*highest_token;
+	t_token		*current_token;
+	t_ast_node	*ast;
+	t_token		*left_arm;
+	t_token		*right_arm;
+
+	highest_token = NULL;
+	current_token = tokens;
+	ast = *root;
+	while (current_token != NULL)
+	{
+		if (highest_token == NULL
+			|| precedence(*current_token) > precedence(*highest_token))
+			highest_token = current_token;
+		current_token = current_token->next;
+	}
+	if (ast == NULL)
+	{
+		ast = malloc(sizeof(t_ast_node));
+		//@TODO: Check if malloc failed
+		ast->token = highest_token;
+		ast->left = NULL;
+		ast->right = NULL;
+		*root = ast;
+	}
+	if (highest_token->type != TOKEN_WORD)
+	{
+		left_arm = tokens;
+		right_arm = highest_token->next;
+		current_token = tokens;
+		while (current_token->next != highest_token)
+			current_token = current_token->next;
+		current_token->next = NULL;
+		ast->token->next = NULL;
+		gen_ast(&(ast->left), left_arm);
+		gen_ast(&(ast->right), right_arm);
+	}
+}
+
+void	print_ast(t_ast_node **root, int level)
+{
+	t_ast_node	*ast;
+
+	ast = *root;
+	if (ast == NULL)
+		return ;
+	print_ast(&(ast->right), level + 1);
+	while (ast->token != NULL)
+	{
+		for (int i = 0; i < level; i++)
+			printf("    ");
+		printf("Type: %d, Value: %s\n", ast->token->type, ast->token->value);
+		ast->token = ast->token->next;
+	}
+	print_ast(&(ast->left), level + 1);
 }

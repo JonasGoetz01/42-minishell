@@ -2,11 +2,13 @@
 
 void	process_input(char *input, char **envv)
 {
-	char	**inputs;
-	t_token	*tokens;
-	t_token	*root;
+	char		**inputs;
+	t_token		*tokens;
+	t_ast_node	*ast;
 
+	// t_token		*root;
 	// t_token		*stack;
+	ast = NULL;
 	printf("You entered: %s\n", input);
 	setenv("PWD", get_current_dir(), 1);
 	inputs = ft_split(input, ' ');
@@ -18,8 +20,12 @@ void	process_input(char *input, char **envv)
 	ft_expand_tokens(tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	root = postfixFromTokens(tokens);
-	print_tokens(root);
+	print_tokens(tokens);
+	printf("---\n");
+	// root = postfixFromTokens(tokens);
+	// print_tokens(root);
+	gen_ast(&ast, tokens);
+	print_ast(&ast, 0);
 	// ft_execute_tokens(tokens);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
