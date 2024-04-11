@@ -357,6 +357,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	t_token		*right_arm;
 	int			highest_token_brackets_level;
 	int			brackets_level;
+	t_token		*prev_token;
 
 	highest_token = NULL;
 	brackets_level = 0;
@@ -371,13 +372,16 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		if (highest_token == NULL || (brackets_level == 0
 				&& precedence(*current_token) >= precedence(*highest_token))
 			|| (brackets_level > 0
-				&& precedence(*current_token) > precedence(*highest_token)))
+				&& precedence(*current_token) > precedence(*highest_token))
+			|| highest_token->type == TOKEN_BRACKET_L
+			|| highest_token->type == TOKEN_BRACKET_R)
 		{
 			highest_token = current_token;
 			highest_token_brackets_level = brackets_level;
 		}
 		current_token = current_token->next;
 	}
+	printf("Highest token: %s\n", highest_token->value);
 	if (ast == NULL)
 	{
 		ast = malloc(sizeof(t_ast_node));
@@ -388,24 +392,36 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		*root = ast;
 	}
 	if (highest_token->type == TOKEN_WORD)
-		return ;
-	if (highest_token->type != TOKEN_WORD
-		&& highest_token->type != TOKEN_BRACKET_L
-		&& highest_token->type != TOKEN_BRACKET_R)
 	{
-		left_arm = tokens;
-		right_arm = highest_token->next;
-		current_token = tokens;
-		if (!current_token || !highest_token || !current_token->next)
-			return ;
-		while (current_token->next != highest_token)
+		ast->token = tokens;
+		while (ast->token->type == TOKEN_BRACKET_L
+			|| ast->token->type == TOKEN_BRACKET_R)
+			ast->token = ast->token->next;
+		current_token = ast->token;
+		while (current_token->next != NULL)
 			current_token = current_token->next;
-		if (current_token)
-			current_token->next = NULL;
-		ast->token->next = NULL;
-		gen_ast(&(ast->left), left_arm);
-		gen_ast(&(ast->right), right_arm);
+		while (current_token->type == TOKEN_BRACKET_L
+			|| current_token->type == TOKEN_BRACKET_R)
+		{
+			prev_token = ast->token;
+			while (prev_token->next != current_token)
+				prev_token = prev_token->next;
+			prev_token->next = NULL;
+			free(current_token);
+			current_token = prev_token;
+		}
+		return ;
 	}
+	left_arm = tokens;
+	current_token = tokens;
+	while (current_token->next != highest_token)
+		current_token = current_token->next;
+	current_token->next = NULL; // Terminate the left arm here
+	right_arm = highest_token->next;
+	// Assign the right arm from the token after the highest token
+	ast->token->next = NULL;
+	gen_ast(&(ast->left), left_arm);
+	gen_ast(&(ast->right), right_arm);
 }
 
 void	print_ast(t_ast_node **root, int level)
