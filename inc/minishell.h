@@ -56,6 +56,8 @@ typedef struct s_ast_node
 	t_token				*token;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
+	int					fd_in;
+	int					fd_out;
 }						t_ast_node;
 
 int						show_prompt(char **envv);

@@ -371,6 +371,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		ast->token = highest_token;
 		ast->left = NULL;
 		ast->right = NULL;
+		ast->fd_in = -1;
+		ast->fd_out = -1;
 		*root = ast;
 	}
 	if (highest_token->type != TOKEN_WORD)
