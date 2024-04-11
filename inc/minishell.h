@@ -97,6 +97,7 @@ bool					ft_execute_process(t_process *process, char **envp);
 void					ft_exec_all(t_ast_node *token, char **envp);
 t_process				*ft_create_process(char *cmd, char **args);
 bool					ft_verify_process(t_process *process);
+int						ft_wait_for_processes(t_ast_node *node);
 
 //----
 t_stack					*create_stack(void);
