@@ -59,4 +59,5 @@ void	ft_exec_all(t_ast_node *node, char **envp)
 {
 	ft_org_tokens(node);
 	ft_execute_nodes(node, envp);
+	ft_wait_for_processes(node);
 }

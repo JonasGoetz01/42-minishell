@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 20:14:49 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/11 20:27:00 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/11 20:32:54 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	ft_wait_for_processes(t_ast_node *node)
 {
 	int		status;
-	pid_t	pid;
+	// pid_t	pid;
+	(void)node;
 
 	status = 0;
 	// pid = args->processes[args->process_len - 1]->pid;
