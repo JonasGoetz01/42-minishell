@@ -6,3 +6,5 @@ lib/libft/*.o
 */**/*.a
 .vscode/
 .DS_Store
+in
+out

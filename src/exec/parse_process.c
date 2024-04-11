@@ -66,6 +66,13 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 
 bool	ft_verify_process(t_process *process)
 {
-	process->cmd = ft_get_cmd_path(process->cmd, get_env("PATH"));
-	return (process->cmd != NULL);
+	char	*new_cmd;
+
+	new_cmd = ft_get_cmd_path(process->cmd, get_env("PATH"));
+	if (new_cmd)
+	{
+		free(process->cmd);
+		process->cmd = new_cmd;
+	}
+	return (new_cmd != NULL);
 }

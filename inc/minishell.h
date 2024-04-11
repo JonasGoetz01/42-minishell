@@ -90,9 +90,9 @@ void					ft_expand_tokens(t_token *tokens);
 
 void					ft_close_fd(int *fd);
 
-void					ft_org_tokens(t_token *token);
+void					ft_org_tokens(t_ast_node *token);
 bool					ft_execute_process(t_process *process, char **envp);
-void					ft_execute_tokens(t_token *token, char **envp);
+void					ft_exec_all(t_ast_node *token, char **envp);
 t_process				*ft_create_process(char *cmd, char **args);
 bool					ft_verify_process(t_process *process);
 

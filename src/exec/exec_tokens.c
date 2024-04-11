@@ -25,17 +25,28 @@ void	ft_exec_cmd(t_token *token, char **envp)
 	if (ft_verify_process(process))
 		ft_execute_process(process, envp);
 	else
-		printf("Command not found for %s\n", args[0]);
+		printf("Command not found for %s\n", process->cmd);
 }
 
-void	ft_execute_tokens(t_token *token, char **envp)
+void	ft_execute_nodes(t_ast_node *node, char **envp)
 {
-	ft_org_tokens(token);
-	print_tokens(token);
+	t_token	*token;
+
+	if (!node)
+		return ;
+	token = node->token;
 	while (token)
 	{
 		if (token->type == TOKEN_CMD)
 			ft_exec_cmd(token, envp);
 		token = token->next;
 	}
+	ft_execute_nodes(node->left, envp);
+	ft_execute_nodes(node->right, envp);
+}
+
+void	ft_exec_all(t_ast_node *node, char **envp)
+{
+	ft_org_tokens(node);
+	ft_execute_nodes(node, envp);
 }
