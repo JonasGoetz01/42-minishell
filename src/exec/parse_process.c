@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_process.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/01 13:46:37 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/03 15:15:21 by pgrossma         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 t_process	*ft_create_process(char *cmd, char **args)
@@ -35,14 +23,14 @@ char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 	cmd_path = ft_strjoin(dirs[ind], "/");
 	if (!cmd_path)
 	{
-		ft_arr_free((void **) dirs);
+		ft_arr_free((void **)dirs);
 		// ft_exit_error(args, "malloc failed");
 	}
 	tmp = ft_strjoin(cmd_path, cmd);
 	free(cmd_path);
 	if (!tmp)
 	{
-		ft_arr_free((void **) dirs);
+		ft_arr_free((void **)dirs);
 		// ft_exit_error(args, "malloc failed");
 	}
 	cmd_path = tmp;
@@ -67,12 +55,12 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 		cmd_path = ft_check_cmd_path(dirs, cmd, ind);
 		if (cmd_path)
 		{
-			ft_arr_free((void **) dirs);
+			ft_arr_free((void **)dirs);
 			return (cmd_path);
 		}
 		ind++;
 	}
-	ft_arr_free((void **) dirs);
+	ft_arr_free((void **)dirs);
 	return (NULL);
 }
 

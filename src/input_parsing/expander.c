@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 15:03:13 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 12:28:54 by pgrossma         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 char	*ft_expand_word(char *word)
@@ -46,3 +34,6 @@ void	ft_expand_tokens(t_token *tokens)
 		current_token = current_token->next;
 	}
 }
+
+// @TODO
+// void ft_expand_asterix(t_token *tokens)

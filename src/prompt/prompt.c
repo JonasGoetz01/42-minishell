@@ -1,24 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 18:51:02 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/02 16:00:34 by pgrossma         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../inc/minishell.h"
 
 void	process_input(char *input, char **envv)
 {
 	char		**inputs;
 	t_token		*tokens;
-	t_ast_node	*root;
+	t_ast_node	*ast;
 
+	// t_token		*root;
 	// t_token		*stack;
+	ast = NULL;
 	printf("You entered: %s\n", input);
 	setenv("PWD", get_current_dir(), 1);
 	inputs = ft_split(input, ' ');
@@ -30,10 +20,14 @@ void	process_input(char *input, char **envv)
 	ft_expand_tokens(tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	root = parse_tokens_to_ast(tokens);
-	print_ast_execution_order(root);
-	ft_execute_tokens(tokens);
 	print_tokens(tokens);
+	printf("---\n");
+	// root = postfixFromTokens(tokens);
+	// print_tokens(root);
+	gen_ast(&ast, tokens);
+	print_ast(&ast, 0);
+	// ft_execute_tokens(tokens);
+	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
 	free(input);
