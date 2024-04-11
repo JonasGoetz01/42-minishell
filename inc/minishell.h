@@ -11,9 +11,10 @@
 # include <stdlib.h>
 # include <sys/select.h>
 # include <unistd.h>
+# include <sys/wait.h>
 
 # define EXIT_ERROR 1
-# define DEBUG 1
+# define DEBUG 0
 
 # include <readline/history.h>
 # include <readline/readline.h>

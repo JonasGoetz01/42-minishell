@@ -84,6 +84,7 @@ t_token	*tokenize(const char *input)
 
 	tokens = NULL;
 	current = NULL;
+	(void) current;
 	i = 0;
 	while (input[i] != '\0')
 	{
@@ -382,7 +383,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		current_token = current_token->next;
 	}
 	if (DEBUG)
-		printf("Highest token: %s\n", highest_token->value);
+		printf("Highest token: %s\nHighest Bracket Level: %d\n", highest_token->value, highest_token_brackets_level);
 	if (ast == NULL)
 	{
 		ast = malloc(sizeof(t_ast_node));

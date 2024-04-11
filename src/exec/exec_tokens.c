@@ -30,34 +30,69 @@ void	ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 		printf("Command not found for %s\n", process->cmd);
 }
 
-void	ft_execute_nodes(t_ast_node *node, char **envp)
+void	ft_exec_pipes(t_ast_node *node, char **envp)
 {
 	t_token	*token;
+	t_token_type	type;
 	int		fd_pipe[2];
 
 	if (!node)
 		return ;
 	token = node->token;
+	type = 0;
 	while (token)
 	{
-		if (token->type == TOKEN_CMD)
-			ft_exec_cmd(token, node, envp);
-		else if (token->type == TOKEN_PIPE)
+		type = token->type;
+		if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
 				printf("Handle Error pipe\n");
 			node->left->fd_out = fd_pipe[PIPE_WRITE];
 			node->right->fd_in = fd_pipe[PIPE_READ];
 		}
+		else if (token->type == TOKEN_CMD)
+			ft_exec_cmd(token, node, envp);
+		// else
+		// 	return ;
 		token = token->next;
 	}
-	ft_execute_nodes(node->left, envp);
-	ft_execute_nodes(node->right, envp);
+	ft_exec_pipes(node->left, envp);
+	ft_exec_pipes(node->right, envp);
+	if (type == TOKEN_PIPE)
+	{
+		ft_close_fd(&node->left->fd_out);
+		ft_close_fd(&node->right->fd_in);
+	}
+	else if (type == TOKEN_CMD)
+	{
+
+	}
+}
+
+void	ft_execute_nodes(t_ast_node *node, char **envp)
+{
+	t_token	*token;
+
+	if (!node)
+		return ;
+	token = node->token;
+	while (token)
+	{
+		if (token->type == TOKEN_PIPE)
+		{
+			ft_exec_pipes(node, envp);
+		}
+		// else if (token->type == TOKEN_CMD)
+		// 	ft_exec_cmd(token, node, envp);
+		token = token->next;
+	}
+	// ft_execute_nodes(node->left, envp);
+	// ft_execute_nodes(node->right, envp);
 }
 
 void	ft_exec_all(t_ast_node *node, char **envp)
 {
 	ft_org_tokens(node);
-	ft_execute_nodes(node, envp);
-	ft_wait_for_processes(node);
+	// ft_execute_nodes(node, envp);
+	ft_exec_pipes(node, envp);
 }
