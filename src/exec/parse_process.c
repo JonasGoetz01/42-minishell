@@ -10,7 +10,7 @@ t_process	*ft_create_process(char *cmd, char **args)
 	process->pipe_fd_in[PIPE_READ] = -1;
 	process->pipe_fd_in[PIPE_WRITE] = -1;
 	process->pipe_fd_out[PIPE_READ] = -1;
-	process->pipe_fd_out[PIPE_WRITE] = STDOUT_FILENO;
+	process->pipe_fd_out[PIPE_WRITE] = -1;
 	process->pid = -1;
 	return (process);
 }

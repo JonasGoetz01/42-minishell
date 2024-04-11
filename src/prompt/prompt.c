@@ -26,7 +26,7 @@ void	process_input(char *input, char **envv)
 	// print_tokens(root);
 	gen_ast(&ast, tokens);
 	print_ast(&ast, 0);
-	// ft_execute_tokens(tokens);
+	ft_execute_tokens(tokens, envv);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
