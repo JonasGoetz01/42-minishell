@@ -13,6 +13,7 @@
 # include <unistd.h>
 
 # define EXIT_ERROR 1
+# define DEBUG 1
 
 # include <readline/history.h>
 # include <readline/readline.h>
