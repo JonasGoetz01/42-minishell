@@ -9,7 +9,8 @@ void	process_input(char *input, char **envv)
 	// t_token		*root;
 	// t_token		*stack;
 	ast = NULL;
-	printf("You entered: %s\n", input);
+	if (DEBUG)
+		printf("You entered: %s\n", input);
 	setenv("PWD", get_current_dir(), 1);
 	inputs = ft_split(input, ' ');
 	if (ft_strncmp(inputs[0], "cd", 2) == 0)
@@ -18,14 +19,18 @@ void	process_input(char *input, char **envv)
 		print_envs(envv);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens);
-	print_tokens(tokens);
+	if (DEBUG)
+		print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	print_tokens(tokens);
-	printf("---\n");
+	if (DEBUG)
+		print_tokens(tokens);
+	if (DEBUG)
+		printf("---\n");
 	// root = postfixFromTokens(tokens);
 	// print_tokens(root);
 	gen_ast(&ast, tokens);
-	print_ast(&ast, 0);
+	if (DEBUG)
+		print_ast(&ast, 0);
 	// ft_execute_tokens(tokens);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);

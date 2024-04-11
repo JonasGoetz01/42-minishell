@@ -381,7 +381,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		}
 		current_token = current_token->next;
 	}
-	printf("Highest token: %s\n", highest_token->value);
+	if (DEBUG)
+		printf("Highest token: %s\n", highest_token->value);
 	if (ast == NULL)
 	{
 		ast = malloc(sizeof(t_ast_node));
