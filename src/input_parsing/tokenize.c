@@ -236,17 +236,19 @@ int	isOperator(t_token token)
 // Logical AND && and Logical OR ||
 int	precedence(t_token token)
 {
-	if (token.type == TOKEN_BRACKET_L || token.type == TOKEN_BRACKET_R)
+	if (token.type == TOKEN_WORD)
+		return (1);
+	else if (token.type == TOKEN_BRACKET_L || token.type == TOKEN_BRACKET_R)
 		return (0);
 	else if (token.type == TOKEN_DOUBLE_GREATER
 		|| token.type == TOKEN_DOUBLE_LESS || token.type == TOKEN_GREATER
 		|| token.type == TOKEN_LESS)
-		return (1);
-	else if (token.type == TOKEN_DOUBLE_PIPE || token.type == TOKEN_PIPE)
 		return (2);
-	else if (token.type == TOKEN_DOUBLE_AMPERSAND
-		|| token.type == TOKEN_AMPERSAND)
+	else if (token.type == TOKEN_PIPE)
 		return (3);
+	else if (token.type == TOKEN_DOUBLE_AMPERSAND
+		|| token.type == TOKEN_DOUBLE_PIPE)
+		return (4);
 	else
 		return (-1);
 }
@@ -353,15 +355,27 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	t_ast_node	*ast;
 	t_token		*left_arm;
 	t_token		*right_arm;
+	int			highest_token_brackets_level;
+	int			brackets_level;
 
 	highest_token = NULL;
+	brackets_level = 0;
 	current_token = tokens;
 	ast = *root;
 	while (current_token != NULL)
 	{
-		if (highest_token == NULL
-			|| precedence(*current_token) > precedence(*highest_token))
+		if (current_token->type == TOKEN_BRACKET_L)
+			brackets_level++;
+		else if (current_token->type == TOKEN_BRACKET_R)
+			brackets_level--;
+		if (highest_token == NULL || (brackets_level == 0
+				&& precedence(*current_token) >= precedence(*highest_token))
+			|| (brackets_level > 0
+				&& precedence(*current_token) > precedence(*highest_token)))
+		{
 			highest_token = current_token;
+			highest_token_brackets_level = brackets_level;
+		}
 		current_token = current_token->next;
 	}
 	if (ast == NULL)
@@ -373,14 +387,21 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		ast->right = NULL;
 		*root = ast;
 	}
-	if (highest_token->type != TOKEN_WORD)
+	if (highest_token->type == TOKEN_WORD)
+		return ;
+	if (highest_token->type != TOKEN_WORD
+		&& highest_token->type != TOKEN_BRACKET_L
+		&& highest_token->type != TOKEN_BRACKET_R)
 	{
 		left_arm = tokens;
 		right_arm = highest_token->next;
 		current_token = tokens;
+		if (!current_token || !highest_token || !current_token->next)
+			return ;
 		while (current_token->next != highest_token)
 			current_token = current_token->next;
-		current_token->next = NULL;
+		if (current_token)
+			current_token->next = NULL;
 		ast->token->next = NULL;
 		gen_ast(&(ast->left), left_arm);
 		gen_ast(&(ast->right), right_arm);
@@ -399,7 +420,8 @@ void	print_ast(t_ast_node **root, int level)
 	{
 		for (int i = 0; i < level; i++)
 			printf("    ");
-		printf("Type: %d, Value: %s\n", ast->token->type, ast->token->value);
+		printf("Type: %d, Value: %s Prio: %d\n", ast->token->type,
+			ast->token->value, precedence_node(ast));
 		ast->token = ast->token->next;
 	}
 	print_ast(&(ast->left), level + 1);

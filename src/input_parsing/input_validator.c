@@ -5,10 +5,10 @@
 // ignored since it just gets printed and not used as a special character
 int	validator(char *input)
 {
-	int i;
-	int quote;
-	int dquote;
-	int parenthesis;
+	int	i;
+	int	quote;
+	int	dquote;
+	int	parenthesis;
 
 	i = 0;
 	quote = 0;
@@ -16,16 +16,16 @@ int	validator(char *input)
 	parenthesis = 0;
 	while (input[i])
 	{
-		if (input[i] == '(' && i > 0 && input[i - 1] != '\\' && dquote == 0
-			&& quote == 0)
-			parenthesis++;
-		if (input[i] == ')' && i > 0 && input[i - 1] != '\\' && dquote == 0
-			&& quote == 0)
-			parenthesis--;
 		if (input[i] == '\'' && dquote == 0)
 			quote = !quote;
-		if (input[i] == '\"' && i > 0 && input[i - 1] != '\\' && quote == 0)
+		if (input[i] == '\"' && (i == 0 || input[i - 1] != '\\') && quote == 0)
 			dquote = !dquote;
+		if (input[i] == '(' && (i == 0 || input[i - 1] != '\\') && dquote == 0
+			&& quote == 0)
+			parenthesis++;
+		if (input[i] == ')' && (i == 0 || input[i - 1] != '\\') && dquote == 0
+			&& quote == 0)
+			parenthesis--;
 		if (input[i] == '\\' && !input[i + 1])
 			return (1);
 		i++;
