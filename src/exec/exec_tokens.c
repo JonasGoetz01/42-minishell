@@ -21,9 +21,7 @@ void	ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 		args = ft_arr_add(token->value, args);
 		token = token->next;
 	}
-	process = ft_create_process(cmd, args);
-	process->pipe_fd_in[PIPE_READ] = node->fd_in;
-	process->pipe_fd_out[PIPE_WRITE] = node->fd_out;
+	process = ft_create_process(cmd, args, node);
 	if (ft_verify_process(process))
 		ft_execute_process(process, envp);
 	else
@@ -47,8 +45,10 @@ void	ft_exec_pipes(t_ast_node *node, char **envp)
 		{
 			if (pipe(fd_pipe) != 0)
 				printf("Handle Error pipe\n");
-			node->left->fd_out = fd_pipe[PIPE_WRITE];
-			node->right->fd_in = fd_pipe[PIPE_READ];
+			node->left->fd_out[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
+			node->left->fd_out[PIPE_READ] = fd_pipe[PIPE_READ];
+			node->right->fd_in[PIPE_READ] = fd_pipe[PIPE_READ];
+			node->right->fd_in[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
 		}
 		else if (token->type == TOKEN_CMD)
 			ft_exec_cmd(token, node, envp);
@@ -95,4 +95,5 @@ void	ft_exec_all(t_ast_node *node, char **envp)
 	ft_org_tokens(node);
 	// ft_execute_nodes(node, envp);
 	ft_exec_pipes(node, envp);
+	// ft_wait_for_processes(node);
 }

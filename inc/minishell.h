@@ -58,8 +58,9 @@ typedef struct s_ast_node
 	t_token				*token;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
-	int					fd_in;
-	int					fd_out;
+	int					fd_out[2];
+	int					fd_in[2];
+	t_process			*process;
 }						t_ast_node;
 
 int						show_prompt(char **envv);
@@ -97,7 +98,7 @@ void					ft_close_fd(int *fd);
 void					ft_org_tokens(t_ast_node *token);
 bool					ft_execute_process(t_process *process, char **envp);
 void					ft_exec_all(t_ast_node *token, char **envp);
-t_process				*ft_create_process(char *cmd, char **args);
+t_process				*ft_create_process(char *cmd, char **args, t_ast_node *node);
 bool					ft_verify_process(t_process *process);
 int						ft_wait_for_processes(t_ast_node *node);
 

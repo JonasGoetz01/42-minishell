@@ -21,7 +21,5 @@ bool	ft_execute_process(t_process *process, char **envp)
 			return (false);
 		}
 	}
-	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
-	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
 	return (true);
 }

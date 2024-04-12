@@ -31,7 +31,7 @@ void	process_input(char *input, char **envv)
 	gen_ast(&ast, tokens);
 	if (DEBUG)
 		print_ast(&ast, 0);
-	// ft_execute_tokens(tokens);
+	ft_exec_all(ast, envv);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
