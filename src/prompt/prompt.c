@@ -24,6 +24,9 @@ void	process_input(char *input, char **envv)
 	remove_unused_spaces(&tokens);
 	if (DEBUG)
 		print_tokens(tokens);
+	rearrange_tokens(&tokens);
+	if (DEBUG)
+		print_tokens(tokens);
 	if (DEBUG)
 		printf("---\n");
 	// root = postfixFromTokens(tokens);
