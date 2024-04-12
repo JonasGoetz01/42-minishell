@@ -313,29 +313,48 @@ void	print_ast(t_ast_node **root, int level)
 void	rearrange_tokens(t_token **tokens)
 {
 	t_token	*start;
+	t_token	*current;
 	t_token	*upcoming;
 	t_token	*pre_upcoming;
 	t_token	*redirect;
 	t_token	*file;
 	t_token	*after_file;
+	t_token	*prev;
 
+	start = *tokens;
+	prev = NULL;
 	// Check if the first token is a redirection operator
-	// If it is, switch the first two tokens
-	if ((*tokens)->type == TOKEN_LESS || (*tokens)->type == TOKEN_DOUBLE_LESS
-		|| (*tokens)->type == TOKEN_GREATER
-		|| (*tokens)->type == TOKEN_DOUBLE_GREATER)
+	while (start != NULL && !(start->type == TOKEN_LESS
+			|| start->type == TOKEN_DOUBLE_LESS || start->type == TOKEN_GREATER
+			|| start->type == TOKEN_DOUBLE_GREATER))
 	{
-		start = *tokens;
+		prev = start;
+		start = start->next;
+	}
+	if ((start->type == TOKEN_LESS || start->type == TOKEN_DOUBLE_LESS
+			|| start->type == TOKEN_GREATER
+			|| start->type == TOKEN_DOUBLE_GREATER) && (prev == NULL
+			|| prev->type != TOKEN_WORD))
+	{
+		current = start;
 		redirect = start;
 		file = start->next;
 		after_file = file->next;
-		while ((*tokens)->next != NULL && (*tokens)->next->type != TOKEN_WORD)
-			*tokens = (*tokens)->next;
-		pre_upcoming = *tokens;
-		upcoming = (*tokens)->next;
-		*tokens = after_file;
-		pre_upcoming->next = start;
-		start->next = file;
+		while (current->next != NULL && current->next->type == TOKEN_WORD)
+			current = current->next;
+		pre_upcoming = current;
+		upcoming = current->next;
+		if (DEBUG)
+		{
+			printf("Start: %s\n", start->value);
+			printf("redirect: %s\n", redirect->value);
+			printf("File: %s\n", file->value);
+			printf("After file: %s\n", after_file->value);
+			printf("Pre-upcoming: %s\n", pre_upcoming->value);
+		}
+		start = after_file;
+		pre_upcoming->next = redirect;
 		file->next = upcoming;
 	}
 }
+// echo 1 && < test.txt echo 2 && echo 3
