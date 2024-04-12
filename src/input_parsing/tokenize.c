@@ -312,49 +312,48 @@ void	print_ast(t_ast_node **root, int level)
 // < file.txt echo hello ... && test => echo hello ... < file.txt && test
 void	rearrange_tokens(t_token **tokens)
 {
-	t_token	*start;
 	t_token	*current;
-	t_token	*upcoming;
-	t_token	*pre_upcoming;
 	t_token	*redirect;
 	t_token	*file;
 	t_token	*after_file;
 	t_token	*prev;
 
-	start = *tokens;
+	current = *tokens;
 	prev = NULL;
-	// Check if the first token is a redirection operator
-	while (start != NULL && !(start->type == TOKEN_LESS
-			|| start->type == TOKEN_DOUBLE_LESS || start->type == TOKEN_GREATER
-			|| start->type == TOKEN_DOUBLE_GREATER))
+	// Find the first redirection token
+	while (current != NULL && !(current->type == TOKEN_LESS
+			|| current->type == TOKEN_DOUBLE_LESS
+			|| current->type == TOKEN_GREATER
+			|| current->type == TOKEN_DOUBLE_GREATER))
 	{
-		prev = start;
-		start = start->next;
+		prev = current;
+		current = current->next;
 	}
-	if ((start->type == TOKEN_LESS || start->type == TOKEN_DOUBLE_LESS
-			|| start->type == TOKEN_GREATER
-			|| start->type == TOKEN_DOUBLE_GREATER) && (prev == NULL
-			|| prev->type != TOKEN_WORD))
+	if (current != NULL && (prev == NULL || prev->type != TOKEN_WORD))
 	{
-		current = start;
-		redirect = start;
-		file = start->next;
+		// Handle case where redirection token is not the first token
+		redirect = current;
+		file = current->next;
 		after_file = file->next;
-		while (current->next != NULL && current->next->type == TOKEN_WORD)
-			current = current->next;
-		pre_upcoming = current;
-		upcoming = current->next;
+		while (after_file != NULL && after_file->type == TOKEN_WORD)
+			after_file = after_file->next;
 		if (DEBUG)
 		{
-			printf("Start: %s\n", start->value);
-			printf("redirect: %s\n", redirect->value);
+			printf("Redirect: %s\n", redirect->value);
 			printf("File: %s\n", file->value);
-			printf("After file: %s\n", after_file->value);
-			printf("Pre-upcoming: %s\n", pre_upcoming->value);
+			if (after_file != NULL)
+				printf("After file: %s\n", after_file->value);
 		}
-		start = after_file;
-		pre_upcoming->next = redirect;
-		file->next = upcoming;
+		if (prev != NULL)
+			prev->next = after_file;
+		else
+			*tokens = after_file;
+		while (after_file != NULL && after_file->next != NULL
+			&& after_file->next->type == TOKEN_WORD)
+			after_file = after_file->next;
+		file->next = after_file->next;
+		after_file->next = redirect;
 	}
 }
+
 // echo 1 && < test.txt echo 2 && echo 3
