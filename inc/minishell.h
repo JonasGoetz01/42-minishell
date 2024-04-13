@@ -85,6 +85,7 @@ bool					ft_is_buildin_cmd(char *cmd);
 int						ft_exec_buildins(t_process *process, char **envp);
 void					ft_error_buildin(const char *msg, const char *arg, t_process *process, int exit_status);
 void					ft_cd_buildin(t_process *process);
+void					ft_echo_buildin(t_process *process);
 
 t_token					*tokenize(const char *input);
 
