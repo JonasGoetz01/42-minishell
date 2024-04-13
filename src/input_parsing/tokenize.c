@@ -409,6 +409,8 @@ void	combine_words_in_quotes(t_token **tokens)
 			}
 			printf("Num tokens: %d\n", num_tokens);
 			current = start;
+			current = current->next;
+			num_tokens--;
 			current->value = ft_strjoin(current->value, "");
 			while (num_tokens > 0)
 			{
