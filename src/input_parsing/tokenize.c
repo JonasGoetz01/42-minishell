@@ -335,15 +335,16 @@ void	rearrange_tokens(t_token **tokens)
 		redirect = current;
 		file = current->next;
 		after_file = file->next;
-		while (after_file != NULL && after_file->type == TOKEN_WORD)
-			after_file = after_file->next;
+		current = after_file;
 		if (DEBUG)
 		{
-			printf("Redirect: %s\n", redirect->value);
+			printf("Redirect7: %s\n", redirect->value);
 			printf("File: %s\n", file->value);
 			if (after_file != NULL)
 				printf("After file: %s\n", after_file->value);
 		}
+		while (current != NULL && current->type == TOKEN_WORD)
+			current = current->next;
 		if (prev != NULL)
 			prev->next = after_file;
 		else
