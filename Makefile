@@ -24,6 +24,7 @@ SOURCES	:=	main.c \
 			exec_buildins.c \
 			pwd_buildin.c \
 			env_buildin.c \
+			echo_buildin.c \
 			get_hostname.c \
 			exec_command.c \
 			prompt.c \

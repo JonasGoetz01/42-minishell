@@ -2,8 +2,9 @@
 
 int	ft_exec_buildins(t_process *process, char **envp)
 {
-	// if (ft_strncmp(process->cmd, "echo", 5) == 0)
-	if (ft_strncmp(process->cmd, "cd", 3) == 0)
+	if (ft_strncmp(process->cmd, "echo", 5) == 0)
+		ft_echo_buildin(process);
+	else if (ft_strncmp(process->cmd, "cd", 3) == 0)
 		ft_cd_buildin(process);
 	else if (ft_strncmp(process->cmd, "pwd", 4) == 0)
 		ft_pwd_buildin(process);
