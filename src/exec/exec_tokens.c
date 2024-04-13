@@ -64,7 +64,8 @@ void	ft_execute_nodes(t_ast_node *node, char **envp, t_global *global)
 	ft_execute_nodes(node->right, envp, global);
 	if (node->process)
 	{
-		waitpid(node->process->pid, &node->process->exit_status, 0);
+		if (!node->process->is_buildin)
+			waitpid(node->process->pid, &node->process->exit_status, 0);
 		global->exit_status = node->process->exit_status;
 	}
 }
