@@ -94,6 +94,8 @@ size_t					token_count(t_token *tokens);
 void					ft_expand_tokens(t_token *tokens);
 
 void					ft_close_fd(int *fd);
+void					ft_close_fd_process(t_process *process);
+void					ft_close_fd_node(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
 bool					ft_execute_process(t_process *process, char **envp);

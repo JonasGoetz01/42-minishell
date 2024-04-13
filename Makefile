@@ -11,7 +11,12 @@ VPATH	:=	src \
 			src/input_parsing \
 			src/signals \
 			src/utils \
-			src/exec
+			src/exec \
+			inc
+
+INC		:=	colors.h \
+			exec.h \
+			minishell.h
 
 SOURCES	:=	main.c \
 			change_dir.c \
@@ -39,7 +44,7 @@ OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJECTS)
+$(NAME): $(OBJECTS) $(INC)
 	make -C $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME) -L $(LIBFT)
 
@@ -56,7 +61,7 @@ re: fclean all
 test:
 	valgrind --leak-check=full ./$(NAME)
 
-$(OBJDIR)/%.o: %.c
+$(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
