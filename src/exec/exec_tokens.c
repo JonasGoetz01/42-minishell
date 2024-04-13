@@ -1,9 +1,9 @@
 #include "../../inc/minishell.h"
 
-void	ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
+t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 {
-	char	*cmd;
-	char	**args;
+	char		*cmd;
+	char		**args;
 	t_process	*process;
 
 	cmd = token->value;
@@ -22,11 +22,13 @@ void	ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 		token = token->next;
 	}
 	process = ft_create_process(cmd, args, node);
-	printf("executing %s: in %d out %d\n", process->cmd, process->pipe_fd_in[PIPE_READ], process->pipe_fd_out[PIPE_WRITE]);
+	if (DEBUG)
+		printf("executing %s: in %d out %d\n", process->cmd, process->pipe_fd_in[PIPE_READ], process->pipe_fd_out[PIPE_WRITE]);
 	if (ft_verify_process(process))
 		ft_execute_process(process, envp);
 	else
 		printf("Command not found for %s\n", process->cmd);
+	return (process);
 }
 
 void	ft_exec_pipes(t_ast_node *node, char **envp)
@@ -56,14 +58,13 @@ void	ft_exec_pipes(t_ast_node *node, char **envp)
 			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 		}
 		else if (token->type == TOKEN_CMD)
-			ft_exec_cmd(token, node, envp);
-		// else
-		// 	return ;
+			node->process = ft_exec_cmd(token, node, envp);
 		token = token->next;
 	}
 	ft_exec_pipes(node->left, envp);
 	ft_exec_pipes(node->right, envp);
-	ft_wait_for_processes(node);
+	if (node->process)
+		waitpid(node->process->pid, NULL, 0);
 }
 
 void	ft_execute_nodes(t_ast_node *node, char **envp)

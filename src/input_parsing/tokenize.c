@@ -389,6 +389,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		ast = malloc(sizeof(t_ast_node));
 		//@TODO: Check if malloc failed
 		ast->token = highest_token;
+		ast->process = NULL;
 		ast->left = NULL;
 		ast->right = NULL;
 		ast->fd_in[0] = -1;
