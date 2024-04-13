@@ -10,7 +10,7 @@ void	process_input(char *input, char **envv, t_global *global)
 	ast = NULL;
 	if (DEBUG)
 		printf("You entered: %s\n", input);
-	setenv("PWD", get_current_dir(), 1);
+	setenv("PWD", getcwd(NULL, 0), 1);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	if (DEBUG)
@@ -39,7 +39,7 @@ char	*build_prompt(void)
 	prompt = ft_strdup("");
 	prompt = ft_strjoin(prompt, KGRN); // Green color
 	prompt = ft_strjoin(prompt, "👤 "); // User icon
-	prompt = ft_strjoin(prompt, get_env("USER"));
+	prompt = ft_strjoin(prompt, getenv("USER"));
 	prompt = ft_strjoin(prompt, KNRM); // Reset color
 	prompt = ft_strjoin(prompt, "@");
 	prompt = ft_strjoin(prompt, KMAG); // Magenta color
@@ -47,7 +47,7 @@ char	*build_prompt(void)
 	prompt = ft_strjoin(prompt, KNRM); // Reset color
 	prompt = ft_strjoin(prompt, "\n");
 	prompt = ft_strjoin(prompt, KBLU); // Blue color
-	prompt = ft_strjoin(prompt, get_current_dir());
+	prompt = ft_strjoin(prompt, getcwd(NULL, 0));
 	prompt = ft_strjoin(prompt, KGRN);  // Green color
 	prompt = ft_strjoin(prompt, " ❯ "); // Arrow icon
 	prompt = ft_strjoin(prompt, KNRM);  // Reset color

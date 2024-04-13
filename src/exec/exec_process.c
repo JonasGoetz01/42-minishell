@@ -15,9 +15,17 @@ bool	ft_execute_process(t_process *process, char **envp)
 			dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
 		ft_close_fd(&process->pipe_fd_out[PIPE_READ]);
 		ft_close_fd(&process->pipe_fd_out[PIPE_WRITE]);
-		execve(process->cmd, process->args, envp);
+		if (ft_is_buildin_cmd(process->cmd))
+		{
+			exit(ft_exec_buildins(process, envp));
+			//Free
+		}
+		else
+		{
+			execve(process->cmd, process->args, envp);
+			exit(1);
+		}
 		//ToDo: Handle Error
-		return (false);
 	}
 	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
 	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);

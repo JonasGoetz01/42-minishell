@@ -82,7 +82,7 @@ bool	ft_verify_process(t_process *process)
 
 	if (ft_is_buildin_cmd(process->cmd))
 		return (true);
-	new_cmd = ft_get_cmd_path(process->cmd, get_env("PATH"));
+	new_cmd = ft_get_cmd_path(process->cmd, getenv("PATH"));
 	if (new_cmd)
 	{
 		free(process->cmd);

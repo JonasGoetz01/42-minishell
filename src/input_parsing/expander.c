@@ -12,7 +12,7 @@ char	*ft_expand_word(char *word, t_global *global)
 			return (ft_itoa(global->exit_status));
 		else
 		{
-			env_value = get_env(&word[1]);
+			env_value = getenv(&word[1]);
 			free(word);
 			if (!env_value)
 				return (ft_strdup(""));

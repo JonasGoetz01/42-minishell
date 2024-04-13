@@ -27,7 +27,7 @@ void	print_welcome_message(void)
 	printf("\x1b[0m\n\n\t\tDont panic shell\n\n");
 	printf("\t\t\e]8;;%s\apgrossma\e]8;;\a && \e]8;;%s\ajgotz\e]8;;\a\n\n\n",
 		pgrossma, jgotz);
-	printf("\n✨ Hello, %s ✨\n", get_env("USER"));
+	printf("\n✨ Hello, %s ✨\n", getenv("USER"));
 	fflush(stdout);
 }
 
