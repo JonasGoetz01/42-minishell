@@ -130,4 +130,6 @@ void					print_ast(t_ast_node **root, int level);
 
 void					rearrange_tokens(t_token **tokens);
 
+void					combine_words_in_quotes(t_token **tokens);
+
 #endif

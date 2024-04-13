@@ -18,6 +18,9 @@ void	process_input(char *input, char **envv, t_global *global)
 	remove_unused_spaces(&tokens);
 	if (DEBUG)
 		print_tokens(tokens);
+	combine_words_in_quotes(&tokens);
+	if (DEBUG)
+		print_tokens(tokens);
 	rearrange_tokens(&tokens);
 	if (DEBUG)
 		print_tokens(tokens);
