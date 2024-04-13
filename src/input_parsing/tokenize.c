@@ -149,6 +149,7 @@ void	remove_unused_spaces(t_token **tokens)
 	}
 }
 
+// Print the tokens
 void	print_tokens(t_token *tokens)
 {
 	printf("Tokens:\n");
@@ -159,6 +160,7 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+// Check if the token is an operator
 int	isOperator(t_token token)
 {
 	return (token.type == TOKEN_AMPERSAND || token.type == TOKEN_BRACKET_L
@@ -310,13 +312,18 @@ void	print_ast(t_ast_node **root, int level)
 // < file.txt echo hello ... => echo hello ... < file.txt
 // example 4:
 // < file.txt echo hello ... && test => echo hello ... < file.txt && test
+//
+// For testing
+// echo 1 && < test.txt echo 2 && echo 3
+// echo 1 && < test.txt echo 2 && < test1.txt echo 3
+// < test.txt echo 1
 void	rearrange_tokens(t_token **tokens)
 {
-	t_token	*current;
-	t_token	*redirect;
-	t_token	*file;
-	t_token	*after_file;
-	t_token	*prev;
+	t_token *current;
+	t_token *redirect;
+	t_token *file;
+	t_token *after_file;
+	t_token *prev;
 
 	current = *tokens;
 	prev = NULL;
@@ -329,39 +336,32 @@ void	rearrange_tokens(t_token **tokens)
 		prev = current;
 		current = current->next;
 	}
+	// If < is the first token
 	if (prev == NULL)
 	{
 		redirect = *tokens;
 		file = redirect->next;
 		after_file = file->next;
+		current = after_file;
 		*tokens = after_file;
-		// Update the token list to skip the redirection token
-		while (after_file != NULL && after_file->type == TOKEN_WORD)
+		while (current != NULL && current->type == TOKEN_WORD)
+			current = current->next;
+		while (after_file != NULL && after_file->next != NULL
+			&& after_file->next->type == TOKEN_WORD)
 			after_file = after_file->next;
-		if (after_file != NULL)
-			file->next = after_file->next;
-		else
-			file->next = NULL;
-		if (after_file != NULL)
-			after_file->next = redirect;
+		file->next = after_file->next;
+		after_file->next = redirect;
 		if (file->next != NULL)
 			rearrange_tokens(&file->next);
-		return ;
 	}
-	if (current != NULL && (prev == NULL || prev->type != TOKEN_WORD))
+	// If < is not the first token
+	else if (current != NULL && (prev == NULL || prev->type != TOKEN_WORD))
 	{
 		// Handle case where redirection token is not the first token
 		redirect = current;
 		file = current->next;
 		after_file = file->next;
 		current = after_file;
-		if (DEBUG)
-		{
-			printf("Redirect7: %s\n", redirect->value);
-			printf("File: %s\n", file->value);
-			if (after_file != NULL)
-				printf("After file: %s\n", after_file->value);
-		}
 		while (current != NULL && current->type == TOKEN_WORD)
 			current = current->next;
 		if (prev != NULL)
@@ -377,9 +377,3 @@ void	rearrange_tokens(t_token **tokens)
 			rearrange_tokens(&file->next);
 	}
 }
-
-// echo 1 && < test.txt echo 2 && echo 3
-
-// echo 1 && < test.txt echo 2 && < test1.txt echo 3
-
-// < test.txt echo 1
