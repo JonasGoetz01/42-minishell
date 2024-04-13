@@ -2,7 +2,6 @@
 
 void	process_input(char *input, char **envv, t_global *global)
 {
-	char		**inputs;
 	t_token		*tokens;
 	t_ast_node	*ast;
 
@@ -12,11 +11,6 @@ void	process_input(char *input, char **envv, t_global *global)
 	if (DEBUG)
 		printf("You entered: %s\n", input);
 	setenv("PWD", get_current_dir(), 1);
-	inputs = ft_split(input, ' ');
-	if (ft_strncmp(inputs[0], "cd", 2) == 0)
-		change_dir(inputs[1]);
-	else if (ft_strncmp(inputs[0], "env", 3) == 0)
-		print_envs(envv);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	if (DEBUG)

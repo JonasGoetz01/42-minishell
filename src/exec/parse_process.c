@@ -65,10 +65,23 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 	return (NULL);
 }
 
+bool	ft_is_buildin_cmd(char *cmd)
+{
+	return (ft_strncmp(cmd, "echo", 5) == 0 ||
+			ft_strncmp(cmd, "cd", 3) == 0 ||
+			ft_strncmp(cmd, "pwd", 4) == 0 ||
+			ft_strncmp(cmd, "export", 7) == 0 ||
+			ft_strncmp(cmd, "unset", 6) == 0 ||
+			ft_strncmp(cmd, "env", 4) == 0 ||
+			ft_strncmp(cmd, "exit", 5) == 0);
+}
+
 bool	ft_verify_process(t_process *process)
 {
 	char	*new_cmd;
 
+	if (ft_is_buildin_cmd(process->cmd))
+		return (true);
 	new_cmd = ft_get_cmd_path(process->cmd, get_env("PATH"));
 	if (new_cmd)
 	{
