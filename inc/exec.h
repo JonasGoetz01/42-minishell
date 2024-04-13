@@ -9,6 +9,7 @@
 
 typedef struct s_process
 {
+	bool	is_buildin;
 	int		pipe_fd_in[2];
 	int		pipe_fd_out[2];
 	char	*cmd;

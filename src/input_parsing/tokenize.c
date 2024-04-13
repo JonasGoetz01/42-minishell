@@ -215,6 +215,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 
 	highest_token = NULL;
 	brackets_level = 0;
+	highest_token_brackets_level = 0;
 	current_token = tokens;
 	ast = *root;
 	while (current_token != NULL)

@@ -106,7 +106,7 @@ void					ft_close_fd_process(t_process *process);
 void					ft_close_fd_node(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
-bool					ft_execute_process(t_process *process, char **envp);
+int						ft_execute_process(t_process *process, char **envp);
 void					ft_exec_all(t_ast_node *token, char **envp,
 							t_global *global);
 t_process				*ft_create_process(char *cmd, char **args,

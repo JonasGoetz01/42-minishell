@@ -5,6 +5,7 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 	t_process	*process;
 
 	process = malloc(sizeof(t_process));
+	process->is_buildin = false;
 	process->cmd = cmd;
 	process->args = args;
 	process->pipe_fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
@@ -81,7 +82,10 @@ bool	ft_verify_process(t_process *process)
 	char	*new_cmd;
 
 	if (ft_is_buildin_cmd(process->cmd))
+	{
+		process->is_buildin = true;
 		return (true);
+	}
 	new_cmd = ft_get_cmd_path(process->cmd, getenv("PATH"));
 	if (new_cmd)
 	{
