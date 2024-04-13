@@ -4,18 +4,18 @@
 # include "../lib/libft/libft.h"
 # include "colors.h"
 # include "exec.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/select.h>
-# include <unistd.h>
 # include <sys/wait.h>
-# include <errno.h>
+# include <unistd.h>
 
 # define EXIT_ERROR 1
-# define DEBUG 0
+# define DEBUG 1
 
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -37,7 +37,6 @@ typedef enum e_token_type
 	TOKEN_DOUBLE_AMPERSAND,
 	TOKEN_DOUBLE_QUOTE,
 	TOKEN_SINGLE_QUOTE,
-	TOKEN_SEMICOLON,
 	TOKEN_CMD,
 	TOKEN_ARG
 }						t_token_type;
@@ -83,7 +82,8 @@ void					remove_unused_spaces(t_token **tokens);
 char					*execute_command(const char *command);
 bool					ft_is_buildin_cmd(char *cmd);
 int						ft_exec_buildins(t_process *process, char **envp);
-void					ft_error_buildin(const char *msg, const char *arg, t_process *process, int exit_status);
+void					ft_error_buildin(const char *msg, const char *arg,
+							t_process *process, int exit_status);
 void					ft_cd_buildin(t_process *process);
 
 t_token					*tokenize(const char *input);
@@ -106,8 +106,10 @@ void					ft_close_fd_node(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
 bool					ft_execute_process(t_process *process, char **envp);
-void					ft_exec_all(t_ast_node *token, char **envp, t_global *global);
-t_process				*ft_create_process(char *cmd, char **args, t_ast_node *node);
+void					ft_exec_all(t_ast_node *token, char **envp,
+							t_global *global);
+t_process				*ft_create_process(char *cmd, char **args,
+							t_ast_node *node);
 bool					ft_verify_process(t_process *process);
 int						ft_wait_for_processes(t_ast_node *node);
 
@@ -124,5 +126,7 @@ void					*ft_recalloc(void *ptr, size_t old_size,
 
 void					gen_ast(t_ast_node **root, t_token *tokens);
 void					print_ast(t_ast_node **root, int level);
+
+void					rearrange_tokens(t_token **tokens);
 
 #endif
