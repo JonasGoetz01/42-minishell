@@ -84,6 +84,7 @@ t_token	*tokenize(const char *input)
 
 	tokens = NULL;
 	current = NULL;
+	(void) current;
 	i = 0;
 	while (input[i] != '\0')
 	{
@@ -382,14 +383,19 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		current_token = current_token->next;
 	}
 	if (DEBUG)
-		printf("Highest token: %s\n", highest_token->value);
+		printf("Highest token: %s\nHighest Bracket Level: %d\n", highest_token->value, highest_token_brackets_level);
 	if (ast == NULL)
 	{
 		ast = malloc(sizeof(t_ast_node));
 		//@TODO: Check if malloc failed
 		ast->token = highest_token;
+		ast->process = NULL;
 		ast->left = NULL;
 		ast->right = NULL;
+		ast->fd_in[0] = -1;
+		ast->fd_in[1] = -1;
+		ast->fd_out[0] = -1;
+		ast->fd_out[1] = -1;
 		*root = ast;
 	}
 	if (highest_token->type == TOKEN_WORD)
@@ -428,18 +434,20 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 void	print_ast(t_ast_node **root, int level)
 {
 	t_ast_node	*ast;
+	t_token		*token;
 
 	ast = *root;
 	if (ast == NULL)
 		return ;
 	print_ast(&(ast->right), level + 1);
-	while (ast->token != NULL)
+	token = ast->token;
+	while (token != NULL)
 	{
 		for (int i = 0; i < level; i++)
 			printf("    ");
-		printf("Type: %d, Value: %s Prio: %d\n", ast->token->type,
-			ast->token->value, precedence_node(ast));
-		ast->token = ast->token->next;
+		printf("Type: %d, Value: %s Prio: %d\n", token->type,
+			token->value, precedence_node(ast));
+		token = token->next;
 	}
 	print_ast(&(ast->left), level + 1);
 }

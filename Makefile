@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	:=	-Wextra -Wall -Werror -g -fsanitize=address -O1
+CFLAGS	:=	-Wextra -Wall -Werror #-g -fsanitize=address -O1
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
 
@@ -11,7 +11,12 @@ VPATH	:=	src \
 			src/input_parsing \
 			src/signals \
 			src/utils \
-			src/exec
+			src/exec \
+			inc
+
+INC		:=	colors.h \
+			exec.h \
+			minishell.h
 
 SOURCES	:=	main.c \
 			change_dir.c \
@@ -31,14 +36,15 @@ SOURCES	:=	main.c \
 			org_tokens.c \
 			exec_tokens.c \
 			parse_process.c \
-			alloc_utils.c
+			alloc_utils.c \
+			wait_process.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJECTS)
+$(NAME): $(OBJECTS) $(INC)
 	make -C $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME) -L $(LIBFT)
 
@@ -55,7 +61,7 @@ re: fclean all
 test:
 	valgrind --leak-check=full ./$(NAME)
 
-$(OBJDIR)/%.o: %.c
+$(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 

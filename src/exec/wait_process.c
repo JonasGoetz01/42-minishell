@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_arr_create_len.c                                :+:      :+:    :+:   */
+/*   wait_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/03 13:48:25 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/03 18:43:23 by pgrossma         ###   ########.fr       */
+/*   Created: 2024/04/11 20:14:49 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/04/11 21:28:46 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../inc/minishell.h"
 
-char	**ft_arr_create_len(size_t len)
+int	ft_wait_for_processes(t_ast_node *node)
 {
-	char	**arr;
+	// int		status;
+	// pid_t	pid;
+	(void)node;
 
-	arr = malloc(sizeof(char *) * len);
-	if (!arr)
-		return (NULL);
-	arr[len - 1] = NULL;
-	return (arr);
+	// status = 0;
+	// pid = args->processes[args->process_len - 1]->pid;
+	// waitpid(pid, &status, 0);
+	while (wait(NULL) > 0)
+		;
+	// if (WIFEXITED(status))
+	// 	return (WEXITSTATUS(status));
+	// return (EXIT_FAILURE);
+	return (0);
 }

@@ -9,11 +9,11 @@
 
 typedef struct s_process
 {
-	int			pipe_fd_in[2];
-	int			pipe_fd_out[2];
-	const char	*cmd;
-	char		**args;
-	pid_t		pid;
+	int		pipe_fd_in[2];
+	int		pipe_fd_out[2];
+	char	*cmd;
+	char	**args;
+	pid_t	pid;
 }			t_process;
 
 #endif

@@ -1,21 +1,21 @@
 #include "../../inc/minishell.h"
 
-t_process	*ft_create_process(const char *cmd, char **args)
+t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 {
 	t_process	*process;
 
-	process = malloc(sizeof(process));
+	process = malloc(sizeof(t_process));
 	process->cmd = cmd;
 	process->args = args;
-	process->pipe_fd_in[PIPE_READ] = -1;
-	process->pipe_fd_in[PIPE_WRITE] = -1;
-	process->pipe_fd_out[PIPE_READ] = -1;
-	process->pipe_fd_out[PIPE_WRITE] = STDOUT_FILENO;
+	process->pipe_fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+	process->pipe_fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
+	process->pipe_fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
+	process->pipe_fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 	process->pid = -1;
 	return (process);
 }
 
-char	*ft_check_cmd_path(char **dirs, const char *cmd, int ind)
+char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 {
 	char	*cmd_path;
 	char	*tmp;
@@ -40,7 +40,7 @@ char	*ft_check_cmd_path(char **dirs, const char *cmd, int ind)
 	return (NULL);
 }
 
-char	*ft_get_cmd_path(const char *cmd, char *path)
+char	*ft_get_cmd_path(char *cmd, char *path)
 {
 	char	**dirs;
 	char	*cmd_path;
@@ -66,6 +66,13 @@ char	*ft_get_cmd_path(const char *cmd, char *path)
 
 bool	ft_verify_process(t_process *process)
 {
-	process->cmd = ft_get_cmd_path(process->cmd, get_env("PATH"));
-	return (process->cmd != NULL);
+	char	*new_cmd;
+
+	new_cmd = ft_get_cmd_path(process->cmd, get_env("PATH"));
+	if (new_cmd)
+	{
+		free(process->cmd);
+		process->cmd = new_cmd;
+	}
+	return (new_cmd != NULL);
 }
