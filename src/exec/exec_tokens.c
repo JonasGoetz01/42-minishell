@@ -16,9 +16,8 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 	token = token->next;
 	while (token)
 	{
-		if (token->type != TOKEN_ARG)
-			break ;
-		args = ft_arr_add(token->value, args);
+		if (token->type == TOKEN_ARG)
+			args = ft_arr_add(token->value, args);
 		token = token->next;
 	}
 	process = ft_create_process(cmd, args, node);
@@ -73,5 +72,6 @@ void	ft_execute_nodes(t_ast_node *node, char **envp, t_global *global)
 void	ft_exec_all(t_ast_node *node, char **envp, t_global *global)
 {
 	ft_org_tokens(node);
+	print_ast(&node, 0);
 	ft_execute_nodes(node, envp, global);
 }
