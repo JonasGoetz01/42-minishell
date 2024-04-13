@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	:=	-Wextra -Wall -Werror -g -fsanitize=address -O1
+CFLAGS	:=	-Wextra -Wall -Werror #-g -fsanitize=address -O1
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
 
@@ -24,6 +24,7 @@ SOURCES	:=	main.c \
 			exec_buildins.c \
 			pwd_buildin.c \
 			env_buildin.c \
+			echo_buildin.c \
 			get_hostname.c \
 			exec_command.c \
 			prompt.c \

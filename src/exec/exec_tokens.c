@@ -16,9 +16,8 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 	token = token->next;
 	while (token)
 	{
-		if (token->type != TOKEN_ARG)
-			break ;
-		args = ft_arr_add(token->value, args);
+		if (token->type == TOKEN_ARG)
+			args = ft_arr_add(token->value, args);
 		token = token->next;
 	}
 	process = ft_create_process(cmd, args, node);
@@ -65,7 +64,8 @@ void	ft_execute_nodes(t_ast_node *node, char **envp, t_global *global)
 	ft_execute_nodes(node->right, envp, global);
 	if (node->process)
 	{
-		waitpid(node->process->pid, &node->process->exit_status, 0);
+		if (!node->process->is_buildin)
+			waitpid(node->process->pid, &node->process->exit_status, 0);
 		global->exit_status = node->process->exit_status;
 	}
 }

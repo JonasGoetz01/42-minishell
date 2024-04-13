@@ -20,7 +20,7 @@ void	ft_cd_buildin(t_process *process)
 		}
 	}
 	else if (process->args[1][0] == '/')
-		tmp = process->args[0];
+		tmp = process->args[1];
 	else
 	{
 		ft_cd_dir_rel(process);
