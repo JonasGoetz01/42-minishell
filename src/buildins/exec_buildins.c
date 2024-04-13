@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-int	ft_exec_buildins(t_process *process, char **envp)
+void	ft_exec_buildins(t_process *process, char **envp)
 {
 	if (ft_strncmp(process->cmd, "echo", 5) == 0)
 		ft_echo_buildin(process);
@@ -14,6 +14,5 @@ int	ft_exec_buildins(t_process *process, char **envp)
 		ft_env_buildin(envp);
 	// else if (ft_strncmp(process->cmd, "exit", 5) == 0)
 	if (process->exit_status == -1)
-		return (0);
-	return (process->exit_status);
+		process->exit_status = 0;
 }
