@@ -31,16 +31,13 @@ void	ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 void	ft_exec_pipes(t_ast_node *node, char **envp)
 {
 	t_token	*token;
-	t_token_type	type;
 	int		fd_pipe[2];
 
 	if (!node)
 		return ;
 	token = node->token;
-	type = 0;
 	while (token)
 	{
-		type = token->type;
 		if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
@@ -58,15 +55,7 @@ void	ft_exec_pipes(t_ast_node *node, char **envp)
 	}
 	ft_exec_pipes(node->left, envp);
 	ft_exec_pipes(node->right, envp);
-	if (type == TOKEN_PIPE)
-	{
-		ft_close_fd(&node->left->fd_out);
-		ft_close_fd(&node->right->fd_in);
-	}
-	else if (type == TOKEN_CMD)
-	{
-
-	}
+	ft_wait_for_processes(node);
 }
 
 void	ft_execute_nodes(t_ast_node *node, char **envp)
