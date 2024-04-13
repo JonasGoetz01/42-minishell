@@ -329,6 +329,25 @@ void	rearrange_tokens(t_token **tokens)
 		prev = current;
 		current = current->next;
 	}
+	if (prev == NULL)
+	{
+		redirect = *tokens;
+		file = redirect->next;
+		after_file = file->next;
+		*tokens = after_file;
+		// Update the token list to skip the redirection token
+		while (after_file != NULL && after_file->type == TOKEN_WORD)
+			after_file = after_file->next;
+		if (after_file != NULL)
+			file->next = after_file->next;
+		else
+			file->next = NULL;
+		if (after_file != NULL)
+			after_file->next = redirect;
+		if (file->next != NULL)
+			rearrange_tokens(&file->next);
+		return ;
+	}
 	if (current != NULL && (prev == NULL || prev->type != TOKEN_WORD))
 	{
 		// Handle case where redirection token is not the first token
@@ -348,13 +367,19 @@ void	rearrange_tokens(t_token **tokens)
 		if (prev != NULL)
 			prev->next = after_file;
 		else
-			*tokens = after_file;
+			(*tokens)->next = after_file;
 		while (after_file != NULL && after_file->next != NULL
 			&& after_file->next->type == TOKEN_WORD)
 			after_file = after_file->next;
 		file->next = after_file->next;
 		after_file->next = redirect;
+		if (file->next != NULL)
+			rearrange_tokens(&file->next);
 	}
 }
 
 // echo 1 && < test.txt echo 2 && echo 3
+
+// echo 1 && < test.txt echo 2 && < test1.txt echo 3
+
+// < test.txt echo 1
