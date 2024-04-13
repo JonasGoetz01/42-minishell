@@ -72,6 +72,5 @@ void	ft_execute_nodes(t_ast_node *node, char **envp, t_global *global)
 void	ft_exec_all(t_ast_node *node, char **envp, t_global *global)
 {
 	ft_org_tokens(node);
-	print_ast(&node, 0);
 	ft_execute_nodes(node, envp, global);
 }
