@@ -19,9 +19,11 @@ INC		:=	colors.h \
 			minishell.h
 
 SOURCES	:=	main.c \
-			change_dir.c \
-			get_dir.c \
-			env.c \
+			cd_buildin.c \
+			error_buildins.c \
+			exec_buildins.c \
+			pwd_buildin.c \
+			env_buildin.c \
 			get_hostname.c \
 			exec_command.c \
 			prompt.c \
@@ -36,8 +38,7 @@ SOURCES	:=	main.c \
 			org_tokens.c \
 			exec_tokens.c \
 			parse_process.c \
-			alloc_utils.c \
-			wait_process.c
+			alloc_utils.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

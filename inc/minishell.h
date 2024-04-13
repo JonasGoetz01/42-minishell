@@ -12,6 +12,7 @@
 # include <sys/select.h>
 # include <unistd.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # define EXIT_ERROR 1
 # define DEBUG 0
@@ -70,19 +71,20 @@ typedef struct s_global
 
 int						show_prompt(char **envv, t_global *global);
 
-char					*get_current_dir(void);
-void					change_dir(char *path);
-
 void					handle_sigint(int sig);
 void					handle_sigquit(int sig);
 
-void					print_envs(char **envv);
-char					*get_env(char *env);
+void					ft_env_buildin(char **envv);
+void					ft_pwd_buildin(t_process *process);
 char					*get_hostname(void);
 void					print_tokens(t_token *tokens);
 void					print_tokens_value(t_token *tokens);
 void					remove_unused_spaces(t_token **tokens);
 char					*execute_command(const char *command);
+bool					ft_is_buildin_cmd(char *cmd);
+int						ft_exec_buildins(t_process *process, char **envp);
+void					ft_error_buildin(const char *msg, const char *arg, t_process *process, int exit_status);
+void					ft_cd_buildin(t_process *process);
 
 t_token					*tokenize(const char *input);
 

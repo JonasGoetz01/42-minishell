@@ -27,7 +27,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 	if (ft_verify_process(process))
 		ft_execute_process(process, envp);
 	else
-		printf("Command not found for %s\n", process->cmd);
+		printf("minishell: %s: command not found\n", process->cmd);
 	return (process);
 }
 
