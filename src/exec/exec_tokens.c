@@ -31,7 +31,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 	return (process);
 }
 
-void	ft_exec_pipes(t_ast_node *node, char **envp)
+void	ft_execute_nodes(t_ast_node *node, char **envp)
 {
 	t_token	*token;
 	int		fd_pipe[2];
@@ -61,37 +61,14 @@ void	ft_exec_pipes(t_ast_node *node, char **envp)
 			node->process = ft_exec_cmd(token, node, envp);
 		token = token->next;
 	}
-	ft_exec_pipes(node->left, envp);
-	ft_exec_pipes(node->right, envp);
+	ft_execute_nodes(node->left, envp);
+	ft_execute_nodes(node->right, envp);
 	if (node->process)
 		waitpid(node->process->pid, NULL, 0);
-}
-
-void	ft_execute_nodes(t_ast_node *node, char **envp)
-{
-	t_token	*token;
-
-	if (!node)
-		return ;
-	token = node->token;
-	while (token)
-	{
-		if (token->type == TOKEN_PIPE)
-		{
-			ft_exec_pipes(node, envp);
-		}
-		// else if (token->type == TOKEN_CMD)
-		// 	ft_exec_cmd(token, node, envp);
-		token = token->next;
-	}
-	// ft_execute_nodes(node->left, envp);
-	// ft_execute_nodes(node->right, envp);
 }
 
 void	ft_exec_all(t_ast_node *node, char **envp)
 {
 	ft_org_tokens(node);
-	// ft_execute_nodes(node, envp);
-	ft_exec_pipes(node, envp);
-	// ft_wait_for_processes(node);
+	ft_execute_nodes(node, envp);
 }
