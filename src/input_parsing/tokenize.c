@@ -1,62 +1,5 @@
 #include "../../inc/minishell.h"
 
-// t_ast_node	*create_ast_node(int type, char *value)
-// {
-// 	t_ast_node	*node;
-
-// 	node = malloc(sizeof(t_ast_node));
-// 	if (node != NULL)
-// 	{
-// 		node->type = type;
-// 		node->value = strdup(value);
-// 		node->left = NULL;
-// 		node->right = NULL;
-// 	}
-// 	return (node);
-// }
-
-// t_ast_node	*parse_tokens_to_ast(t_token *tokens)
-// {
-// 	t_ast_node	*root;
-// 	t_ast_node	*current_node;
-// 	t_token		*current_token;
-// 	t_ast_node	*new_node;
-// 	int			current_precedence;
-
-// 	root = NULL;
-// 	current_node = NULL;
-// 	current_token = tokens;
-// 	while (current_token != NULL)
-// 	{
-// 		new_node = create_ast_node(current_token->type, current_token->value);
-// 		current_precedence = precedence(*current_token);
-// 		if (root == NULL || current_precedence > precedence_node(root))
-// 			root = new_node;
-// 		else
-// 		{
-// 			current_node = root;
-// 			while (current_node->right != NULL
-// 				&& current_precedence <= precedence_node(current_node->right))
-// 				current_node = current_node->right;
-// 			new_node->left = current_node->right;
-// 			current_node->right = new_node;
-// 		}
-// 		current_token = current_token->next;
-// 	}
-// 	return (root);
-// }
-
-// void	print_ast_execution_order(t_ast_node *root)
-// {
-// 	if (root == NULL)
-// 	{
-// 		return ;
-// 	}
-// 	printf("%s\n", root->value);
-// 	print_ast_execution_order(root->left);
-// 	print_ast_execution_order(root->right);
-// }
-
 // length of the token
 // figures out the length of the token by checking for delimiters
 int	token_length(const char *input, const char *delimiters)
@@ -204,6 +147,7 @@ void	remove_unused_spaces(t_token **tokens)
 	}
 }
 
+// Print the tokens
 void	print_tokens(t_token *tokens)
 {
 	printf("Tokens:\n");
@@ -214,6 +158,7 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+// Check if the token is an operator
 int	isOperator(t_token token)
 {
 	return (token.type == TOKEN_AMPERSAND || token.type == TOKEN_BRACKET_L
@@ -254,92 +199,6 @@ int	precedence(t_token token)
 int	precedence_node(t_ast_node *node)
 {
 	return (precedence(*create_token(node->token->type, node->token->value)));
-}
-
-t_token	*postfixFromTokens(t_token *tokens)
-{
-	t_token	*current_token;
-	t_stack	*stack;
-	t_token	*output_queue;
-	int		in_single_quote;
-	int		in_double_quote;
-
-	stack = create_stack();
-	output_queue = NULL;
-	current_token = tokens;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (current_token != NULL)
-	{
-		if (current_token->type == TOKEN_WORD
-			|| current_token->type == TOKEN_SINGLE_QUOTE
-			|| current_token->type == TOKEN_DOUBLE_QUOTE)
-		{
-			if (current_token->type == TOKEN_SINGLE_QUOTE)
-			{
-				if (in_double_quote == 1)
-					append_token(&output_queue,
-						create_token(current_token->type,
-							current_token->value));
-				else
-					in_single_quote = !in_single_quote;
-			}
-			if (current_token->type == TOKEN_DOUBLE_QUOTE)
-			{
-				if (in_single_quote == 1)
-					append_token(&output_queue,
-						create_token(current_token->type,
-							current_token->value));
-				else
-					in_double_quote = !in_double_quote;
-			}
-			if (current_token->type == TOKEN_WORD)
-			{
-				if (current_token->value[0] == '\\')
-				{
-					if (current_token->next)
-						current_token = current_token->next;
-					else
-						break ;
-				}
-				append_token(&output_queue, create_token(current_token->type,
-						current_token->value));
-			}
-		}
-		else if (isOperator(*current_token))
-		{
-			while (stack_is_not_empty(stack)
-				&& precedence(stack_peek(stack)) >= precedence(*current_token))
-			{
-				append_token(&output_queue, create_token(stack_peek(stack).type,
-						stack_pop(stack).value));
-			}
-			stack_push(stack, *current_token);
-		}
-		else if (current_token->type == TOKEN_BRACKET_L)
-		{
-			stack_push(stack, *current_token);
-		}
-		else if (current_token->type == TOKEN_BRACKET_R)
-		{
-			while (stack_is_not_empty(stack)
-				&& stack_peek(stack).type != TOKEN_BRACKET_L)
-			{
-				append_token(&output_queue, create_token(stack_peek(stack).type,
-						stack_pop(stack).value));
-			}
-			stack_pop(stack);
-		}
-		current_token = current_token->next;
-	}
-	while (stack_is_not_empty(stack))
-	{
-		append_token(&output_queue, create_token(stack_peek(stack).type,
-				stack_pop(stack).value));
-	}
-	free(stack->top);
-	free(stack);
-	return (output_queue);
 }
 
 // walk through tokens and search for the highest precedence operator
@@ -448,4 +307,79 @@ void	print_ast(t_ast_node **root, int level)
 		token = token->next;
 	}
 	print_ast(&(ast->left), level + 1);
+}
+
+// sometimes the tokens need to be rearranged
+// example 1:
+// echo < file.txt hello ... => echo hello ... < file.txt
+// example 2:
+// echo < file.txt hello ... && test => echo hello ... < file.txt && test
+// example 3:
+// < file.txt echo hello ... => echo hello ... < file.txt
+// example 4:
+// < file.txt echo hello ... && test => echo hello ... < file.txt && test
+//
+// For testing
+// echo 1 && < test.txt echo 2 && echo 3
+// echo 1 && < test.txt echo 2 && < test1.txt echo 3
+// < test.txt echo 1
+void	rearrange_tokens(t_token **tokens)
+{
+	t_token *current;
+	t_token *redirect;
+	t_token *file;
+	t_token *after_file;
+	t_token *prev;
+
+	current = *tokens;
+	prev = NULL;
+	// Find the first redirection token
+	while (current != NULL && !(current->type == TOKEN_LESS
+			|| current->type == TOKEN_DOUBLE_LESS
+			|| current->type == TOKEN_GREATER
+			|| current->type == TOKEN_DOUBLE_GREATER))
+	{
+		prev = current;
+		current = current->next;
+	}
+	// If < is the first token
+	if (prev == NULL)
+	{
+		redirect = *tokens;
+		file = redirect->next;
+		after_file = file->next;
+		current = after_file;
+		*tokens = after_file;
+		while (current != NULL && current->type == TOKEN_WORD)
+			current = current->next;
+		while (after_file != NULL && after_file->next != NULL
+			&& after_file->next->type == TOKEN_WORD)
+			after_file = after_file->next;
+		file->next = after_file->next;
+		after_file->next = redirect;
+		if (file->next != NULL)
+			rearrange_tokens(&file->next);
+	}
+	// If < is not the first token
+	else if (current != NULL && (prev == NULL || prev->type != TOKEN_WORD))
+	{
+		// Handle case where redirection token is not the first token
+		redirect = current;
+		file = current->next;
+		after_file = file->next;
+		current = after_file;
+		while (current != NULL && current->type == TOKEN_WORD)
+			current = current->next;
+		if (prev != NULL)
+			prev->next = after_file;
+		else
+			(*tokens)->next = after_file;
+		while (after_file != NULL && after_file->next != NULL
+			&& after_file->next->type == TOKEN_WORD)
+			after_file = after_file->next;
+		file->next = after_file->next;
+		after_file->next = redirect;
+		if (file->next != NULL)
+			rearrange_tokens(&file->next);
+	}
 }

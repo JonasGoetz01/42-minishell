@@ -125,4 +125,6 @@ void					*ft_recalloc(void *ptr, size_t old_size,
 void					gen_ast(t_ast_node **root, t_token *tokens);
 void					print_ast(t_ast_node **root, int level);
 
+void					rearrange_tokens(t_token **tokens);
+
 #endif
