@@ -22,6 +22,7 @@ void	ft_exec_cmd(t_token *token, t_ast_node *node, char **envp)
 		token = token->next;
 	}
 	process = ft_create_process(cmd, args, node);
+	printf("executing %s: in %d out %d\n", process->cmd, process->pipe_fd_in[PIPE_READ], process->pipe_fd_out[PIPE_WRITE]);
 	if (ft_verify_process(process))
 		ft_execute_process(process, envp);
 	else
@@ -41,11 +42,18 @@ void	ft_exec_pipes(t_ast_node *node, char **envp)
 		if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
+			{
 				printf("Handle Error pipe\n");
+				return ;
+			}
 			node->left->fd_out[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
 			node->left->fd_out[PIPE_READ] = fd_pipe[PIPE_READ];
+			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 			node->right->fd_in[PIPE_READ] = fd_pipe[PIPE_READ];
 			node->right->fd_in[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
+			node->right->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
+			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 		}
 		else if (token->type == TOKEN_CMD)
 			ft_exec_cmd(token, node, envp);

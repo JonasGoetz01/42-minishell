@@ -433,18 +433,20 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 void	print_ast(t_ast_node **root, int level)
 {
 	t_ast_node	*ast;
+	t_token		*token;
 
 	ast = *root;
 	if (ast == NULL)
 		return ;
 	print_ast(&(ast->right), level + 1);
-	while (ast->token != NULL)
+	token = ast->token;
+	while (token != NULL)
 	{
 		for (int i = 0; i < level; i++)
 			printf("    ");
-		printf("Type: %d, Value: %s Prio: %d\n", ast->token->type,
-			ast->token->value, precedence_node(ast));
-		ast->token = ast->token->next;
+		printf("Type: %d, Value: %s Prio: %d\n", token->type,
+			token->value, precedence_node(ast));
+		token = token->next;
 	}
 	print_ast(&(ast->left), level + 1);
 }
