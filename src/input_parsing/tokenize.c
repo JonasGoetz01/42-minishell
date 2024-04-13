@@ -74,7 +74,6 @@ int	token_length(const char *input, const char *delimiters)
 t_token	*tokenize(const char *input)
 {
 	t_token			*tokens;
-	t_token			*current;
 	const char		*delimiters = "()<>|&\"' $";
 	char			*value;
 	t_token_type	type;
@@ -83,8 +82,6 @@ t_token	*tokenize(const char *input)
 	int				tokenLen;
 
 	tokens = NULL;
-	current = NULL;
-	(void) current;
 	i = 0;
 	while (input[i] != '\0')
 	{
@@ -383,7 +380,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		current_token = current_token->next;
 	}
 	if (DEBUG)
-		printf("Highest token: %s\nHighest Bracket Level: %d\n", highest_token->value, highest_token_brackets_level);
+		printf("Highest token: %s\nHighest Bracket Level: %d\n",
+			highest_token->value, highest_token_brackets_level);
 	if (ast == NULL)
 	{
 		ast = malloc(sizeof(t_ast_node));
@@ -445,8 +443,8 @@ void	print_ast(t_ast_node **root, int level)
 	{
 		for (int i = 0; i < level; i++)
 			printf("    ");
-		printf("Type: %d, Value: %s Prio: %d\n", token->type,
-			token->value, precedence_node(ast));
+		printf("Type: %d, Value: %s Prio: %d\n", token->type, token->value,
+			precedence_node(ast));
 		token = token->next;
 	}
 	print_ast(&(ast->left), level + 1);
