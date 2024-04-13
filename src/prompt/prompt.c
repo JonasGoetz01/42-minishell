@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-void	process_input(char *input, char **envv)
+void	process_input(char *input, char **envv, t_global *global)
 {
 	char		**inputs;
 	t_token		*tokens;
@@ -18,7 +18,7 @@ void	process_input(char *input, char **envv)
 	else if (ft_strncmp(inputs[0], "env", 3) == 0)
 		print_envs(envv);
 	tokens = tokenize(input);
-	ft_expand_tokens(tokens);
+	ft_expand_tokens(tokens, global);
 	if (DEBUG)
 		print_tokens(tokens);
 	remove_unused_spaces(&tokens);
@@ -31,7 +31,7 @@ void	process_input(char *input, char **envv)
 	gen_ast(&ast, tokens);
 	if (DEBUG)
 		print_ast(&ast, 0);
-	ft_exec_all(ast, envv);
+	ft_exec_all(ast, envv, global);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
 	// print_tokens(stack);
@@ -60,7 +60,7 @@ char	*build_prompt(void)
 	return (prompt);
 }
 
-int	show_prompt(char **envv)
+int	show_prompt(char **envv, t_global *global)
 {
 	char	*input;
 	char	*prompt;
@@ -81,6 +81,6 @@ int	show_prompt(char **envv)
 		free(input);
 		return (0);
 	}
-	process_input(input, envv);
+	process_input(input, envv, global);
 	return (0);
 }

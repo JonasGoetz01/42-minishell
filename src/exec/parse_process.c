@@ -12,6 +12,7 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 	process->pipe_fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 	process->pipe_fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 	process->pid = -1;
+	process->exit_status = -1;
 	return (process);
 }
 
@@ -74,5 +75,7 @@ bool	ft_verify_process(t_process *process)
 		free(process->cmd);
 		process->cmd = new_cmd;
 	}
+	else
+		process->exit_status = 127;
 	return (new_cmd != NULL);
 }

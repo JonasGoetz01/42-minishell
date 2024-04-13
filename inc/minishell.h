@@ -63,7 +63,12 @@ typedef struct s_ast_node
 	t_process			*process;
 }						t_ast_node;
 
-int						show_prompt(char **envv);
+typedef struct s_global
+{
+	int					exit_status;
+}						t_global;
+
+int						show_prompt(char **envv, t_global *global);
 
 char					*get_current_dir(void);
 void					change_dir(char *path);
@@ -91,7 +96,7 @@ t_token					*create_token(t_token_type type, char *value);
 void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
-void					ft_expand_tokens(t_token *tokens);
+void					ft_expand_tokens(t_token *tokens, t_global *global);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
@@ -99,7 +104,7 @@ void					ft_close_fd_node(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
 bool					ft_execute_process(t_process *process, char **envp);
-void					ft_exec_all(t_ast_node *token, char **envp);
+void					ft_exec_all(t_ast_node *token, char **envp, t_global *global);
 t_process				*ft_create_process(char *cmd, char **args, t_ast_node *node);
 bool					ft_verify_process(t_process *process);
 int						ft_wait_for_processes(t_ast_node *node);

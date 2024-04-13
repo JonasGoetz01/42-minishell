@@ -14,6 +14,7 @@ typedef struct s_process
 	char	*cmd;
 	char	**args;
 	pid_t	pid;
+	int		exit_status;
 }			t_process;
 
 #endif

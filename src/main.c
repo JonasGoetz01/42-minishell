@@ -33,6 +33,8 @@ void	print_welcome_message(void)
 
 int	main(int argc, char **argv, char **envv)
 {
+	t_global	global;
+
 	(void)argc;
 	(void)argv;
 	(void)envv;
@@ -41,8 +43,8 @@ int	main(int argc, char **argv, char **envv)
 	print_welcome_message();
 	while (1)
 	{
-		if (show_prompt(envv))
+		if (show_prompt(envv, &global))
 			break ;
 	}
-	return (0);
+	return (global.exit_status);
 }
