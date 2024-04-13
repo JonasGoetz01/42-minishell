@@ -322,11 +322,11 @@ void	print_ast(t_ast_node **root, int level)
 // < test.txt echo 1
 void	rearrange_tokens(t_token **tokens)
 {
-	t_token *current;
-	t_token *redirect;
-	t_token *file;
-	t_token *after_file;
-	t_token *prev;
+	t_token	*current;
+	t_token	*redirect;
+	t_token	*file;
+	t_token	*after_file;
+	t_token	*prev;
 
 	current = *tokens;
 	prev = NULL;
@@ -378,5 +378,49 @@ void	rearrange_tokens(t_token **tokens)
 		after_file->next = redirect;
 		if (file->next != NULL)
 			rearrange_tokens(&file->next);
+	}
+}
+
+void	combine_words_in_quotes(t_token **tokens)
+{
+	t_token			*current;
+	int				num_tokens;
+	t_token_type	type;
+	t_token			*start;
+
+	current = *tokens;
+	while (current)
+	{
+		if (current->type == TOKEN_DOUBLE_QUOTE
+			|| current->type == TOKEN_SINGLE_QUOTE)
+		{
+			num_tokens = 0;
+			type = current->type;
+			start = current;
+			while (current->next && current->next->type != type)
+			{
+				current = current->next;
+				num_tokens++;
+			}
+			if (current->next == NULL)
+			{
+				printf("Unmatched quote\n");
+				return ;
+			}
+			printf("Num tokens: %d\n", num_tokens);
+			current = start;
+			current->value = ft_strjoin(current->value, "");
+			while (num_tokens > 0)
+			{
+				current->value = ft_strjoin(current->value,
+						current->next->value);
+				if (current->next->next)
+					current->next = current->next->next;
+				else
+					current->next = NULL;
+				num_tokens--;
+			}
+		}
+		current = current->next;
 	}
 }
