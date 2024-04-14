@@ -17,7 +17,7 @@ int	token_length(const char *input, const char *delimiters)
 t_token	*tokenize(const char *input)
 {
 	t_token			*tokens;
-	const char		*delimiters = "()<>|&\"' $";
+	const char		*delimiters = "()<>|&\"' ";
 	char			*value;
 	t_token_type	type;
 	t_token			*new_token;
