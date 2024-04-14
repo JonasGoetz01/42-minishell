@@ -1,16 +1,16 @@
 #include "../../inc/minishell.h"
 
-void	ft_export_buildin(t_process *process, char **envp)
+void	ft_export_buildin(t_process *process, char ***envv)
 {
-	char	*name;
-	char	*value;
+	// char	*name;
+	// char	*value;
 
 	if (!process->args[1])
 	{
-		while (*envp)
+		while (**envv)
 		{
-			printf("declare -x %s\n", *envp);
-			envp++;
+			printf("declare -x %s\n", **envv);
+			(*envv)++;
 		}
 		return ;
 	}

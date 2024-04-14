@@ -37,13 +37,12 @@ int	main(int argc, char **argv, char **envv)
 
 	(void)argc;
 	(void)argv;
-	(void)envv;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	print_welcome_message();
 	while (1)
 	{
-		if (show_prompt(envv, &global))
+		if (show_prompt(&envv, &global))
 			break ;
 	}
 	return (global.exit_status);
