@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **envv)
 	(void)argv;
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	ft_init_t_global(&global, &envv);
+	ft_init_t_global(&global, envv);
 	print_welcome_message();
 	while (1)
 	{

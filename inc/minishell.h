@@ -71,7 +71,7 @@ typedef struct s_global
 }						t_global;
 
 int						show_prompt(t_global *global);
-void					ft_init_t_global(t_global *global, char ***envv);
+void					ft_init_t_global(t_global *global, char **envv);
 
 void					handle_sigint(int sig);
 void					handle_sigquit(int sig);
@@ -91,6 +91,7 @@ void					ft_cd_buildin(t_process *process);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
+bool					ft_env_contains(char *str, char **env);
 
 t_token					*tokenize(const char *input);
 
