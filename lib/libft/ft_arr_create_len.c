@@ -16,7 +16,7 @@ char	**ft_arr_create_len(size_t len)
 {
 	char	**arr;
 
-	arr = malloc(sizeof(char *) * len);
+	arr = ft_calloc(len, sizeof(char *));
 	if (!arr)
 		return (NULL);
 	arr[len - 1] = NULL;
