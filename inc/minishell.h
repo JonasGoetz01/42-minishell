@@ -87,6 +87,7 @@ void					ft_error_buildin(const char *msg, const char *arg,
 void					ft_cd_buildin(t_process *process);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
+void					ft_export_buildin(t_process *process, char **envp);
 
 t_token					*tokenize(const char *input);
 
