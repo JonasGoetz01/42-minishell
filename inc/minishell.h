@@ -133,4 +133,6 @@ void					rearrange_tokens(t_token **tokens);
 
 void					combine_words_in_quotes(t_token **tokens);
 
+int						input_validation(t_token **tokens);
+
 #endif

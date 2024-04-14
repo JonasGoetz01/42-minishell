@@ -5,36 +5,27 @@ void	process_input(char *input, char **envv, t_global *global)
 	t_token		*tokens;
 	t_ast_node	*ast;
 
-	// t_token		*root;
-	// t_token		*stack;
 	ast = NULL;
 	if (DEBUG)
 		printf("You entered: %s\n", input);
 	setenv("PWD", getcwd(NULL, 0), 1);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
-	if (DEBUG)
-		print_tokens(tokens);
+	print_tokens(tokens);
+	if (input_validation(&tokens))
+	{
+		free(input);
+		return ;
+	}
 	remove_unused_spaces(&tokens);
-	if (DEBUG)
-		print_tokens(tokens);
+	print_tokens(tokens);
 	combine_words_in_quotes(&tokens);
-	if (DEBUG)
-		print_tokens(tokens);
+	print_tokens(tokens);
 	rearrange_tokens(&tokens);
-	if (DEBUG)
-		print_tokens(tokens);
-	if (DEBUG)
-		printf("---\n");
-	// root = postfixFromTokens(tokens);
-	// print_tokens(root);
+	print_tokens(tokens);
 	gen_ast(&ast, tokens);
-	if (DEBUG)
-		print_ast(&ast, 0);
+	print_ast(&ast, 0);
 	ft_exec_all(ast, envv, global);
-	// print_tokens(tokens);
-	// stack = postfixFromTokens(tokens);
-	// print_tokens(stack);
 	free(input);
 }
 
@@ -75,12 +66,6 @@ int	show_prompt(char **envv, t_global *global)
 		return (0);
 	}
 	add_history(input);
-	if (validator(input))
-	{
-		printf("Invalid input\n");
-		free(input);
-		return (0);
-	}
 	process_input(input, envv, global);
 	return (0);
 }
