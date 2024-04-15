@@ -17,6 +17,16 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+	TEST("retokenize", "no changes needed multiple words", {
+		tokens = create_token_list(1, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "HELLO", TOKEN_WORD, " ", TOKEN_WORD, "WORLD");
+		tokens1 = create_token_list(1, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "HELLO", TOKEN_WORD, " ", TOKEN_WORD, "WORLD");
+		retokenize(tokens);
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
 	TEST("retokenize", "split into tree words", {
 		tokens = create_token_list(1, TOKEN_WORD, "ls (");
 		tokens1 = create_token_list(3, TOKEN_WORD, "ls", TOKEN_WORD, " ",
