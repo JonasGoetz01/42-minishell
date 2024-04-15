@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <readline/history.h>
+# include <readline/readline.h>
 # include "../lib/libft/libft.h"
 # include "colors.h"
 # include "exec.h"
@@ -13,12 +15,11 @@
 # include <sys/select.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <string.h>
 
 # define EXIT_ERROR 1
 # define DEBUG 1
 
-# include <readline/history.h>
-# include <readline/readline.h>
 
 # define MAX_BUFFER_SIZE 4096
 
