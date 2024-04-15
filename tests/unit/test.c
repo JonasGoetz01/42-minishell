@@ -27,8 +27,8 @@ int	main(void)
 	});
 	TEST("retokenize", "more complex lists", {
 		tokens = create_token_list(1, "echo $HOME | wc -l");
-		tokens1 = create_token_list(8, "echo", " ", "$HOME", " ", "|", " ",
-				"wc", " ");
+		tokens1 = create_token_list(9, "echo", " ", "$HOME", " ", "|", " ",
+				"wc", " ", "-l");
 		retokenize(tokens);
 		ASSERT_TOKENS_EQ(*tokens, *tokens1);
 		free_token_list(tokens);
