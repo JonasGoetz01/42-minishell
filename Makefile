@@ -12,7 +12,8 @@ VPATH	:=	src \
 			src/signals \
 			src/utils \
 			src/exec \
-			inc
+			inc \
+			tests/unit
 
 INC		:=	colors.h \
 			exec.h \
@@ -40,10 +41,18 @@ SOURCES	:=	main.c \
 			org_tokens.c \
 			exec_tokens.c \
 			parse_process.c \
-			alloc_utils.c
+			alloc_utils.c 
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
+
+TESTSSRC	:=	$(TESTDIR)/test.c
+
+TESTDIR := test/unit
+TESTS	:=	$(addprefix $(OBJDIR), $(TESTSSRC:.c=.o))
+
+TESTOBJECTS := $(filter-out $(OBJDIR)/main.o, $(OBJECTS))
+TESTNAME := test
 
 all: $(NAME)
 
@@ -58,11 +67,21 @@ clean:
 fclean: clean
 	make -C $(LIBFT) fclean
 	rm -f $(NAME)
+	rm -f $(TESTNAME)
 
 re: fclean all
 
 test:
 	valgrind --leak-check=full ./$(NAME)
+
+unit: $(TESTS) $(TESTOBJECTS) $(INC)
+	make -C $(LIBFT)
+	$(CC) $(CFLAGS) $(TESTOBJECTS) $(TESTS) $(LDFLAGS) -o $(TESTNAME) -L $(LIBFT)
+	./$(TESTNAME)
+
+$(TESTDIR)/%.o: %.c $(INC)
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)

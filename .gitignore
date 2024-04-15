@@ -8,3 +8,4 @@ lib/libft/*.o
 .DS_Store
 in
 out
+test
