@@ -10,7 +10,7 @@ void	process_input(char *input, t_global *global)
 	ast = NULL;
 	if (DEBUG)
 		printf("You entered: %s\n", input);
-	setenv("PWD", getcwd(NULL, 0), 1);
+	ft_set_env(ft_strjoin("PWD=", getcwd(NULL, 0)), global);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	if (DEBUG)
