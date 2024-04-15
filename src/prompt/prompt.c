@@ -12,6 +12,8 @@ void	process_input(char *input, char **envv, t_global *global)
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
+	retokenize(&tokens);
+	print_tokens(tokens);
 	if (input_validation(&tokens))
 	{
 		free(input);

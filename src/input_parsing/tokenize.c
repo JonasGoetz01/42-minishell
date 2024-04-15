@@ -454,3 +454,36 @@ int	input_validation(t_token **tokens)
 	}
 	return (0);
 }
+
+void	retokenize(t_token **tokens)
+{
+	t_token *current;
+	t_token *prev;
+	t_token *new;
+
+	current = *tokens;
+	prev = NULL;
+	while (current)
+	{
+		if (current->type == TOKEN_WORD)
+		{
+			new = tokenize(current->value);
+			if (prev == NULL)
+				*tokens = new;
+			else
+				prev->next = new;
+			while (new->next)
+				new = new->next;
+			prev = new;
+		}
+		else
+		{
+			if (prev == NULL)
+				*tokens = current;
+			else
+				prev->next = current;
+			prev = current;
+		}
+		current = current->next;
+	}
+}
