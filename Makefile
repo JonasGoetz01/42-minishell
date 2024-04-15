@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	:=	-Wextra -Wall -Werror #-g -fsanitize=address -O1
+CFLAGS	:=	-Wextra -Wall -Werror -g -fsanitize=address -O1
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
 
@@ -26,6 +26,7 @@ SOURCES	:=	main.c \
 			env_buildin.c \
 			echo_buildin.c \
 			exit_buildin.c \
+			export_buildin.c \
 			get_hostname.c \
 			exec_command.c \
 			prompt.c \
@@ -40,7 +41,9 @@ SOURCES	:=	main.c \
 			org_tokens.c \
 			exec_tokens.c \
 			parse_process.c \
-			alloc_utils.c
+			alloc_utils.c \
+			init_utils.c \
+			env_utils.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

@@ -2,7 +2,6 @@
 # define EXEC_H
 
 # include <sys/types.h>
-# include "minishell.h"
 
 # define PIPE_READ 0
 # define PIPE_WRITE 1
