@@ -89,6 +89,111 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+	TEST("tokenize", "redirects", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls -lah > file");
+		tokens1 = create_token_list(7, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_WORD, "-lah", TOKEN_WORD, " ", TOKEN_GREATER, ">",
+				TOKEN_WORD, " ", TOKEN_WORD, "file");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "multiple redirects", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls -lah > file > file2");
+		tokens1 = create_token_list(11, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_WORD, "-lah", TOKEN_WORD, " ", TOKEN_GREATER, ">",
+				TOKEN_WORD, " ", TOKEN_WORD, "file", TOKEN_WORD, " ",
+				TOKEN_GREATER, ">", TOKEN_WORD, " ", TOKEN_WORD, "file2");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "indirect", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls -lah < file");
+		tokens1 = create_token_list(7, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_WORD, "-lah", TOKEN_WORD, " ", TOKEN_LESS, "<",
+				TOKEN_WORD, " ", TOKEN_WORD, "file");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "multiple indirect", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls -lah < file < file2");
+		tokens1 = create_token_list(11, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_WORD, "-lah", TOKEN_WORD, " ", TOKEN_LESS, "<",
+				TOKEN_WORD, " ", TOKEN_WORD, "file", TOKEN_WORD, " ",
+				TOKEN_LESS, "<", TOKEN_WORD, " ", TOKEN_WORD, "file2");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "parentheses", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("(ls -lah)");
+		tokens1 = create_token_list(5, TOKEN_BRACKET_L, "(", TOKEN_WORD, "ls",
+				TOKEN_WORD, " ", TOKEN_WORD, "-lah", TOKEN_BRACKET_R, ")");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "logical AND", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls && pwd");
+		tokens1 = create_token_list(5, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_AMPERSAND, "&&", TOKEN_WORD, " ", TOKEN_WORD,
+				"pwd");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "logical OR", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls || pwd");
+		tokens1 = create_token_list(5, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_PIPE, "||", TOKEN_WORD, " ", TOKEN_WORD, "pwd");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "mixed operators 1", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("ls -lah && (pwd || echo)");
+		tokens1 = create_token_list(13, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_WORD, "-lah", TOKEN_WORD, " ", TOKEN_DOUBLE_AMPERSAND,
+				"&&", TOKEN_WORD, " ", TOKEN_BRACKET_L, "(", TOKEN_WORD, "pwd",
+				TOKEN_WORD, " ", TOKEN_DOUBLE_PIPE, "||", TOKEN_WORD, " ",
+				TOKEN_WORD, "echo", TOKEN_BRACKET_R, ")");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "mixed operators 2", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("(ls || pwd) && echo");
+		tokens1 = create_token_list(11, TOKEN_BRACKET_L, "(", TOKEN_WORD, "ls",
+				TOKEN_WORD, " ", TOKEN_DOUBLE_PIPE, "||", TOKEN_WORD, " ",
+				TOKEN_WORD, "pwd", TOKEN_BRACKET_R, ")", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_AMPERSAND, "&&", TOKEN_WORD, " ", TOKEN_WORD,
+				"echo");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("tokenize", "mixed operators 3", {
+		tokens = malloc(sizeof(t_token *));
+		*tokens = tokenize("(ls && pwd) || echo");
+		tokens1 = create_token_list(11, TOKEN_BRACKET_L, "(", TOKEN_WORD, "ls",
+				TOKEN_WORD, " ", TOKEN_DOUBLE_AMPERSAND, "&&", TOKEN_WORD, " ",
+				TOKEN_WORD, "pwd", TOKEN_BRACKET_R, ")", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_PIPE, "||", TOKEN_WORD, " ", TOKEN_WORD, "echo");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
 	SUMMARIZE_TESTS();
 	return (0);
 }
