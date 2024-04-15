@@ -1,8 +1,6 @@
 #include "test.h"
 #include <stdio.h>
 
-TEST_COUNT(1);
-
 int	main(void)
 {
 	INIT_TESTER();

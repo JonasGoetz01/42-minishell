@@ -16,6 +16,7 @@
 
 // Macro to initialize the tester and print a welcome message
 #define INIT_TESTER() \
+    TEST_COUNT(1); \
     printf("\x1b[34mStarting tests...\n\x1b[0m");
 
 // Macro to summarize the tests
