@@ -1,16 +1,46 @@
+#include "../../inc/minishell.h"
+#include "helpers.h"
 #include "test.h"
 #include <stdio.h>
 
 int	main(void)
 {
+	t_token	**tokens;
+	t_token	**tokens1;
+
 	INIT_TESTER();
-	TEST("add", "Should add two numbers", {
-		ASSERT_EQ(2 + 2, 4);
-		ASSERT_EQ(2 + 3, 4);
+	TEST("retokenize", "no changes needed", {
+		tokens = create_token_list(1, "ls");
+		tokens1 = create_token_list(1, "ls");
+		retokenize(tokens);
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
 	});
-	TEST("sub", "Should substract two numbers", {
-		ASSERT_EQ(2 - 2, 0);
-		ASSERT_EQ(2 - 3, -1);
+	TEST("retokenize", "split into tree words", {
+		tokens = create_token_list(1, "ls (");
+		tokens1 = create_token_list(3, "ls", " ", "(");
+		retokenize(tokens);
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("retokenize", "more complex lists", {
+		tokens = create_token_list(1, "echo $HOME | wc -l");
+		tokens1 = create_token_list(9, "echo", " ", "$HOME", " ", "|", " ",
+				"wc", " ", "-l");
+		retokenize(tokens);
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("retokenize", "empty", {
+		tokens = create_token_list(1, "");
+		tokens1 = create_token_list(1, "");
+		retokenize(tokens);
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
 	});
 	SUMMARIZE_TESTS();
 	return (0);

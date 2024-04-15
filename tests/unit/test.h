@@ -50,4 +50,47 @@
         } \
     } while (0)
 
+#define ASSERT_STR_EQ(arg1, arg2) \
+    do { \
+        if (strcmp(arg1, arg2) == 0) { \
+            printf("\x1b[32m[    OK    ] %s == %s\x1b[0m\n", arg1, arg2); \
+            passedTests++;  \
+        } else { \
+            printf("\x1b[31m[    KO    ] %s == %s\x1b[0m\n", arg1, arg2); \
+            failedTests++; \
+        } \
+    } while (0)
+
+#define ASSERT_TOKENS_EQ(arg1, arg2) \
+    do { \
+        t_token *token1 = arg1; \
+        t_token *token2 = arg2; \
+        while (token1 != NULL && token2 != NULL) { \
+            if (token1->type != token2->type || strcmp(token1->value, token2->value) != 0) { \
+                printf("\x1b[31m[    KO    ] Tokens are not equal\x1b[0m\n"); \
+                printf("Actual tokens:\n"); \
+                print_tokens(arg1); \
+                printf("vs\n"); \
+                printf("Expected output:\n"); \
+                print_tokens(arg2); \
+                failedTests++; \
+                break; \
+            } \
+            token1 = token1->next; \
+            token2 = token2->next; \
+        } \
+        if (token1 == NULL && token2 == NULL) { \
+            printf("\x1b[32m[    OK    ] Tokens are equal\x1b[0m\n"); \
+            passedTests++; \
+        } else { \
+            printf("\x1b[31m[    KO    ] Token lists have different lengths\x1b[0m\n"); \
+            printf("Actual tokens:\n"); \
+            print_tokens(arg1); \
+            printf("vs\n"); \
+            printf("Expected output:\n"); \
+            print_tokens(arg2); \
+            failedTests++; \
+        } \
+    } while (0)
+
 #endif

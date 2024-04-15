@@ -457,32 +457,63 @@ int	input_validation(t_token **tokens)
 
 void	retokenize(t_token **tokens)
 {
-	t_token *current;
-	t_token *prev;
-	t_token *new;
+	t_token	*current;
+	t_token	*prev;
+	t_token	*new_token;
+	int		i;
 
 	current = *tokens;
-	prev = NULL;
 	while (current)
 	{
-		if (current->type == TOKEN_WORD)
+		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
-			new = tokenize(current->value);
-			if (prev == NULL)
-				*tokens = new;
-			else
-				prev->next = new;
-			while (new->next)
-				new = new->next;
-			prev = new;
-		}
-		else
-		{
-			if (prev == NULL)
-				*tokens = current;
-			else
-				prev->next = current;
-			prev = current;
+			i = 0;
+			prev = NULL;
+			while (current->value[i] != '\0')
+			{
+				if (current->value[i] == ' ')
+				{
+					if (i > 0)
+					{
+						new_token = create_token(TOKEN_WORD,
+								ft_substr(current->value, 0, i));
+						if (prev)
+							prev->next = new_token;
+						else
+							*tokens = new_token;
+						prev = new_token;
+						new_token = create_token(TOKEN_WORD, ft_strdup(" "));
+						prev->next = new_token;
+						prev = new_token;
+						current->value = ft_substr(current->value, i + 1,
+								ft_strlen(current->value) - i - 1);
+						i = 0;
+					}
+					else
+					{
+						new_token = create_token(TOKEN_WORD, ft_strdup(" "));
+						if (prev)
+							prev->next = new_token;
+						else
+							*tokens = new_token;
+						prev = new_token;
+						current->value = ft_substr(current->value, 1,
+								ft_strlen(current->value) - 1);
+					}
+				}
+				else
+					i++;
+			}
+			if (current->value[0] != '\0')
+			{
+				new_token = create_token(TOKEN_WORD, ft_strdup(current->value));
+				if (prev)
+					prev->next = new_token;
+				else
+					*tokens = new_token;
+				prev = new_token;
+				current->value[0] = '\0';
+			}
 		}
 		current = current->next;
 	}

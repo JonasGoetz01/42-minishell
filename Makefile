@@ -46,7 +46,8 @@ SOURCES	:=	main.c \
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
-TESTSSRC	:=	$(TESTDIR)/test.c
+TESTSSRC	:=	$(TESTDIR)/test.c \
+				$(TESTDIR)/helpers.c
 
 TESTDIR := test/unit
 TESTS	:=	$(addprefix $(OBJDIR), $(TESTSSRC:.c=.o))
