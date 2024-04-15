@@ -1,8 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <readline/history.h>
-# include <readline/readline.h>
 # include "../lib/libft/libft.h"
 # include "colors.h"
 # include "exec.h"
@@ -20,6 +18,8 @@
 # define EXIT_ERROR 1
 # define DEBUG 1
 
+# include <readline/history.h>
+# include <readline/readline.h>
 
 # define MAX_BUFFER_SIZE 4096
 
@@ -93,6 +93,8 @@ void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
 bool					ft_env_contains(char *str, char **env);
+bool					ft_set_env(char *str, t_global *global);
+bool					ft_add_env(char *str, t_global *global);
 
 t_token					*tokenize(const char *input);
 
