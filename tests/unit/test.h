@@ -80,6 +80,11 @@
             printf("\x1b[31m[    KO    ] Token lists have different lengths\x1b[0m\n"); \
             printf("Actual token length: %d\n", actual_length); \
             printf("Expected token length: %d\n", expected_length); \
+            printf("Actual tokens:\n"); \
+            print_tokens(arg1); \
+            printf("vs\n"); \
+            printf("Expected output:\n"); \
+            print_tokens(arg2); \
             failedTests++; \
         } else { \
             t_token *token1 = arg1; \

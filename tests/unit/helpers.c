@@ -2,11 +2,12 @@
 
 t_token	**create_token_list(int count, ...)
 {
-	va_list	args;
-	t_token	**head;
-	t_token	*current;
-	char	*value;
-	t_token	*token;
+	va_list			args;
+	t_token			**head;
+	t_token			*current;
+	char			*value;
+	t_token			*token;
+	t_token_type	type;
 
 	va_start(args, count);
 	head = malloc(sizeof(t_token));
@@ -14,11 +15,12 @@ t_token	**create_token_list(int count, ...)
 	current = NULL;
 	for (int i = 0; i < count; ++i)
 	{
+		type = va_arg(args, t_token_type); // Get the type of the argument
 		value = va_arg(args, char *);
 		token = malloc(sizeof(t_token));
 		if (!token)
 			return (NULL);
-		token->type = TOKEN_WORD;
+		token->type = type; // Set the type of the token
 		token->value = ft_strdup(value);
 		token->next = NULL;
 		if (!(*head))
