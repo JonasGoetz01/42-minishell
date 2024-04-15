@@ -155,3 +155,11 @@ bool	ft_set_env(char *str, t_global *global)
 		return (false);
 	return (setenv(name, value, 1) == 0);
 }
+
+void	ft_unset_env(char *str, t_global *global)
+{
+	if (ft_env_contains(str, global->env_export))
+	{
+		ft_find_env(str, global->envv);
+	}
+}
