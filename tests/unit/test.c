@@ -201,6 +201,52 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+	TEST("expand_tokens", "simple command", {
+		tokens = create_token_list(1, TOKEN_WORD, "ls");
+		ft_expand_tokens(*tokens, NULL);
+		tokens1 = create_token_list(1, TOKEN_WORD, "ls");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("expand_tokens", "multiple words", {
+		tokens = create_token_list(3, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "world");
+		ft_expand_tokens(*tokens, NULL);
+		tokens1 = create_token_list(3, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "world");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("expand_tokens", "simple variable", {
+		tokens = create_token_list(1, TOKEN_WORD, "$HOME");
+		ft_expand_tokens(*tokens, NULL);
+		tokens1 = create_token_list(1, TOKEN_WORD, getenv("HOME"));
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("expand and retokenize", "simple variable", {
+		tokens = create_token_list(1, TOKEN_WORD, "$HOME");
+		ft_expand_tokens(*tokens, NULL);
+		retokenize(tokens);
+		tokens1 = create_token_list(1, TOKEN_WORD, getenv("HOME"));
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("expand and retokenize", "multiple words", {
+		tokens = create_token_list(3, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "hello");
+		ft_expand_tokens(*tokens, NULL);
+		retokenize(tokens);
+		tokens1 = create_token_list(3, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "hello");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
 	SUMMARIZE_TESTS();
 	return (0);
 }
