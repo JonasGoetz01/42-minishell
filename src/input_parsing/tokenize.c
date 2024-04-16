@@ -143,7 +143,7 @@ void	remove_unused_spaces(t_token **tokens)
 		}
 		else
 		{
-		prev = current;
+			prev = current;
 			if (current)
 				current = current->next;
 		}
@@ -468,62 +468,38 @@ void	retokenize(t_token **tokens)
 {
 	t_token	*current;
 	t_token	*prev;
+	char	*value;
+	char	*token_value;
 	t_token	*new_token;
-	int		i;
+	t_token	*temp;
 
 	current = *tokens;
+	prev = NULL;
 	while (current)
 	{
 		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
-			i = 0;
-			prev = NULL;
-			while (current->value[i] != '\0')
+			value = current->value;
+			token_value = ft_strtok(value, " ");
+			while (token_value != NULL)
 			{
-				if (current->value[i] == ' ')
-				{
-					if (i > 0)
-					{
-						new_token = create_token(TOKEN_WORD,
-								ft_substr(current->value, 0, i));
-						if (prev)
-							prev->next = new_token;
-						else
-							*tokens = new_token;
-						prev = new_token;
-						new_token = create_token(TOKEN_WORD, ft_strdup(" "));
-						prev->next = new_token;
-						prev = new_token;
-						current->value = ft_substr(current->value, i + 1,
-								ft_strlen(current->value) - i - 1);
-						i = 0;
-					}
-					else
-					{
-						new_token = create_token(TOKEN_WORD, ft_strdup(" "));
-						if (prev)
-							prev->next = new_token;
-						else
-							*tokens = new_token;
-						prev = new_token;
-						current->value = ft_substr(current->value, 1,
-								ft_strlen(current->value) - 1);
-					}
-				}
-				else
-					i++;
-			}
-			if (current->value[0] != '\0')
-			{
-				new_token = create_token(TOKEN_WORD, ft_strdup(current->value));
+				new_token = create_token(TOKEN_WORD, ft_strdup(token_value));
 				if (prev)
 					prev->next = new_token;
 				else
 					*tokens = new_token;
 				prev = new_token;
-				current->value[0] = '\0';
+				token_value = ft_strtok(NULL, " ");
 			}
+			temp = current->next;
+			// free(current->value); // Free memory for the token value
+			// free(current);        // Free memory for the token itself
+			current = temp;
 		}
-		current = current->next;
+		else
+		{
+			prev = current;
+			current = current->next;
+		}
 	}
 }
