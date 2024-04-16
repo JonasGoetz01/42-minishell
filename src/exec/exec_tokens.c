@@ -53,6 +53,8 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 			ft_open_out_file(node);
 		else if (token->type == TOKEN_DOUBLE_GREATER)
 			ft_open_out_append_file(node);
+		else if(token->type == TOKEN_DOUBLE_LESS)
+			ft_exec_here_doc(node);
 		else if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
