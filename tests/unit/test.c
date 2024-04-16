@@ -29,8 +29,7 @@ int	main(void)
 	});
 	TEST("retokenize", "split into tree words", {
 		tokens = create_token_list(1, TOKEN_WORD, "ls (");
-		tokens1 = create_token_list(3, TOKEN_WORD, "ls", TOKEN_WORD, " ",
-				TOKEN_WORD, "(");
+		tokens1 = create_token_list(2, TOKEN_WORD, "ls", TOKEN_WORD, "(");
 		retokenize(tokens);
 		ASSERT_TOKENS_EQ(*tokens, *tokens1);
 		free_token_list(tokens);
@@ -38,10 +37,8 @@ int	main(void)
 	});
 	TEST("retokenize", "more complex lists", {
 		tokens = create_token_list(1, TOKEN_WORD, "echo $HOME | wc -l");
-		tokens1 = create_token_list(9, TOKEN_WORD, "echo", TOKEN_WORD, " ",
-				TOKEN_WORD, "$HOME", TOKEN_WORD, " ", TOKEN_WORD, "|",
-				TOKEN_WORD, " ", TOKEN_WORD, "wc", TOKEN_WORD, " ", TOKEN_WORD,
-				"-l");
+		tokens1 = create_token_list(5, TOKEN_WORD, "echo", TOKEN_WORD, "$HOME",
+				TOKEN_WORD, "|", TOKEN_WORD, "wc", TOKEN_WORD, "-l");
 		retokenize(tokens);
 		ASSERT_TOKENS_EQ(*tokens, *tokens1);
 		free_token_list(tokens);
