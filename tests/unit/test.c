@@ -247,6 +247,16 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+	TEST("rearrange_tokens", "one word", {
+		tokens = create_token_list(1, TOKEN_WORD, "echo");
+		ft_expand_tokens(*tokens, NULL);
+		retokenize(tokens);
+		tokens1 = create_token_list(1, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "hello");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
 	SUMMARIZE_TESTS();
 	return (0);
 }
