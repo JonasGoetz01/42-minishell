@@ -92,9 +92,11 @@ void					ft_cd_buildin(t_process *process);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
+void					ft_unset_buildin(t_process *process, t_global *global);
 bool					ft_env_contains(char *str, char **env);
 bool					ft_set_env(char *str, t_global *global);
 bool					ft_add_env(char *str, t_global *global);
+void					ft_unset_env(char *str, t_global *global);
 
 t_token					*tokenize(const char *input);
 

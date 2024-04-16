@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 14:00:18 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/03 15:04:32 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/03 14:48:32 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,5 @@ char	**ft_arr_add(char *str, char **arr)
 	}
 	new[len] = str;
 	new[len + 1] = NULL;
-	ft_arr_free((void **) arr);
 	return (new);
 }

@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:40:40 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 14:50:45 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:16:52 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ char	**ft_arr_create();
 char	**ft_arr_create_len(size_t len);
 size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
+char	**ft_arr_rm(size_t	ind, char **arr);
 
 #endif

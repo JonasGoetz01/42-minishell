@@ -39,7 +39,8 @@ ft_arr_cpy.c \
 ft_arr_create_len.c \
 ft_arr_create.c \
 ft_arr_free.c \
-ft_arr_len.c
+ft_arr_len.c \
+ft_arr_rm.c
 
 
 OBJECTS	= ${SOURCES:.c=.o}

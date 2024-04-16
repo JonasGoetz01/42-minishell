@@ -14,9 +14,5 @@
 
 char	**ft_arr_create()
 {
-	char	**arr;
-
-	arr = malloc(sizeof(char *));
-	arr[0] = NULL;
-	return (arr);
+	return (ft_calloc(1, sizeof(char *)));
 }
