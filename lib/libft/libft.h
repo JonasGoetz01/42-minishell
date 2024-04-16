@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:40:40 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/03 14:50:45 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/16 12:07:12 by jgotz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 int		ft_isprint(int c);
 int		ft_isdigit(int c);
@@ -53,9 +53,10 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 int		ft_atoi(const char *str);
 void	ft_arr_free(void **array);
 char	**ft_arr_add(char *str, char **arr);
-char	**ft_arr_create();
+char	**ft_arr_create(void);
 char	**ft_arr_create_len(size_t len);
 size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
+char	*ft_strtok(char *str, const char *delim);
 
 #endif
