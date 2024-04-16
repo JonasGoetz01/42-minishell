@@ -105,39 +105,48 @@ t_token	*tokenize(const char *input)
 	return (tokens);
 }
 
-//
-// Spaces should only stay there if they are after a quote or double quote
 void	remove_unused_spaces(t_token **tokens)
 {
 	t_token	*current;
-	t_token	*next;
-	t_token	*old;
 	t_token	*prev;
+	t_token	*temp;
 
-	prev = NULL;
 	current = *tokens;
+	prev = NULL;
+	temp = NULL;
 	while (current)
 	{
-		next = current->next;
 		if (current->type == TOKEN_DOUBLE_QUOTE
 			|| current->type == TOKEN_SINGLE_QUOTE)
 		{
-			while (next != NULL && next->type != current->type)
-				next = next->next;
+			prev = current;
+			current = current->next;
+			while (current && current->type != prev->type)
+			{
+				temp = current;
+				current = current->next;
+			}
+			prev = current;
+			current = current->next;
 		}
-		else if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
+		else if (current->type == TOKEN_WORD && strcmp(current->value,
+				" ") == 0)
 		{
-			old = current;
-			current = next;
-			free(old->value);
-			free(old);
+			temp = current;
 			if (prev == NULL)
-				*tokens = current;
+				*tokens = current->next;
 			else
-				prev->next = current;
+				prev->next = current->next;
+			current = current->next;
+			free(temp->value);
+			free(temp);
 		}
+		else
+		{
 		prev = current;
-		current = next;
+			if (current)
+				current = current->next;
+		}
 	}
 }
 
