@@ -119,6 +119,7 @@ void					ft_exec_here_doc(t_ast_node *node);
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
 void					ft_close_fd_node(t_ast_node *node);
+void					ft_close_all_fds(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
 void					ft_execute_process(t_process *process, t_global *global);

@@ -1,4 +1,5 @@
 #include "../../inc/minishell.h"
+#include <stdio.h>
 
 t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 {
@@ -40,12 +41,17 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 	token = node->token;
 	while (token)
 	{
-		if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER || token->type == TOKEN_DOUBLE_GREATER)
+		if (token->type == TOKEN_LESS || token->type == TOKEN_DOUBLE_LESS)
 		{
 			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
 			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+		}
+		else if (token->type == TOKEN_GREATER || token->type == TOKEN_DOUBLE_GREATER)
+		{
+			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 		}
 		if (token->type == TOKEN_LESS)
 			ft_open_in_file(node);
@@ -82,7 +88,6 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 		if (!node->process->is_buildin)
 			waitpid(node->process->pid, &node->process->exit_status, 0);
 		global->exit_status = node->process->exit_status;
-		ft_close_fd(&(node->process->pipe_fd_out[PIPE_WRITE]));
 	}
 }
 
@@ -92,4 +97,5 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	if (DEBUG)
 		print_ast(&node, 0);
 	ft_execute_nodes(node, global);
+	ft_close_all_fds(node);
 }
