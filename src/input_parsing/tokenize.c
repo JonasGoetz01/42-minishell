@@ -191,9 +191,9 @@ int	precedence(t_token token)
 	else if (token.type == TOKEN_DOUBLE_GREATER
 		|| token.type == TOKEN_DOUBLE_LESS || token.type == TOKEN_GREATER
 		|| token.type == TOKEN_LESS)
-		return (2);
-	else if (token.type == TOKEN_PIPE)
 		return (3);
+	else if (token.type == TOKEN_PIPE)
+		return (2);
 	else if (token.type == TOKEN_DOUBLE_AMPERSAND
 		|| token.type == TOKEN_DOUBLE_PIPE)
 		return (4);
