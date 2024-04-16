@@ -20,7 +20,7 @@ void	ft_org_tokens(t_ast_node *ast)
 			token = token->next;
 		}
 	}
-	else if (token->type == TOKEN_LESS)
+	else if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER)
 		ast->right->token->type = TOKEN_ARG;
 	ft_org_tokens(ast->left);
 	ft_org_tokens(ast->right);

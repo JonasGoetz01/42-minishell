@@ -42,6 +42,8 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 	{
 		if (token->type == TOKEN_LESS)
 			ft_open_in_file(node);
+		else if (token->type == TOKEN_GREATER)
+			ft_open_out_file(node);
 		else if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
@@ -58,7 +60,7 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 			node->right->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 		}
-		else if (token->type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2)
+		else if (token->type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2 && node->fd_out[PIPE_WRITE] != -2)
 			node->process = ft_exec_cmd(token, node, global);
 		token = token->next;
 	}

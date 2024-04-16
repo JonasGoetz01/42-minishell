@@ -112,6 +112,7 @@ void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
 void					ft_expand_tokens(t_token *tokens, t_global *global);
 void					ft_open_in_file(t_ast_node *node);
+void					ft_open_out_file(t_ast_node *node);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
