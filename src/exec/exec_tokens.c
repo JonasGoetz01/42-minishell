@@ -44,6 +44,8 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 			ft_open_in_file(node);
 		else if (token->type == TOKEN_GREATER)
 			ft_open_out_file(node);
+		else if (token->type == TOKEN_DOUBLE_GREATER)
+			ft_open_out_append_file(node);
 		else if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
@@ -71,6 +73,7 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 		if (!node->process->is_buildin)
 			waitpid(node->process->pid, &node->process->exit_status, 0);
 		global->exit_status = node->process->exit_status;
+		ft_close_fd(&(node->process->pipe_fd_out[PIPE_WRITE]));
 	}
 }
 
