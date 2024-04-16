@@ -40,12 +40,21 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 	token = node->token;
 	while (token)
 	{
+		if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER || token->type == TOKEN_DOUBLE_GREATER)
+		{
+			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
+			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
+			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+		}
 		if (token->type == TOKEN_LESS)
 			ft_open_in_file(node);
 		else if (token->type == TOKEN_GREATER)
 			ft_open_out_file(node);
 		else if (token->type == TOKEN_DOUBLE_GREATER)
 			ft_open_out_append_file(node);
+		else if(token->type == TOKEN_DOUBLE_LESS)
+			ft_exec_here_doc(node);
 		else if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
@@ -55,10 +64,10 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 			}
 			node->left->fd_out[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
 			node->left->fd_out[PIPE_READ] = fd_pipe[PIPE_READ];
-			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 			node->right->fd_in[PIPE_READ] = fd_pipe[PIPE_READ];
 			node->right->fd_in[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
+			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 			node->right->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 		}
@@ -80,5 +89,7 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 void	ft_exec_all(t_ast_node *node, t_global *global)
 {
 	ft_org_tokens(node);
+	if (DEBUG)
+		print_ast(&node, 0);
 	ft_execute_nodes(node, global);
 }
