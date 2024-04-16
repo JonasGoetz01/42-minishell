@@ -58,7 +58,7 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 			node->right->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 		}
-		else if (token->type == TOKEN_CMD)
+		else if (token->type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2)
 			node->process = ft_exec_cmd(token, node, global);
 		token = token->next;
 	}
