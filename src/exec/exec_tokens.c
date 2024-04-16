@@ -40,7 +40,9 @@ void	ft_execute_nodes(t_ast_node *node, t_global *global)
 	token = node->token;
 	while (token)
 	{
-		if (token->type == TOKEN_PIPE)
+		if (token->type == TOKEN_LESS)
+			ft_open_in_file(node);
+		else if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
 			{

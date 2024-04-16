@@ -20,6 +20,8 @@ void	ft_org_tokens(t_ast_node *ast)
 			token = token->next;
 		}
 	}
+	else if (token->type == TOKEN_LESS)
+		ast->right->token->type = TOKEN_ARG;
 	ft_org_tokens(ast->left);
 	ft_org_tokens(ast->right);
 }
