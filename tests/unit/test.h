@@ -25,10 +25,12 @@
     if(failedTests == 0) \
     { \
       printf("\x1b[32m[  PASSED  ] %d of %d passed\n\x1b[0m", passedTests, totalTests); \
+      exit(0); \
     } \
     else \
     { \
       printf("\x1b[31m[  FAILED  ] %d of %d failed\n\x1b[0m", failedTests, totalTests); \
+      exit(1); \
     } \
 
 #define TEST(function, description, body) \
