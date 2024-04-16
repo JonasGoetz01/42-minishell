@@ -29,8 +29,6 @@ void	process_input(char *input, t_global *global)
 	// root = postfixFromTokens(tokens);
 	// print_tokens(root);
 	gen_ast(&ast, tokens);
-	if (DEBUG)
-		print_ast(&ast, 0);
 	ft_exec_all(ast, global);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);

@@ -427,4 +427,3 @@ void	combine_words_in_quotes(t_token **tokens)
 		current = current->next;
 	}
 }
-
