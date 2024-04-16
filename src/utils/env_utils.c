@@ -107,6 +107,28 @@ static char	**ft_find_env(char *name, char **envv)
 	return (NULL);
 }
 
+static ssize_t ft_find_env_ind(char *name, char **envv)
+{
+	char	*temp;
+	ssize_t	ind;
+
+	ind = 0;
+	while (envv[ind])
+	{
+		temp = ft_trim_to_equal(envv[ind]);
+		if (!temp)
+			return (-1);
+		if (ft_strncmp(name, temp, ft_strlen(temp)) == 0)
+		{
+			free(temp);
+			return (ind);
+		}
+		free(temp);
+		ind++;
+	}
+	return (-1);
+}
+
 static bool ft_replace_env(char *name, char *str, char **envv)
 {
 	char	**line;
@@ -154,4 +176,26 @@ bool	ft_set_env(char *str, t_global *global)
 	if (!name || !value)
 		return (false);
 	return (setenv(name, value, 1) == 0);
+}
+
+void	ft_unset_env(char *str, t_global *global)
+{
+	ssize_t ind;
+	char	*name;
+
+	if (ft_env_contains(str, global->env_export))
+	{
+		ind = ft_find_env_ind(str, global->env_export);
+		if (!(ind == -1))
+			global->env_export = ft_arr_rm(ind, global->env_export);
+	}
+	if (ft_env_contains(str, global->envv))
+	{
+		ind = ft_find_env_ind(str, global->envv);
+		if (!(ind == -1))
+			global->envv = ft_arr_rm(ind, global->envv);
+		name = ft_trim_to_equal(str);
+		if (name)
+			unsetenv(name);
+	}
 }
