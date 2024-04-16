@@ -257,6 +257,127 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+	TEST("remove_unused_spaces", "one word", {
+		tokens = create_token_list(1, TOKEN_WORD, "echo");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(1, TOKEN_WORD, "echo");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "multiple words", {
+		tokens = create_token_list(3, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, "hello");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(2, TOKEN_WORD, "echo", TOKEN_WORD, "hello");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "two spaces", {
+		tokens = create_token_list(4, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_WORD, " ", TOKEN_WORD, "hello");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(2, TOKEN_WORD, "echo", TOKEN_WORD, "hello");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "double quotes", {
+		tokens = create_token_list(6, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(5, TOKEN_WORD, "echo", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "multiple double quotes", {
+		tokens = create_token_list(11, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(9, TOKEN_WORD, "echo", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello", TOKEN_WORD,
+				" ", TOKEN_DOUBLE_QUOTE, "\"");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "single quotes", {
+		tokens = create_token_list(6, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(5, TOKEN_WORD, "echo", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "multiple single quotes", {
+		tokens = create_token_list(11, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(9, TOKEN_WORD, "echo", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "hello", TOKEN_WORD,
+				" ", TOKEN_SINGLE_QUOTE, "\'");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "mixed quotes", {
+		tokens = create_token_list(11, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(9, TOKEN_WORD, "echo", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello", TOKEN_WORD,
+				" ", TOKEN_DOUBLE_QUOTE, "\"");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
+	TEST("remove_unused_spaces", "quotes in quotes", {
+		tokens = create_token_list(10, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "world", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_SINGLE_QUOTE, "\'");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(9, TOKEN_WORD, "echo", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_WORD, "world", TOKEN_WORD, " ", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_SINGLE_QUOTE, "\'");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+		tokens = create_token_list(10, TOKEN_WORD, "echo", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "world", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_DOUBLE_QUOTE, "\"");
+		remove_unused_spaces(tokens);
+		tokens1 = create_token_list(9, TOKEN_WORD, "echo", TOKEN_DOUBLE_QUOTE,
+				"\"", TOKEN_WORD, "hello", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_WORD, "world", TOKEN_WORD, " ", TOKEN_SINGLE_QUOTE,
+				"\'", TOKEN_DOUBLE_QUOTE, "\"");
+		ASSERT_TOKENS_EQ(*tokens, *tokens1);
+		free_token_list(tokens);
+		free_token_list(tokens1);
+	});
 	SUMMARIZE_TESTS();
 	return (0);
 }
