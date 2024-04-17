@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-void	process_input(char *input, char **envv, t_global *global)
+void	process_input(char *input, t_global *global)
 {
 	t_token		*tokens;
 	t_ast_node	*ast;
@@ -8,7 +8,7 @@ void	process_input(char *input, char **envv, t_global *global)
 	ast = NULL;
 	if (DEBUG)
 		printf("You entered: %s\n", input);
-	setenv("PWD", getcwd(NULL, 0), 1);
+	ft_set_env(ft_strjoin("PWD=", getcwd(NULL, 0)), global);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
@@ -27,7 +27,10 @@ void	process_input(char *input, char **envv, t_global *global)
 	print_tokens(tokens);
 	gen_ast(&ast, tokens);
 	print_ast(&ast, 0);
-	ft_exec_all(ast, envv, global);
+	ft_exec_all(ast, global);
+	// print_tokens(tokens);
+	// stack = postfixFromTokens(tokens);
+	// print_tokens(stack);
 	free(input);
 }
 
@@ -53,7 +56,7 @@ char	*build_prompt(void)
 	return (prompt);
 }
 
-int	show_prompt(char **envv, t_global *global)
+int	show_prompt(t_global *global)
 {
 	char	*input;
 	char	*prompt;
@@ -68,6 +71,12 @@ int	show_prompt(char **envv, t_global *global)
 		return (0);
 	}
 	add_history(input);
-	process_input(input, envv, global);
+	if (validator(input))
+	{
+		printf("Invalid input\n");
+		free(input);
+		return (0);
+	}
+	process_input(input, global);
 	return (0);
 }

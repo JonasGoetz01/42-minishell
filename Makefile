@@ -27,8 +27,11 @@ SOURCES	:=	main.c \
 			env_buildin.c \
 			echo_buildin.c \
 			exit_buildin.c \
+			unset_buildin.c \
+			export_buildin.c \
 			get_hostname.c \
 			exec_command.c \
+			exec_heredoc.c \
 			prompt.c \
 			tokenize.c \
 			stack_utils.c \
@@ -40,8 +43,13 @@ SOURCES	:=	main.c \
 			exec_process.c \
 			org_tokens.c \
 			exec_tokens.c \
+			exec_files.c \
 			parse_process.c \
-			alloc_utils.c 
+			alloc_utils.c \
+			init_utils.c \
+			env_utils.c \
+			error_msg.c
+
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))

@@ -13,6 +13,7 @@
 # include <sys/select.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <string.h>
 
 # define EXIT_ERROR 1
 # define DEBUG 1
@@ -66,9 +67,12 @@ typedef struct s_ast_node
 typedef struct s_global
 {
 	int					exit_status;
+	char				**envv;
+	char				**env_export;
 }						t_global;
 
-int						show_prompt(char **envv, t_global *global);
+int						show_prompt(t_global *global);
+void					ft_init_t_global(t_global *global, char **envv);
 
 void					handle_sigint(int sig);
 void					handle_sigquit(int sig);
@@ -81,12 +85,18 @@ void					print_tokens_value(t_token *tokens);
 void					remove_unused_spaces(t_token **tokens);
 char					*execute_command(const char *command);
 bool					ft_is_buildin_cmd(char *cmd);
-void					ft_exec_buildins(t_process *process, char **envp);
+void					ft_exec_buildins(t_process *process, t_global *global);
 void					ft_error_buildin(const char *msg, const char *arg,
 							t_process *process, int exit_status);
 void					ft_cd_buildin(t_process *process);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
+void					ft_export_buildin(t_process *process, t_global *global);
+void					ft_unset_buildin(t_process *process, t_global *global);
+bool					ft_env_contains(char *str, char **env);
+bool					ft_set_env(char *str, t_global *global);
+bool					ft_add_env(char *str, t_global *global);
+void					ft_unset_env(char *str, t_global *global);
 
 t_token					*tokenize(const char *input);
 
@@ -101,15 +111,19 @@ void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
 void					ft_expand_tokens(t_token *tokens, t_global *global);
+void					ft_open_in_file(t_ast_node *node);
+void					ft_open_out_file(t_ast_node *node);
+void					ft_open_out_append_file(t_ast_node *node);
+void					ft_exec_here_doc(t_ast_node *node);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
 void					ft_close_fd_node(t_ast_node *node);
+void					ft_close_all_fds(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
-void					ft_execute_process(t_process *process, char **envp);
-void					ft_exec_all(t_ast_node *token, char **envp,
-							t_global *global);
+void					ft_execute_process(t_process *process, t_global *global);
+void					ft_exec_all(t_ast_node *token, t_global *global);
 t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node);
 bool					ft_verify_process(t_process *process);
@@ -136,5 +150,7 @@ void					combine_words_in_quotes(t_token **tokens);
 int						input_validation(t_token **tokens);
 
 void					retokenize(t_token **tokens);
+
+void					ft_print_error(const char *msg, const char *arg);
 
 #endif

@@ -12,6 +12,6 @@ void	*ft_recalloc(void *ptr, size_t old_size, size_t new_size)
 	if (new_ptr == NULL)
 		return (NULL);
 	ft_memcpy(new_ptr, ptr, old_size);
-	// free(&ptr);
+	free(ptr);
 	return (new_ptr);
 }

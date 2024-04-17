@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jgotz <jgotz@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/05 11:40:40 by jgotz             #+#    #+#             */
-/*   Updated: 2024/04/16 12:07:12 by jgotz            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef LIBFT_H
 # define LIBFT_H
 
@@ -58,5 +46,6 @@ char	**ft_arr_create_len(size_t len);
 size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
 char	*ft_strtok(char *str, const char *delim);
+char	**ft_arr_rm(size_t	ind, char **arr);
 
 #endif
