@@ -520,8 +520,6 @@ void	retokenize(t_token **tokens)
 				token_value = ft_strtok(NULL, " ");
 			}
 			temp = current->next;
-			// free(current->value); // Free memory for the token value
-			// free(current);        // Free memory for the token itself
 			current = temp;
 		}
 		else
