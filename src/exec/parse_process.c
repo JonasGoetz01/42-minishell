@@ -1,4 +1,5 @@
 #include "../../inc/minishell.h"
+#include <stdio.h>
 
 t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 {
@@ -80,13 +81,17 @@ bool	ft_is_buildin_cmd(char *cmd)
 bool	ft_verify_process(t_process *process)
 {
 	char	*new_cmd;
+	char	*lc_cmd;
 
 	if (ft_is_buildin_cmd(process->cmd))
 	{
 		process->is_buildin = true;
 		return (true);
 	}
-	new_cmd = ft_get_cmd_path(process->cmd, getenv("PATH"));
+	lc_cmd = ft_strdup(process->cmd);
+	ft_lower_str(lc_cmd);
+	new_cmd = ft_get_cmd_path(lc_cmd, getenv("PATH"));
+	free(lc_cmd);
 	if (new_cmd)
 	{
 		free(process->cmd);

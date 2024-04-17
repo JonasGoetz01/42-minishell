@@ -4,7 +4,7 @@ void	ft_error_buildin(const char *msg, const char *arg, t_process *process, int 
 {
 	process->exit_status = exit_status;
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(process->args[0], 2);
+	ft_putstr_fd(process->cmd, 2);
 	ft_putstr_fd(": ", 2);
 	if (arg)
 	{
