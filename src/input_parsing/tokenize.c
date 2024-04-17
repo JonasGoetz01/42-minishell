@@ -8,9 +8,7 @@ int	token_length(const char *input, const char *delimiters)
 
 	length = 0;
 	while (input[length] != '\0' && !ft_strchr(delimiters, input[length]))
-	{
 		length++;
-	}
 	return (length);
 }
 
@@ -83,19 +81,17 @@ t_token	*tokenize(const char *input)
 			{
 				type = TOKEN_DOUBLE_QUOTE;
 				value = ft_substr(input, i, 1);
-				// Include the double quote in the value
 			}
 			else if (input[i] == '\'')
 			{
 				type = TOKEN_SINGLE_QUOTE;
 				value = ft_substr(input, i, 1);
-				// Include the single quote in the value
 			}
 			else
 				type = TOKEN_WORD;
 			new_token = create_token(type, value);
 			append_token(&tokens, new_token);
-			i++; // Increment i since we've already processed this character
+			i++;
 		}
 		else
 		{
@@ -103,56 +99,68 @@ t_token	*tokenize(const char *input)
 			value = ft_substr(input, i, tokenLen);
 			new_token = create_token(TOKEN_WORD, value);
 			append_token(&tokens, new_token);
-			i += tokenLen; // Increment i by token length
+			i += tokenLen;
 		}
 	}
 	return (tokens);
 }
 
-//
-// Spaces should only stay there if they are after a quote or double quote
 void	remove_unused_spaces(t_token **tokens)
 {
 	t_token	*current;
-	t_token	*next;
-	t_token	*old;
 	t_token	*prev;
+	t_token	*temp;
 
-	prev = NULL;
 	current = *tokens;
-	while (current != NULL)
+	prev = NULL;
+	temp = NULL;
+	while (current)
 	{
-		next = current->next;
 		if (current->type == TOKEN_DOUBLE_QUOTE
 			|| current->type == TOKEN_SINGLE_QUOTE)
 		{
-			while (next != NULL && next->type != current->type)
-				next = next->next;
+			prev = current;
+			current = current->next;
+			while (current && current->type != prev->type)
+			{
+				temp = current;
+				current = current->next;
+			}
+			prev = current;
+			current = current->next;
 		}
-		else if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
+		else if (current->type == TOKEN_WORD && strcmp(current->value,
+				" ") == 0)
 		{
-			old = current;
-			current = next;
-			free(old->value);
-			free(old);
+			temp = current;
 			if (prev == NULL)
-				*tokens = current;
+				*tokens = current->next;
 			else
-				prev->next = current;
+				prev->next = current->next;
+			current = current->next;
+			free(temp->value);
+			free(temp);
 		}
-		prev = current;
-		current = next;
+		else
+		{
+			prev = current;
+			if (current)
+				current = current->next;
+		}
 	}
 }
 
 // Print the tokens
 void	print_tokens(t_token *tokens)
 {
-	printf("Tokens:\n");
-	while (tokens != NULL)
+	if (DEBUG)
 	{
-		printf("Type: %d, Value: %s\n", tokens->type, tokens->value);
-		tokens = tokens->next;
+		printf("Tokens:\n");
+		while (tokens != NULL)
+		{
+			printf("Type: %d, Value: %s\n", tokens->type, tokens->value);
+			tokens = tokens->next;
+		}
 	}
 }
 
@@ -183,9 +191,9 @@ int	precedence(t_token token)
 	else if (token.type == TOKEN_DOUBLE_GREATER
 		|| token.type == TOKEN_DOUBLE_LESS || token.type == TOKEN_GREATER
 		|| token.type == TOKEN_LESS)
-		return (2);
-	else if (token.type == TOKEN_PIPE)
 		return (3);
+	else if (token.type == TOKEN_PIPE)
+		return (2);
 	else if (token.type == TOKEN_DOUBLE_AMPERSAND
 		|| token.type == TOKEN_DOUBLE_PIPE)
 		return (4);
@@ -278,9 +286,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	current_token = tokens;
 	while (current_token->next != highest_token)
 		current_token = current_token->next;
-	current_token->next = NULL; // Terminate the left arm here
+	current_token->next = NULL;
 	right_arm = highest_token->next;
-	// Assign the right arm from the token after the highest token
 	ast->token->next = NULL;
 	gen_ast(&(ast->left), left_arm);
 	gen_ast(&(ast->right), right_arm);
@@ -294,17 +301,20 @@ void	print_ast(t_ast_node **root, int level)
 	ast = *root;
 	if (ast == NULL)
 		return ;
-	print_ast(&(ast->right), level + 1);
-	token = ast->token;
-	while (token != NULL)
+	if (DEBUG)
 	{
-		for (int i = 0; i < level; i++)
-			printf("    ");
-		printf("Type: %d, Value: %s Prio: %d\n", token->type, token->value,
-			precedence_node(ast));
-		token = token->next;
+		print_ast(&(ast->right), level + 1);
+		token = ast->token;
+		while (token != NULL)
+		{
+			for (int i = 0; i < level; i++)
+				printf("    ");
+			printf("Type: %d, Value: %s Prio: %d\n", token->type, token->value,
+				precedence_node(ast));
+			token = token->next;
+		}
+		print_ast(&(ast->left), level + 1);
 	}
-	print_ast(&(ast->left), level + 1);
 }
 
 // sometimes the tokens need to be rearranged
@@ -331,7 +341,6 @@ void	rearrange_tokens(t_token **tokens)
 
 	current = *tokens;
 	prev = NULL;
-	// Find the first redirection token
 	while (current != NULL && !(current->type == TOKEN_LESS
 			|| current->type == TOKEN_DOUBLE_LESS
 			|| current->type == TOKEN_GREATER
@@ -361,7 +370,6 @@ void	rearrange_tokens(t_token **tokens)
 	// If < is not the first token
 	else if (current != NULL && (prev == NULL || prev->type != TOKEN_WORD))
 	{
-		// Handle case where redirection token is not the first token
 		redirect = current;
 		file = current->next;
 		after_file = file->next;
@@ -404,10 +412,7 @@ void	combine_words_in_quotes(t_token **tokens)
 				num_tokens++;
 			}
 			if (current->next == NULL)
-			{
-				printf("Unmatched quote\n");
 				return ;
-			}
 			printf("Num tokens: %d\n", num_tokens);
 			current = start;
 			current = current->next;
@@ -425,5 +430,76 @@ void	combine_words_in_quotes(t_token **tokens)
 			}
 		}
 		current = current->next;
+	}
+}
+
+int	input_validation(t_token **tokens)
+{
+	t_token	*current;
+	int		quote;
+	int		dquote;
+	int		parenthesis;
+
+	current = *tokens;
+	quote = 0;
+	dquote = 0;
+	parenthesis = 0;
+	while (current)
+	{
+		if (current->type == TOKEN_SINGLE_QUOTE)
+			quote = !quote;
+		else if (current->type == TOKEN_DOUBLE_QUOTE)
+			dquote = !dquote;
+		else if (current->type == TOKEN_BRACKET_L)
+			parenthesis++;
+		else if (current->type == TOKEN_BRACKET_R)
+			parenthesis--;
+		current = current->next;
+	}
+	if (parenthesis != 0 || quote != 0 || dquote != 0)
+	{
+		printf("Invalid input!\n");
+		return (1);
+	}
+	return (0);
+}
+
+void	retokenize(t_token **tokens)
+{
+	t_token	*current;
+	t_token	*prev;
+	char	*value;
+	char	*token_value;
+	t_token	*new_token;
+	t_token	*temp;
+
+	current = *tokens;
+	prev = NULL;
+	while (current)
+	{
+		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
+		{
+			value = current->value;
+			token_value = ft_strtok(value, " ");
+			while (token_value != NULL)
+			{
+				new_token = create_token(TOKEN_WORD, ft_strdup(token_value));
+				if (prev)
+					prev->next = new_token;
+				else
+					*tokens = new_token;
+				prev = new_token;
+				token_value = ft_strtok(NULL, " ");
+			}
+			temp = current->next;
+			// free(current->value); // Free memory for the token value
+			// free(current);        // Free memory for the token itself
+			current = temp;
+		}
+		else
+		{
+			prev = current;
+			current = current->next;
+		}
 	}
 }

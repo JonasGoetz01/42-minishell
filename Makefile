@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	:=	-Wextra -Wall -Werror #-g -fsanitize=address -O1
+CFLAGS	:=	-Wextra -Wall -Werror -g -fsanitize=address -O1
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
 
@@ -12,7 +12,8 @@ VPATH	:=	src \
 			src/signals \
 			src/utils \
 			src/exec \
-			inc
+			inc \
+			tests/unit
 
 INC		:=	colors.h \
 			exec.h \
@@ -49,8 +50,18 @@ SOURCES	:=	main.c \
 			env_utils.c \
 			error_msg.c
 
+
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
+
+TESTSSRC	:=	$(TESTDIR)/test.c \
+				$(TESTDIR)/helpers.c
+
+TESTDIR := test/unit
+TESTS	:=	$(addprefix $(OBJDIR), $(TESTSSRC:.c=.o))
+
+TESTOBJECTS := $(filter-out $(OBJDIR)/main.o, $(OBJECTS))
+TESTNAME := test
 
 all: $(NAME)
 
@@ -65,11 +76,21 @@ clean:
 fclean: clean
 	make -C $(LIBFT) fclean
 	rm -f $(NAME)
+	rm -f $(TESTNAME)
 
 re: fclean all
 
 test:
 	valgrind --leak-check=full ./$(NAME)
+
+unit: $(TESTS) $(TESTOBJECTS) $(INC)
+	make -C $(LIBFT)
+	$(CC) $(CFLAGS) $(TESTOBJECTS) $(TESTS) $(LDFLAGS) -o $(TESTNAME) -L $(LIBFT)
+	./$(TESTNAME)
+
+$(TESTDIR)/%.o: %.c $(INC)
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)

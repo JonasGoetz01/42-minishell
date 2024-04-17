@@ -5,30 +5,28 @@ void	process_input(char *input, t_global *global)
 	t_token		*tokens;
 	t_ast_node	*ast;
 
-	// t_token		*root;
-	// t_token		*stack;
 	ast = NULL;
 	if (DEBUG)
 		printf("You entered: %s\n", input);
 	ft_set_env(ft_strjoin("PWD=", getcwd(NULL, 0)), global);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
-	if (DEBUG)
-		print_tokens(tokens);
+	print_tokens(tokens);
+	retokenize(&tokens);
+	print_tokens(tokens);
+	if (input_validation(&tokens))
+	{
+		free(input);
+		return ;
+	}
 	remove_unused_spaces(&tokens);
-	if (DEBUG)
-		print_tokens(tokens);
+	print_tokens(tokens);
 	combine_words_in_quotes(&tokens);
-	if (DEBUG)
-		print_tokens(tokens);
+	print_tokens(tokens);
 	rearrange_tokens(&tokens);
-	if (DEBUG)
-		print_tokens(tokens);
-	if (DEBUG)
-		printf("---\n");
-	// root = postfixFromTokens(tokens);
-	// print_tokens(root);
+	print_tokens(tokens);
 	gen_ast(&ast, tokens);
+	print_ast(&ast, 0);
 	ft_exec_all(ast, global);
 	// print_tokens(tokens);
 	// stack = postfixFromTokens(tokens);
