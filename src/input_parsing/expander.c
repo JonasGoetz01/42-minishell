@@ -25,11 +25,15 @@ char	*ft_expand_word(char *word, t_global *global)
 void	ft_expand_tokens(t_token *tokens, t_global *global)
 {
 	t_token	*current_token;
+	int		in_single_quotes;
 
 	current_token = tokens;
+	in_single_quotes = 0;
 	while (current_token != NULL)
 	{
-		if (current_token->type == TOKEN_WORD)
+		if (current_token->type == TOKEN_SINGLE_QUOTE)
+			in_single_quotes = !in_single_quotes;
+		if (current_token->type == TOKEN_WORD && !in_single_quotes)
 			current_token->value = ft_expand_word(current_token->value, global);
 		current_token = current_token->next;
 	}
