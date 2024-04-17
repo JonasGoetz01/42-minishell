@@ -1,5 +1,4 @@
 #include "../../inc/minishell.h"
-#include <stdio.h>
 
 t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 {
