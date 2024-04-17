@@ -28,23 +28,63 @@ void	process_input(char *input, t_global *global)
 char	*build_prompt(void)
 {
 	char	*prompt;
+	char	*temp;
+	char	*reset_color;
 
 	prompt = ft_strdup("");
-	prompt = ft_strjoin(prompt, KGRN); // Green color
-	prompt = ft_strjoin(prompt, "👤 "); // User icon
-	prompt = ft_strjoin(prompt, getenv("USER"));
-	prompt = ft_strjoin(prompt, KNRM); // Reset color
-	prompt = ft_strjoin(prompt, "@");
-	prompt = ft_strjoin(prompt, KMAG); // Magenta color
-	prompt = ft_strjoin(prompt, get_hostname());
-	prompt = ft_strjoin(prompt, KNRM); // Reset color
-	prompt = ft_strjoin(prompt, "\n");
-	prompt = ft_strjoin(prompt, KBLU); // Blue color
-	prompt = ft_strjoin(prompt, getcwd(NULL, 0));
-	prompt = ft_strjoin(prompt, KGRN);  // Green color
-	prompt = ft_strjoin(prompt, " ❯ "); // Arrow icon
-	prompt = ft_strjoin(prompt, KNRM);  // Reset color
-	return (prompt);
+	reset_color = ft_strdup(KNRM);
+	temp = ft_strjoin(prompt, KGRN);
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, "👤 ");
+	free(prompt);
+	prompt = temp;
+	if (getenv("USER") == NULL)
+	{
+		temp = ft_strjoin(prompt, "user");
+		free(prompt);
+		prompt = temp;
+	}
+	else
+	{
+		temp = ft_strjoin(prompt, getenv("USER"));
+		free(prompt);
+		prompt = temp;
+	}
+	temp = ft_strjoin(prompt, reset_color);
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, "@");
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, KMAG);
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, get_hostname());
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, reset_color);
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, "\n");
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, KBLU);
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, getcwd(NULL, 0));
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, KGRN);
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, " ❯ ");
+	free(prompt);
+	prompt = temp;
+	temp = ft_strjoin(prompt, reset_color);
+	free(prompt);
+	free(reset_color);
+	return (temp);
 }
 
 int	show_prompt(t_global *global)
@@ -56,6 +96,7 @@ int	show_prompt(t_global *global)
 	{
 		prompt = build_prompt();
 		input = readline(prompt);
+		free(prompt);
 	}
 	else
 	{
@@ -77,7 +118,5 @@ int	show_prompt(t_global *global)
 		return (0);
 	}
 	process_input(input, global);
-	if (isatty(fileno(stdin)))
-		free(prompt);
 	return (0);
 }

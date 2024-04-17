@@ -433,6 +433,23 @@ void	combine_words_in_quotes(t_token **tokens)
 	}
 }
 
+void	free_token(t_token **tokens)
+{
+	t_token	*current;
+	t_token	*temp;
+
+	current = *tokens;
+	while (current)
+	{
+		temp = current;
+		current = current->next;
+		free(temp->value);
+		free(temp);
+	}
+	free(*tokens);
+	*tokens = NULL;
+}
+
 int	input_validation(t_token **tokens)
 {
 	t_token	*current;
@@ -458,10 +475,7 @@ int	input_validation(t_token **tokens)
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
-	{
-		printf("Invalid input!\n");
-		return (1);
-	}
+		return (free_token(tokens), printf("Invalid input!\n"), 1);
 	current = *tokens;
 	prev = NULL;
 	while (current)
