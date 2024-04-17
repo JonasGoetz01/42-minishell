@@ -11,6 +11,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	// ToDo Error
 	// if (!args)
 	args[0] = ft_strdup(cmd);
+	ft_lower_str(cmd);
 	// ToDo Error
 	// if (!args[0])
 	token = token->next;

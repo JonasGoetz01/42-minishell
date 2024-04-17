@@ -43,7 +43,8 @@ ft_arr_free.c \
 ft_arr_len.c \
 ft_strtok.c \
 ft_arr_rm.c \
-get_next_line.c
+get_next_line.c \
+ft_lower_str.c
 
 
 
