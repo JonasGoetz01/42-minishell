@@ -35,10 +35,12 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 	t_token	*token;
 	int		fd_pipe[2];
 	bool	next_wait;
+	bool	exit_on_err;
 
 	if (!node)
 		return ;
 	next_wait = wait;
+	exit_on_err = false;
 	token = node->token;
 	while (token)
 	{
@@ -65,7 +67,10 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 		else if (token->type == TOKEN_DOUBLE_PIPE)
 			next_wait = false;
 		else if (token->type == TOKEN_DOUBLE_AMPERSAND)
+		{
 			wait = false;
+			exit_on_err = true;
+		}
 		else if (token->type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
@@ -88,6 +93,8 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 		token = token->next;
 	}
 	ft_execute_nodes(node->left, next_wait, global);
+	if (exit_on_err && global->exit_status >= 1)
+		return ;
 	ft_execute_nodes(node->right, next_wait, global);
 	if (wait)
 		ft_wait_for_processes(node, global);
