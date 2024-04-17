@@ -83,6 +83,9 @@ re: fclean all
 test:
 	valgrind --leak-check=full ./$(NAME)
 
+tester:
+	cd 42_minishell_tester-master && bash tester.sh m
+
 unit: $(TESTS) $(TESTOBJECTS) $(INC)
 	make -C $(LIBFT)
 	$(CC) $(CFLAGS) $(TESTOBJECTS) $(TESTS) $(LDFLAGS) -o $(TESTNAME) -L $(LIBFT)
