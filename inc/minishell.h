@@ -10,10 +10,10 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/select.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <string.h>
 
 # define EXIT_ERROR 1
 # define DEBUG 1
@@ -122,7 +122,8 @@ void					ft_close_fd_node(t_ast_node *node);
 void					ft_close_all_fds(t_ast_node *node);
 
 void					ft_org_tokens(t_ast_node *token);
-void					ft_execute_process(t_process *process, t_global *global);
+void					ft_execute_process(t_process *process,
+							t_global *global);
 void					ft_exec_all(t_ast_node *token, t_global *global);
 t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node);
