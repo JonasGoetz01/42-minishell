@@ -1,4 +1,5 @@
 #include "../../inc/minishell.h"
+#include <stdio.h>
 
 static void	ft_exec_buildin(t_process *process, t_global *global)
 {
@@ -57,6 +58,8 @@ void	ft_execute_process(t_process *process, t_global *global)
 
 void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 {
+	int	exit_status;
+
 	if (!node)
 		return ;
 	ft_wait_for_processes(node->right, global);
@@ -65,7 +68,10 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
 		if (!node->process->is_buildin)
-			waitpid(node->process->pid, &node->process->exit_status, 0);
+		{
+			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
+				node->process->exit_status = WEXITSTATUS(exit_status);
+		}
 		global->exit_status = node->process->exit_status;
 	}
 	ft_wait_for_processes(node->left, global);
