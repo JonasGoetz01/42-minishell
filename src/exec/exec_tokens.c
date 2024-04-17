@@ -32,10 +32,11 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 
 void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 {
-	t_token	*token;
-	int		fd_pipe[2];
-	bool	next_wait;
-	bool	exit_on_err;
+	t_token			*token;
+	t_token_type	type;
+	int				fd_pipe[2];
+	bool			next_wait;
+	bool			exit_on_err;
 
 	if (!node)
 		return ;
@@ -44,34 +45,33 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 	token = node->token;
 	while (token)
 	{
-		if (token->type == TOKEN_LESS || token->type == TOKEN_DOUBLE_LESS)
+		type = type;
+		if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
 		{
 			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
 			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 		}
-		else if (token->type == TOKEN_GREATER || token->type == TOKEN_DOUBLE_GREATER)
+		else if (type == TOKEN_GREATER || type == TOKEN_DOUBLE_GREATER)
 		{
 			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
 			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 		}
-		if (token->type == TOKEN_LESS)
+		if (type == TOKEN_LESS)
 			ft_open_in_file(node);
-		else if (token->type == TOKEN_GREATER)
+		else if (type == TOKEN_GREATER)
 			ft_open_out_file(node);
-		else if (token->type == TOKEN_DOUBLE_GREATER)
+		else if (type == TOKEN_DOUBLE_GREATER)
 			ft_open_out_append_file(node);
-		else if(token->type == TOKEN_DOUBLE_LESS)
+		else if(type == TOKEN_DOUBLE_LESS)
 			ft_exec_here_doc(node);
-		else if (token->type == TOKEN_DOUBLE_PIPE)
-			next_wait = false;
-		else if (token->type == TOKEN_DOUBLE_AMPERSAND)
+		else if (type == TOKEN_DOUBLE_AMPERSAND)
 		{
 			wait = false;
 			exit_on_err = true;
 		}
-		else if (token->type == TOKEN_PIPE)
+		else if (type == TOKEN_PIPE)
 		{
 			if (pipe(fd_pipe) != 0)
 			{
@@ -88,12 +88,14 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 			next_wait = false;
 		}
-		else if (token->type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2 && node->fd_out[PIPE_WRITE] != -2 && !node->process)
+		else if (type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2 && node->fd_out[PIPE_WRITE] != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, global);
 		token = token->next;
 	}
 	ft_execute_nodes(node->left, next_wait, global);
 	if (exit_on_err && global->exit_status >= 1)
+		return ;
+	if (type == TOKEN_DOUBLE_PIPE && global->exit_status == 0)
 		return ;
 	ft_execute_nodes(node->right, next_wait, global);
 	if (wait)

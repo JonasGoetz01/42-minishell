@@ -413,7 +413,8 @@ void	combine_words_in_quotes(t_token **tokens)
 			}
 			if (current->next == NULL)
 				return ;
-			printf("Num tokens: %d\n", num_tokens);
+			if (DEBUG)
+				printf("Num tokens: %d\n", num_tokens);
 			current = start;
 			current = current->next;
 			num_tokens--;
