@@ -1,7 +1,5 @@
 #include "../inc/minishell.h"
 
-#define BUFFER_SIZE 100
-
 void	print_welcome_message(void)
 {
 	char	*pgrossma;
@@ -40,7 +38,8 @@ int	main(int argc, char **argv, char **envv)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	ft_init_t_global(&global, envv);
-	print_welcome_message();
+	if (isatty(fileno(stdin)))
+		print_welcome_message();
 	while (1)
 	{
 		if (show_prompt(&global))

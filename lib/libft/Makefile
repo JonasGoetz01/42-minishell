@@ -41,7 +41,8 @@ ft_arr_create.c \
 ft_arr_free.c \
 ft_arr_len.c \
 ft_strtok.c \
-ft_arr_rm.c
+ft_arr_rm.c \
+get_next_line.c
 
 
 

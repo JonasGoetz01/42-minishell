@@ -52,8 +52,16 @@ int	show_prompt(t_global *global)
 	char	*input;
 	char	*prompt;
 
-	prompt = build_prompt();
-	input = readline(prompt);
+	if (isatty(fileno(stdin)))
+	{
+		prompt = build_prompt();
+		input = readline(prompt);
+	}
+	else
+	{
+		input = get_next_line(fileno(stdin));
+		input = ft_strtrim(input, "\n");
+	}
 	if (!input)
 		return (1);
 	if (input[0] == '\0')
@@ -69,5 +77,7 @@ int	show_prompt(t_global *global)
 		return (0);
 	}
 	process_input(input, global);
+	if (isatty(fileno(stdin)))
+		free(prompt);
 	return (0);
 }
