@@ -115,6 +115,7 @@ void					ft_open_in_file(t_ast_node *node);
 void					ft_open_out_file(t_ast_node *node);
 void					ft_open_out_append_file(t_ast_node *node);
 void					ft_exec_here_doc(t_ast_node *node);
+void					ft_wait_for_processes(t_ast_node *node, t_global *global);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
@@ -128,7 +129,6 @@ void					ft_exec_all(t_ast_node *token, t_global *global);
 t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node);
 bool					ft_verify_process(t_process *process);
-int						ft_wait_for_processes(t_ast_node *node);
 
 //----
 t_stack					*create_stack(void);

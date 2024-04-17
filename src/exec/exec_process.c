@@ -54,3 +54,19 @@ void	ft_execute_process(t_process *process, t_global *global)
 	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
 	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
 }
+
+void	ft_wait_for_processes(t_ast_node *node, t_global *global)
+{
+	if (!node)
+		return ;
+	ft_wait_for_processes(node->right, global);
+	if (node->process)
+	{
+		if (DEBUG)
+			printf("waiting for %s...\n", node->process->cmd);
+		if (!node->process->is_buildin)
+			waitpid(node->process->pid, &node->process->exit_status, 0);
+		global->exit_status = node->process->exit_status;
+	}
+	ft_wait_for_processes(node->left, global);
+}
