@@ -5,6 +5,10 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+
 int		ft_isprint(int c);
 int		ft_isdigit(int c);
 int		ft_isascii(int c);
@@ -46,6 +50,7 @@ char	**ft_arr_create_len(size_t len);
 size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
 char	*ft_strtok(char *str, const char *delim);
-char	**ft_arr_rm(size_t	ind, char **arr);
+char	**ft_arr_rm(size_t ind, char **arr);
+char	*get_next_line(int fd);
 
 #endif
