@@ -96,8 +96,7 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 void	ft_exec_all(t_ast_node *node, t_global *global)
 {
 	ft_org_tokens(node);
-	if (DEBUG)
-		print_ast(&node, 0);
+	print_ast(&node, 0);
 	ft_execute_nodes(node, true, global);
 	ft_close_all_fds(node);
 }
