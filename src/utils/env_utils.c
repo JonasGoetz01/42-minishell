@@ -22,7 +22,7 @@ static char	*ft_trim_from_equal(char *str)
 	if (!find)
 		return (NULL);
 	ind_equal = find - str;
-	find = ft_substr(str, ind_equal, ft_strlen(str));
+	find = ft_substr(str, ind_equal + 1, ft_strlen(str));
 	return (find);
 }
 
@@ -153,6 +153,7 @@ bool	ft_set_env(char *str, t_global *global)
 {
 	char	*name;
 	char	*value;
+	bool	result;
 
 	if (!ft_env_contains(str, global->env_export))
 		return (ft_add_env(str, global));
@@ -175,7 +176,10 @@ bool	ft_set_env(char *str, t_global *global)
 	value = ft_trim_from_equal(str);
 	if (!name || !value)
 		return (false);
-	return (setenv(name, value, 1) == 0);
+	result = (setenv(name, value, 1) == 0);
+	free(name);
+	free(value);
+	return (result);
 }
 
 void	ft_unset_env(char *str, t_global *global)

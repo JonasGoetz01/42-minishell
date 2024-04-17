@@ -88,7 +88,7 @@ bool					ft_is_buildin_cmd(char *cmd);
 void					ft_exec_buildins(t_process *process, t_global *global);
 void					ft_error_buildin(const char *msg, const char *arg,
 							t_process *process, int exit_status);
-void					ft_cd_buildin(t_process *process);
+void					ft_cd_buildin(t_process *process, t_global *global);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
