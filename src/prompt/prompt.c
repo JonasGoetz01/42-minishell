@@ -6,20 +6,15 @@ void	process_input(char *input, t_global *global)
 	t_ast_node	*ast;
 
 	ast = NULL;
-	if (DEBUG)
-		printf("You entered: %s\n", input);
 	ft_set_env(ft_strjoin("PWD=", getcwd(NULL, 0)), global);
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
 	retokenize(&tokens);
 	print_tokens(tokens);
-	if (input_validation(&tokens))
-	{
-		free(input);
-		return ;
-	}
 	remove_unused_spaces(&tokens);
+	if (input_validation(&tokens))
+		return (free(input));
 	print_tokens(tokens);
 	combine_words_in_quotes(&tokens);
 	print_tokens(tokens);
@@ -28,9 +23,6 @@ void	process_input(char *input, t_global *global)
 	gen_ast(&ast, tokens);
 	print_ast(&ast, 0);
 	ft_exec_all(ast, global);
-	// print_tokens(tokens);
-	// stack = postfixFromTokens(tokens);
-	// print_tokens(stack);
 	free(input);
 }
 

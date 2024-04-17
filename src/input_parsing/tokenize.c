@@ -439,6 +439,7 @@ int	input_validation(t_token **tokens)
 	int		quote;
 	int		dquote;
 	int		parenthesis;
+	t_token	*prev;
 
 	current = *tokens;
 	quote = 0;
@@ -460,6 +461,33 @@ int	input_validation(t_token **tokens)
 	{
 		printf("Invalid input!\n");
 		return (1);
+	}
+	current = *tokens;
+	prev = NULL;
+	while (current)
+	{
+		if ((current->type == TOKEN_LESS || current->type == TOKEN_GREATER)
+			&& (prev == NULL || prev->type != TOKEN_WORD))
+		{
+			if (current->next == NULL || current->next->type != TOKEN_WORD
+				|| current->next->next == NULL
+				|| current->next->next->type != TOKEN_WORD)
+			{
+				printf("Invalid input!\n");
+				return (1);
+			}
+		}
+		else if ((current->type == TOKEN_LESS || current->type == TOKEN_GREATER)
+			&& (prev == NULL || prev->type == TOKEN_WORD))
+		{
+			if (current->next == NULL || current->next->type != TOKEN_WORD)
+			{
+				printf("Invalid input!\n");
+				return (1);
+			}
+		}
+		prev = current;
+		current = current->next;
 	}
 	return (0);
 }
