@@ -3,12 +3,23 @@
 #include "test.h"
 #include <stdio.h>
 
-int	main(void)
+void	test_expand(void)
+{
+	// t_token	**tokens;
+	// t_token	**tokens1;
+}
+
+void	test_combine_words_in_quotes(void)
+{
+	// t_token	**tokens;
+	// t_token	**tokens1;
+}
+
+void	test_retokenize(void)
 {
 	t_token	**tokens;
 	t_token	**tokens1;
 
-	INIT_TESTER();
 	TEST("retokenize", "no changes needed", {
 		tokens = create_token_list(1, TOKEN_WORD, "ls");
 		tokens1 = create_token_list(1, TOKEN_WORD, "ls");
@@ -52,9 +63,13 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
-	//
-	// ---- tokenize
-	//
+}
+
+void	test_tokenize(void)
+{
+	t_token	**tokens;
+	t_token	**tokens1;
+
 	TEST("tokenize", "simple command", {
 		tokens = malloc(sizeof(t_token *));
 		*tokens = tokenize("ls");
@@ -201,6 +216,13 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+}
+
+void	test_expand_tokens(void)
+{
+	t_token	**tokens;
+	t_token	**tokens1;
+
 	TEST("expand_tokens", "simple command", {
 		tokens = create_token_list(1, TOKEN_WORD, "ls");
 		ft_expand_tokens(*tokens, NULL);
@@ -227,6 +249,13 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+}
+
+void	test_expand_and_retokenize(void)
+{
+	t_token	**tokens;
+	t_token	**tokens1;
+
 	TEST("expand and retokenize", "simple variable", {
 		tokens = create_token_list(1, TOKEN_WORD, "$HOME");
 		ft_expand_tokens(*tokens, NULL);
@@ -247,6 +276,13 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+}
+
+void	test_rearrange_tokens(void)
+{
+	t_token	**tokens;
+	t_token	**tokens1;
+
 	TEST("rearrange_tokens", "one word", {
 		tokens = create_token_list(1, TOKEN_WORD, "echo");
 		ft_expand_tokens(*tokens, NULL);
@@ -257,6 +293,13 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+}
+
+void	test_remove_unused_spaces(void)
+{
+	t_token	**tokens;
+	t_token	**tokens1;
+
 	TEST("remove_unused_spaces", "one word", {
 		tokens = create_token_list(1, TOKEN_WORD, "echo");
 		remove_unused_spaces(tokens);
@@ -378,6 +421,71 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
+}
+
+void	test_gen_ast(void)
+{
+	t_token		**tokens;
+	t_ast_node	*ast;
+
+	// t_ast_node	**ast1;
+	// t_token		**tokens1;
+	// TEST("gen_ast", "simple command", {
+	// 	ast = NULL;
+	// 	ast1 = NULL;
+	// 	tokens = create_token_list(1, TOKEN_WORD, "ls");
+	// 	gen_ast(&ast, *tokens);
+	// 	tokens1 = create_token_list(1, TOKEN_WORD, "ls");
+	// 	ast1 = create_ast(*tokens);
+	// 	ASSERT_AST_EQ(ast, ast1);
+	// 	free_token_list(tokens);
+	// 	free_token_list(tokens1);
+	// 	free_ast(ast);
+	// 	free_ast(ast1);
+	// });
+	// TEST("gen_ast", "simple command with flags", {
+	// 	ast = NULL;
+	// 	ast1 = NULL;
+	// 	tokens = create_token_list(2, TOKEN_WORD, "ls", TOKEN_WORD, "-lah");
+	// 	gen_ast(&ast, *tokens);
+	// 	tokens1 = create_token_list(2, TOKEN_WORD, "ls", TOKEN_WORD, "-lah");
+	// 	ast1 = create_ast(*tokens);
+	// 	ASSERT_AST_EQ(ast, ast1);
+	// 	free_token_list(tokens);
+	// 	free_token_list(tokens1);
+	// 	free_ast(ast);
+	// 	free_ast(ast1);
+	// });
+	TEST("gen_ast", "simple command with flags and pipes", {
+		tokens = create_token_list(1, TOKEN_WORD, "echo");
+		// remove_unused_spaces(tokens);
+		// print_tokens(*tokens);
+		// gen_ast(&ast, *tokens);
+		ast = create_ast(create_token_list(1, TOKEN_PIPE, "|"));
+		// add_left(ast1, *create_token_list(2, TOKEN_WORD, "ls", TOKEN_WORD,
+		// 		"-lah"));
+		// add_right(ast1, *create_token_list(1, TOKEN_WORD, "lwc", TOKEN_WORD,
+		// 		"-ll"));
+		print_ast(&ast, 1);
+		// print_ast(ast1, 2);
+		// ASSERT_AST_EQ(ast, ast1);
+		// free_token_list(tokens);
+		// free_ast(*ast);
+		// free_ast(*ast1);
+	});
+}
+
+int	main(void)
+{
+	test_expand();
+	test_combine_words_in_quotes();
+	test_retokenize();
+	test_tokenize();
+	test_expand_tokens();
+	test_expand_and_retokenize();
+	test_rearrange_tokens();
+	test_remove_unused_spaces();
+	test_gen_ast();
 	SUMMARIZE_TESTS();
 	return (0);
 }

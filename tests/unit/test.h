@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static int totalTests = 0;
+static int passedTests = 0;
+static int failedTests = 0;
+
 // Define macros to keep track of test counts
 #define TEST_COUNT(count) \
     static int totalTests = count; \
@@ -109,6 +113,22 @@
                 printf("\x1b[32m[    OK    ] Tokens are equal\x1b[0m\n"); \
                 passedTests++; \
             } \
+        } \
+    } while (0)
+
+#define ASSERT_AST_EQ(ast1, ast2) \
+    do { \
+        if (compare_ast(ast1, ast2)) { \
+            printf("\x1b[32m[    OK    ] ASTs are identical\x1b[0m\n"); \
+            passedTests++; \
+        } else { \
+            printf("\x1b[31m[    KO    ] ASTs are not identical\x1b[0m\n"); \
+            printf("Actual AST:\n"); \
+            print_ast(ast1, 0); \
+            printf("vs\n"); \
+            printf("Expected AST:\n"); \
+            print_ast(ast2, 0); \
+            failedTests++; \
         } \
     } while (0)
 
