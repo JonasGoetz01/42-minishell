@@ -38,8 +38,12 @@ static char	*ft_cd_env(const char *env, t_process *process, t_global *global)
 static void	ft_set_oldpwd(t_global *global)
 {
 	char	*old_pwd;
+	char	*value;
 
-	old_pwd = ft_strjoin("OLDPWD=", getenv("PWD"));
+	value = ft_get_env("PWD", global);
+	if (!value)
+		return ;
+	old_pwd = ft_strjoin("OLDPWD=", value);
 	ft_set_env(old_pwd, global);
 	free(old_pwd);
 }
