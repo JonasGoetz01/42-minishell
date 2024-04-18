@@ -13,9 +13,11 @@ void	process_input(char *input, t_global *global)
 	retokenize(&tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	if (input_validation(&tokens))
-		return (free(input));
 	print_tokens(tokens);
+	if (input_validation(&tokens))
+		return (free_token(&tokens), free(input));
+	else
+		printf("Input is valid\n");
 	combine_words_in_quotes(&tokens);
 	print_tokens(tokens);
 	rearrange_tokens(&tokens);

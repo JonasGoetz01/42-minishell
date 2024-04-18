@@ -464,9 +464,9 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
-		if (current->type == TOKEN_SINGLE_QUOTE)
+		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
-		else if (current->type == TOKEN_DOUBLE_QUOTE)
+		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
 			dquote = !dquote;
 		else if (current->type == TOKEN_BRACKET_L)
 			parenthesis++;
@@ -475,7 +475,7 @@ int	input_validation(t_token **tokens)
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
-		return (free_token(tokens), printf("Invalid input!\n"), 1);
+		return (printf("Invalid input!\n"), 1);
 	current = *tokens;
 	prev = NULL;
 	while (current)
@@ -543,3 +543,4 @@ void	retokenize(t_token **tokens)
 		}
 	}
 }
+// test
