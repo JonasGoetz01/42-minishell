@@ -145,8 +145,6 @@ static bool ft_replace_env(char *name, char *str, char **envv)
 bool	ft_set_env(char *str, t_global *global)
 {
 	char	*name;
-	char	*value;
-	bool	result;
 
 	if (!ft_env_contains(str, global->env_export))
 		return (ft_add_env(str, global));
@@ -169,7 +167,7 @@ bool	ft_set_env(char *str, t_global *global)
 	else
 		ft_add_env_arr(str, &global->envv);
 	free(name);
-	return (result);
+	return (true);
 }
 
 void	ft_unset_env(char *str, t_global *global)
