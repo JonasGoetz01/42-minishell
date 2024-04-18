@@ -15,7 +15,7 @@ void	process_input(char *input, t_global *global)
 	remove_unused_spaces(&tokens);
 	print_tokens(tokens);
 	if (input_validation(&tokens))
-		return (free(input));
+		return (free_token(&tokens), free(input));
 	else
 		printf("Input is valid\n");
 	combine_words_in_quotes(&tokens);

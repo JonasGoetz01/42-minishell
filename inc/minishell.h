@@ -159,4 +159,6 @@ void					retokenize(t_token **tokens);
 
 void					ft_print_error(const char *msg, const char *arg);
 
+void					free_token(t_token **tokens);
+
 #endif

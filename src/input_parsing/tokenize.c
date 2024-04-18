@@ -475,7 +475,7 @@ int	input_validation(t_token **tokens)
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
-		return (free_token(tokens), printf("Invalid input!\n"), 1);
+		return (printf("Invalid input!\n"), 1);
 	current = *tokens;
 	prev = NULL;
 	while (current)
