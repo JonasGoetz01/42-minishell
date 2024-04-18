@@ -27,6 +27,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 		ft_execute_process(process, global);
 	else
 		printf("minishell: %s: command not found\n", process->cmd);
+	node->exit_status = process->exit_status;
 	return (process);
 }
 
@@ -45,7 +46,7 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 	token = node->token;
 	while (token)
 	{
-		type = type;
+		type = token->type;
 		if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
 		{
 			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
@@ -66,6 +67,8 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 			ft_open_out_append_file(node);
 		else if(type == TOKEN_DOUBLE_LESS)
 			ft_exec_here_doc(node);
+		else if (type == TOKEN_DOUBLE_PIPE)
+			wait = false;
 		else if (type == TOKEN_DOUBLE_AMPERSAND)
 		{
 			wait = false;
@@ -90,9 +93,12 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 		}
 		else if (type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2 && node->fd_out[PIPE_WRITE] != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, global);
+		else if (type == TOKEN_CMD && (node->fd_in[PIPE_READ] == -2 || node->fd_out[PIPE_WRITE] == -2) && !node->process)
+			node->exit_status = 1;
 		token = token->next;
 	}
 	ft_execute_nodes(node->left, next_wait, global);
+	ft_set_right_exit_code(node, global);
 	if (exit_on_err && global->exit_status >= 1)
 		return ;
 	if (type == TOKEN_DOUBLE_PIPE && global->exit_status == 0)
@@ -100,6 +106,7 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 	ft_execute_nodes(node->right, next_wait, global);
 	if (wait)
 		ft_wait_for_processes(node, global);
+	ft_set_right_exit_code(node, global);
 }
 
 void	ft_exec_all(t_ast_node *node, t_global *global)

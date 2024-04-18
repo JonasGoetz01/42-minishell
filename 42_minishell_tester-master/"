@@ -13,3 +13,68 @@ Num tokens: 1
 Num tokens: 1
 Num tokens: 1
 Num tokens: 1
+Tokens:
+Type: 6, Value: >>
+Type: 0, Value:  
+Type: 11, Value: "
+Type: 0, Value: 
+Type: 11, Value: "
+Type: 0, Value: OM
+Type: 11, Value: "
+Type: 0, Value: E
+Type: 11, Value: "
+Tokens:
+Type: 6, Value: >>
+Type: 0, Value:  
+Type: 11, Value: "
+Type: 0, Value: 
+Type: 11, Value: "
+Type: 0, Value: OM
+Type: 11, Value: "
+Type: 0, Value: E
+Type: 11, Value: "
+Tokens:
+Type: 6, Value: >>
+Type: 11, Value: "
+Type: 0, Value: 
+Type: 11, Value: "
+Type: 0, Value: OM
+Type: 11, Value: "
+Type: 0, Value: E
+Type: 11, Value: "
+Num tokens: 1
+Num tokens: 1
+Num tokens: 1
+Tokens:
+Type: 6, Value: >>
+Type: 11, Value: "
+Type: 0, Value: 
+Type: 11, Value: "
+Type: 0, Value: OM
+Type: 11, Value: "
+Type: 0, Value: E
+Type: 11, Value: "
+Tokens:
+Type: 0, Value: 
+Type: 6, Value: >>
+Type: 11, Value: "
+Type: 11, Value: "
+Type: 0, Value: OM
+Type: 11, Value: "
+Type: 0, Value: E
+Type: 11, Value: "
+Highest token: >>
+Highest Bracket Level: 0
+Highest token: 
+Highest Bracket Level: 0
+Highest token: E
+Highest Bracket Level: 0
+    Type: 14, Value: " Prio: -1
+    Type: 11, Value: " Prio: -1
+    Type: 0, Value: OM Prio: -1
+    Type: 11, Value: " Prio: -1
+    Type: 0, Value: E Prio: -1
+    Type: 11, Value: " Prio: -1
+Type: 6, Value: >> Prio: 2
+    Type: 13, Value:  Prio: -1
+executing : in -1 out 3

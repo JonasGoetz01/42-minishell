@@ -61,6 +61,7 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 	int					fd_out[2];
 	int					fd_in[2];
+	int					exit_status;
 	t_process			*process;
 }						t_ast_node;
 
@@ -116,6 +117,7 @@ void					ft_open_out_file(t_ast_node *node);
 void					ft_open_out_append_file(t_ast_node *node);
 void					ft_exec_here_doc(t_ast_node *node);
 void					ft_wait_for_processes(t_ast_node *node, t_global *global);
+void					ft_set_right_exit_code(t_ast_node *node, t_global *global);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
