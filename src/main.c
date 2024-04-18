@@ -1,12 +1,14 @@
 #include "../inc/minishell.h"
 
-void	print_welcome_message(void)
+void	print_welcome_message(t_global *global)
 {
 	char	*pgrossma;
 	char	*jgotz;
+	char	*username;
 
 	pgrossma = "https://profile.intra.42.fr/users/pgrossma";
 	jgotz = "https://profile.intra.42.fr/users/jgotz";
+	username = ft_get_env("USER", global);
 	char *pastel_colors[] = {
 		"\x1b[38;2;255;204;204m",
 		"\x1b[38;2;255;229;204m",
@@ -25,7 +27,11 @@ void	print_welcome_message(void)
 	printf("\x1b[0m\n\n\t\tDont panic shell\n\n");
 	printf("\t\t\e]8;;%s\apgrossma\e]8;;\a && \e]8;;%s\ajgotz\e]8;;\a\n\n\n",
 		pgrossma, jgotz);
-	printf("\n✨ Hello, %s ✨\n", getenv("USER"));
+	if (username)
+	{
+		printf("\n✨ Hello, %s ✨\n", username);
+		free(username);
+	}
 	fflush(stdout);
 }
 
@@ -39,7 +45,7 @@ int	main(int argc, char **argv, char **envv)
 	signal(SIGQUIT, SIG_IGN);
 	ft_init_t_global(&global, envv);
 	if (isatty(fileno(stdin)))
-		print_welcome_message();
+		print_welcome_message(&global);
 	while (1)
 	{
 		if (show_prompt(&global))

@@ -23,7 +23,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	process = ft_create_process(cmd, args, node);
 	if (DEBUG)
 		printf("executing %s: in %d out %d\n", process->cmd, process->pipe_fd_in[PIPE_READ], process->pipe_fd_out[PIPE_WRITE]);
-	if (ft_verify_process(process))
+	if (ft_verify_process(process, global))
 		ft_execute_process(process, global);
 	else
 		printf("minishell: %s: command not found\n", process->cmd);

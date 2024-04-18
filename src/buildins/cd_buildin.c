@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static void	ft_cd_dir_rel(t_process *process)
+static char	*ft_cd_dir_rel(t_process *process)
 {
 	char	*cwd;
 	char	*new_path;
@@ -9,28 +9,23 @@ static void	ft_cd_dir_rel(t_process *process)
 	if (!cwd)
 	{
 		ft_error_buildin(strerror(errno), process->args[1], process, 1);
-		return ;
+		return (NULL);
 	}
 	new_path = ft_strjoin(cwd, "/");
 	free(cwd);
 	if (!new_path)
-		return ;
+		return (NULL);
 	cwd = ft_strjoin(new_path, process->args[1]);
 	free(new_path);
-	if (!cwd)
-		return ;
-	if (chdir(cwd) != 0)
-		ft_error_buildin(strerror(errno), process->args[1], process, 1);
-	free(cwd);
-	return ;
+	return (cwd);
 }
 
-static char	*ft_cd_env(const char *env, t_process *process)
+static char	*ft_cd_env(const char *env, t_process *process, t_global *global)
 {
 	char	*new_pwd;
 	char	*err_msg;
 
-	new_pwd = getenv(env);
+	new_pwd = ft_get_env((char *) env, global);
 	if (!new_pwd)
 	{
 		err_msg = ft_strjoin(env, " not set");
@@ -43,35 +38,36 @@ static char	*ft_cd_env(const char *env, t_process *process)
 static void	ft_set_oldpwd(t_global *global)
 {
 	char	*old_pwd;
+	char	*value;
 
-	old_pwd = ft_strjoin("OLDPWD=", getenv("PWD"));
+	value = ft_get_env("PWD", global);
+	if (!value)
+		return ;
+	old_pwd = ft_strjoin("OLDPWD=", value);
 	ft_set_env(old_pwd, global);
 	free(old_pwd);
 }
 
 void	ft_cd_buildin(t_process *process, t_global *global)
 {
-	char	*tmp;
+	char	*temp;
 
 	if (!process->args[1])
-		tmp = ft_cd_env("HOME", process);
+		temp = ft_cd_env("HOME", process, global);
 	else if (ft_strncmp(process->args[1], "-", 2) == 0)
 	{
-		tmp = ft_cd_env("OLDPWD", process);
-		if (tmp)
-			printf("%s\n", tmp);
+		temp = ft_cd_env("OLDPWD", process, global);
+		if (temp)
+			printf("%s\n", temp);
 	}
 	else if (process->args[1][0] == '/' || process->args[1][0] == '.')
-		tmp = process->args[1];
+		temp = ft_strdup(process->args[1]);
 	else
-	{
-		ft_set_oldpwd(global);
-		ft_cd_dir_rel(process);
-		return ;
-	}
+		temp = ft_cd_dir_rel(process);
 	ft_set_oldpwd(global);
-	if (!tmp)
+	if (!temp)
 		return ;
-	if (chdir(tmp) != 0)
+	if (chdir(temp) != 0)
 		ft_error_buildin(strerror(errno), process->args[1], process, 1);
+	free(temp);
 }

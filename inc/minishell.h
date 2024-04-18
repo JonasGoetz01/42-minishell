@@ -98,6 +98,7 @@ bool					ft_env_contains(char *str, char **env);
 bool					ft_set_env(char *str, t_global *global);
 bool					ft_add_env(char *str, t_global *global);
 void					ft_unset_env(char *str, t_global *global);
+char					*ft_get_env(char *name, t_global *global);
 
 t_token					*tokenize(const char *input);
 
@@ -130,7 +131,7 @@ void					ft_execute_process(t_process *process,
 void					ft_exec_all(t_ast_node *token, t_global *global);
 t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node);
-bool					ft_verify_process(t_process *process);
+bool					ft_verify_process(t_process *process, t_global *global);
 
 //----
 t_stack					*create_stack(void);
