@@ -232,12 +232,10 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 			brackets_level++;
 		else if (current_token->type == TOKEN_BRACKET_R)
 			brackets_level--;
-		if (highest_token == NULL || (brackets_level == 0
-				&& precedence(*current_token) >= precedence(*highest_token))
-			|| (brackets_level > 0
-				&& precedence(*current_token) > precedence(*highest_token))
-			|| highest_token->type == TOKEN_BRACKET_L
-			|| highest_token->type == TOKEN_BRACKET_R)
+		if (highest_token == NULL
+			|| precedence(*current_token) > precedence(*highest_token)
+			|| (precedence(*current_token) == precedence(*highest_token)
+				&& brackets_level <= highest_token_brackets_level))
 		{
 			highest_token = current_token;
 			highest_token_brackets_level = brackets_level;
