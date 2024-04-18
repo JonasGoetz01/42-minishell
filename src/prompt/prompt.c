@@ -25,11 +25,12 @@ void	process_input(char *input, t_global *global)
 	free(input);
 }
 
-char	*build_prompt(void)
+char	*build_prompt(t_global *global)
 {
 	char	*prompt;
 	char	*temp;
 	char	*reset_color;
+	char	*username;
 
 	prompt = ft_strdup("");
 	reset_color = ft_strdup(KNRM);
@@ -39,7 +40,8 @@ char	*build_prompt(void)
 	temp = ft_strjoin(prompt, "👤 ");
 	free(prompt);
 	prompt = temp;
-	if (getenv("USER") == NULL)
+	username = ft_get_env("USER", global);
+	if (username == NULL)
 	{
 		temp = ft_strjoin(prompt, "user");
 		free(prompt);
@@ -47,10 +49,11 @@ char	*build_prompt(void)
 	}
 	else
 	{
-		temp = ft_strjoin(prompt, getenv("USER"));
+		temp = ft_strjoin(prompt, username);
 		free(prompt);
 		prompt = temp;
 	}
+	free(username);
 	temp = ft_strjoin(prompt, reset_color);
 	free(prompt);
 	prompt = temp;
@@ -94,7 +97,7 @@ int	show_prompt(t_global *global)
 
 	if (isatty(fileno(stdin)))
 	{
-		prompt = build_prompt();
+		prompt = build_prompt(global);
 		input = readline(prompt);
 		free(prompt);
 	}
