@@ -98,6 +98,7 @@ bool					ft_env_contains(char *str, char **env);
 bool					ft_set_env(char *str, t_global *global);
 bool					ft_add_env(char *str, t_global *global);
 void					ft_unset_env(char *str, t_global *global);
+char					*ft_get_env(char *name, t_global *global);
 
 t_token					*tokenize(const char *input);
 
