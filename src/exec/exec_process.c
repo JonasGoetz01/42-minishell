@@ -70,9 +70,20 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 		if (!node->process->is_buildin)
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
-				node->process->exit_status = WEXITSTATUS(exit_status);
+				node->exit_status = WEXITSTATUS(exit_status);
 		}
-		global->exit_status = node->process->exit_status;
 	}
+	if (node->exit_status != -1)
+		global->exit_status = node->exit_status;
 	ft_wait_for_processes(node->left, global);
+}
+
+void	ft_set_right_exit_code(t_ast_node *node, t_global *global)
+{
+	if (!node)
+		return ;
+	if (node->process || node->exit_status != -1)
+		global->exit_status = node->exit_status;
+	ft_set_right_exit_code(node->left, global);
+	ft_set_right_exit_code(node->right, global);
 }
