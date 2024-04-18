@@ -464,9 +464,9 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
-		if (current->type == TOKEN_SINGLE_QUOTE)
+		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
-		else if (current->type == TOKEN_DOUBLE_QUOTE)
+		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
 			dquote = !dquote;
 		else if (current->type == TOKEN_BRACKET_L)
 			parenthesis++;
