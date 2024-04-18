@@ -3,6 +3,7 @@
 void	ft_export_buildin(t_process *process, t_global *global)
 {
 	char	**export_env;
+	size_t	ind;
 
 	export_env = global->env_export;
 	if (!process->args[1])
@@ -14,5 +15,10 @@ void	ft_export_buildin(t_process *process, t_global *global)
 		}
 		return ;
 	}
-	ft_add_env(process->args[1], global);
+	ind = 1;
+	while (process->args[ind])
+	{
+		ft_add_env(process->args[ind], global);
+		ind++;
+	}
 }
