@@ -24,7 +24,10 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	if (DEBUG)
 		printf("executing %s: in %d out %d\n", process->cmd, process->pipe_fd_in[PIPE_READ], process->pipe_fd_out[PIPE_WRITE]);
 	if (ft_verify_process(process, global))
+	{
 		ft_execute_process(process, global);
+		ft_close_fd_node(node);
+	}
 	else
 		printf("minishell: %s: command not found\n", process->cmd);
 	node->exit_status = process->exit_status;
@@ -91,9 +94,9 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 			next_wait = false;
 		}
-		else if (type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2 && node->fd_out[PIPE_WRITE] != -2 && !node->process)
+		else if (type == TOKEN_CMD && node->file_in != -2 && node->file_out != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, global);
-		else if (type == TOKEN_CMD && (node->fd_in[PIPE_READ] == -2 || node->fd_out[PIPE_WRITE] == -2) && !node->process)
+		else if (type == TOKEN_CMD && (node->file_in == -2 || node->file_out == -2) && !node->process)
 			node->exit_status = 1;
 		token = token->next;
 	}
@@ -114,5 +117,5 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	ft_org_tokens(node);
 	print_ast(&node, 0);
 	ft_execute_nodes(node, true, global);
-	ft_close_all_fds(node);
+	// ft_close_all_fds(node);
 }

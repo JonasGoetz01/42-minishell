@@ -59,8 +59,10 @@ typedef struct s_ast_node
 	t_token				*token;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
+	int					file_in;
 	int					fd_out[2];
 	int					fd_in[2];
+	int					file_out;
 	int					exit_status;
 	t_process			*process;
 }						t_ast_node;

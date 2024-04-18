@@ -12,7 +12,7 @@ void	ft_open_in_file(t_ast_node *node)
 		ft_print_error(strerror(errno), file_name);
 		fd = -2;
 	}
-	node->left->fd_in[PIPE_READ] = fd;
+	node->left->file_in = fd;
 }
 
 void	ft_open_out_file(t_ast_node *node)
@@ -27,7 +27,7 @@ void	ft_open_out_file(t_ast_node *node)
 		ft_print_error(strerror(errno), file_name);
 		fd = -2;
 	}
-	node->left->fd_out[PIPE_WRITE] = fd;
+	node->left->file_out = fd;
 }
 
 void	ft_open_out_append_file(t_ast_node *node)
@@ -42,5 +42,5 @@ void	ft_open_out_append_file(t_ast_node *node)
 		ft_print_error(strerror(errno), file_name);
 		fd = -2;
 	}
-	node->left->fd_out[PIPE_WRITE] = fd;
+	node->left->file_out = fd;
 }

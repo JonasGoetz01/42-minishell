@@ -8,10 +8,12 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 	process->is_buildin = false;
 	process->cmd = cmd;
 	process->args = args;
+	process->file_in = node->file_in;
 	process->pipe_fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
 	process->pipe_fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 	process->pipe_fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 	process->pipe_fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+	process->file_out = node->file_out;
 	process->pid = -1;
 	process->exit_status = -1;
 	return (process);
