@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static char	*ft_trim_to_equal(char *str)
+char	*ft_trim_to_equal(char *str)
 {
 	char	*find;
 	size_t	ind_equal;
@@ -13,7 +13,7 @@ static char	*ft_trim_to_equal(char *str)
 	return (find);
 }
 
-static char	*ft_trim_from_equal(char *str)
+char	*ft_trim_from_equal(char *str)
 {
 	char	*find;
 	size_t	ind_equal;

@@ -101,6 +101,8 @@ bool					ft_add_env_export(char *name, char *value, char ***envv);
 bool					ft_add_env_env(char *name, char *value, char ***envv);
 void					ft_unset_env(char *name, t_global *global);
 char					*ft_get_env(char *name, char **envv);
+char					*ft_trim_to_equal(char *str);
+char					*ft_trim_from_equal(char *str);
 
 t_token					*tokenize(const char *input);
 

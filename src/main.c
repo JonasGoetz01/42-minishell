@@ -8,7 +8,7 @@ void	print_welcome_message(t_global *global)
 
 	pgrossma = "https://profile.intra.42.fr/users/pgrossma";
 	jgotz = "https://profile.intra.42.fr/users/jgotz";
-	username = ft_get_env("USER", global);
+	username = ft_get_env("USER", global->envv);
 	char *pastel_colors[] = {
 		"\x1b[38;2;255;204;204m",
 		"\x1b[38;2;255;229;204m",
