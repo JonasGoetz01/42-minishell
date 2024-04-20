@@ -281,6 +281,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		}
 		return ;
 	}
+	if (highest_token->next == NULL)
+		return ;
 	left_arm = tokens;
 	current_token = tokens;
 	while (current_token->next != highest_token)
