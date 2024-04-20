@@ -16,7 +16,7 @@
 # include <unistd.h>
 
 # define EXIT_ERROR 1
-# define DEBUG 1
+# define DEBUG 0
 
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -94,11 +94,13 @@ void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
 void					ft_unset_buildin(t_process *process, t_global *global);
-bool					ft_env_contains(char *str, char **env);
-bool					ft_set_env(char *str, t_global *global);
-bool					ft_add_env(char *str, t_global *global);
-void					ft_unset_env(char *str, t_global *global);
-char					*ft_get_env(char *name, t_global *global);
+bool					ft_env_contains(char *name, char **env);
+bool					ft_set_env_export(char *name, char *value, char ***envv);
+bool					ft_set_env_env(char *name, char *value, char ***envv);
+bool					ft_add_env_export(char *name, char *value, char ***envv);
+bool					ft_add_env_env(char *name, char *value, char ***envv);
+void					ft_unset_env(char *name, t_global *global);
+char					*ft_get_env(char *name, char **envv);
 
 t_token					*tokenize(const char *input);
 
