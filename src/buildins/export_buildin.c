@@ -36,7 +36,10 @@ void	ft_export_buildin(t_process *process, t_global *global)
 	ind = 1;
 	while (process->args[ind])
 	{
-		ft_add_env(process->args[ind], global);
+		if (ft_is_valid_identifier(process->args[ind]))
+			ft_add_env(process->args[ind], global);
+		else
+			ft_error_buildin_env(process->args[ind], process);
 		ind++;
 	}
 }
