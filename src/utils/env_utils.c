@@ -255,3 +255,23 @@ char	*ft_get_env(char *name, char **envv)
 	value = ft_trim_from_equal(*find);
 	return (value);
 }
+
+bool	ft_is_valid_identifier(char *str)
+{
+	char	*name;
+	size_t	ind;
+
+	name = ft_trim_to_equal(str);
+	if (!name)
+		return (false);
+	if (!ft_isalpha(name[0]) && name[0] != '_')
+		return (free(name), false);
+	ind = 0;
+	while (name[ind])
+	{
+		if (!ft_isalnum(name[ind]) && name[ind] != '_')
+			return (free(name), false);
+		ind++;
+	}
+	return (free(name), true);
+}

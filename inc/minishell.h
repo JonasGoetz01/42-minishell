@@ -89,6 +89,7 @@ bool					ft_is_buildin_cmd(char *cmd);
 void					ft_exec_buildins(t_process *process, t_global *global);
 void					ft_error_buildin(const char *msg, const char *arg,
 							t_process *process, int exit_status);
+void					ft_error_buildin_env(const char *arg, t_process *process);
 void					ft_cd_buildin(t_process *process, t_global *global);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
@@ -103,6 +104,7 @@ void					ft_unset_env(char *name, t_global *global);
 char					*ft_get_env(char *name, char **envv);
 char					*ft_trim_to_equal(char *str);
 char					*ft_trim_from_equal(char *str);
+bool					ft_is_valid_identifier(char *str);
 
 t_token					*tokenize(const char *input);
 
