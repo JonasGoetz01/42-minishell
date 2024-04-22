@@ -15,6 +15,7 @@ void	process_input(char *input, t_global *global)
 		free(cwd);
 	}
 	tokens = tokenize(input);
+	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
