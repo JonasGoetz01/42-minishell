@@ -25,6 +25,7 @@ char	*ft_expand_word(char *word, t_global *global)
 void	ft_expand_tokens(t_token *tokens, t_global *global)
 {
 	t_token	*current_token;
+	t_token	*tmp;
 	int		in_single_quotes;
 	int		start;
 	int		end;
@@ -38,33 +39,38 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			in_single_quotes = !in_single_quotes;
 		if (current_token->type == TOKEN_WORD && !in_single_quotes)
 		{
-			start = 0;
-			while (current_token->value[start] != '$'
-				&& current_token->value[start] != '\0')
+			while (ft_strchr(current_token->value, '$'))
+			{
+				start = ft_strchr(current_token->value, '$')
+					- current_token->value;
 				start++;
-			if (current_token->value[start] == '\0')
-				break ;
-			end = start;
-			if (current_token->value[end] == '$')
-				end++;
-			while (current_token->value[end] != '\0'
-				&& current_token->value[end] != ' '
-				&& current_token->value[end] != '?'
-				&& current_token->value[end] != '$')
-				end++;
-			if (current_token->value[end] == ' '
-				|| current_token->value[end] == '$')
-				end--;
-			temp = ft_strdup("");
-			temp = ft_strjoin(temp, ft_substr(current_token->value, 0, start));
-			temp = ft_strjoin(temp,
-					ft_expand_word(ft_substr(current_token->value, start, end
-							- start + 1), global));
-			temp = ft_strjoin(temp, ft_strdup(&current_token->value[end + 1]));
-			free(current_token->value);
-			current_token->value = temp;
-			if (start != end)
-				ft_expand_tokens(tokens, global);
+				end = start;
+				while (current_token->value[end]
+					&& ft_isalnum(current_token->value[end]))
+					end++;
+				if (end - start == 0)
+				{
+					while (current_token->next != NULL
+						&& current_token->next->type != TOKEN_WORD)
+					{
+						tmp = current_token->next->next;
+						free(current_token->next->value);
+						free(current_token->next);
+						current_token->next = tmp;
+						current_token = current_token->next;
+					}
+					printf("Error: Invalid variable name\n");
+					break ;
+				}
+				temp = ft_substr(current_token->value, 0, start - 1);
+				temp = ft_strjoin(temp,
+						ft_expand_word(ft_substr(current_token->value, start
+								- 1, end - (start - 1)), global));
+				temp = ft_strjoin(temp, &current_token->value[end]);
+				free(current_token->value);
+				current_token->value = ft_strdup(temp);
+				free(temp);
+			}
 		}
 		current_token = current_token->next;
 	}
