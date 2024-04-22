@@ -43,11 +43,15 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				&& current_token->value[start] != '\0')
 				start++;
 			end = start;
+			if (current_token->value[end] == '$')
+				end++;
 			while (current_token->value[end] != '\0'
 				&& current_token->value[end] != ' '
-				&& current_token->value[end] != '?')
+				&& current_token->value[end] != '?'
+				&& current_token->value[end] != '$')
 				end++;
-			if (current_token->value[end] == ' ')
+			if (current_token->value[end] == ' '
+				|| current_token->value[end] == '$')
 				end--;
 			temp = ft_strdup("");
 			temp = ft_strjoin(temp, ft_substr(current_token->value, 0, start));
@@ -57,6 +61,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			temp = ft_strjoin(temp, ft_strdup(&current_token->value[end + 1]));
 			free(current_token->value);
 			current_token->value = temp;
+			if (start != end)
+				ft_expand_tokens(tokens, global);
 		}
 		current_token = current_token->next;
 	}
