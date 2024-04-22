@@ -26,13 +26,8 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	if (ft_verify_process(process, global))
 	{
 		ft_execute_process(process, global);
-		// printf("fd_in[PIPE_WRITE]: %d\n", node->fd_in[PIPE_WRITE]);
-		// printf("fd_in[PIPE_READ]: %d\n", node->fd_in[PIPE_READ]);
-		// printf("fd_out[PIPE_WRITE]: %d\n", node->fd_out[PIPE_WRITE]);
-		// printf("fd_out[PIPE_READ]: %d\n", node->fd_out[PIPE_READ]);
 		ft_close_fd(&node->fd_in[PIPE_READ]);
 		ft_close_fd(&node->fd_in[PIPE_WRITE]);
-		ft_close_fd(&node->fd_out[PIPE_WRITE]);
 	}
 	else
 		printf("minishell: %s: command not found\n", process->cmd);
@@ -123,5 +118,4 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	ft_org_tokens(node);
 	print_ast(&node, 0);
 	ft_execute_nodes(node, true, global);
-	// ft_close_all_fds(node);
 }

@@ -3,8 +3,11 @@
 void	ft_close_fd(int *fd)
 {
 	if (*fd != -1 && *fd != -2)
-		close(*fd);
-	*fd = -1;
+	{
+		if (close(*fd) != 0)
+			ft_print_error(strerror(errno), NULL);
+		*fd = -1;
+	}
 }
 
 void	ft_close_fd_process(t_process *process)
