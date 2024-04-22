@@ -60,6 +60,7 @@ void	ft_execute_process(t_process *process, t_global *global)
 			dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
 		ft_close_fd_process(process);
 		execve(process->cmd, process->args, global->envv);
+		ft_print_error(strerror(errno), process->cmd);
 		exit(1);
 	}
 }
@@ -75,6 +76,8 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
+		ft_close_fd(&node->file_in);
+		ft_close_fd(&node->file_out);
 		if (!node->process->is_buildin)
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
