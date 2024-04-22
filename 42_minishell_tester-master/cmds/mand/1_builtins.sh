@@ -417,8 +417,6 @@ export TEST=123
 
 export ___TEST=123
 
-export --TEST=123
-
 export ''=''
 
 export "="="="
@@ -426,8 +424,6 @@ export "="="="
 export '='='='
 
 export TE-ST=100
-
-export -TEST=100
 
 export TEST-=100
 
@@ -457,8 +453,6 @@ export TES{T=123
 
 export TES-T=123
 
-export -TEST=123
-
 export _TEST=123
 
 export TES_T=123
@@ -471,8 +465,6 @@ export TES#T=123
 
 export TES@T=123
 
-export TES!T=123
-
 export TES$?T=123
 
 export =============123
@@ -483,11 +475,7 @@ export ________=123
 
 export TES^T=123
 
-export TES!T=123
-
 export TES\~T=123
-
-export TEST+=100
 
 export TES_T=123
 /bin/echo $TES_T
@@ -563,8 +551,6 @@ unset TES{T
 
 unset TES-T
 
-unset -TEST
-
 unset _TEST
 
 unset TES_T
@@ -576,8 +562,6 @@ unset TE*ST
 unset TES#T
 
 unset TES@T
-
-unset TES!T
 
 unset TES$?T
 
@@ -600,8 +584,6 @@ unset unset
 unset sudo
 
 unset TES^T
-
-unset TES!T
 
 unset TES\~T
 

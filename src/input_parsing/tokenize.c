@@ -232,12 +232,10 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 			brackets_level++;
 		else if (current_token->type == TOKEN_BRACKET_R)
 			brackets_level--;
-		if (highest_token == NULL || (brackets_level == 0
-				&& precedence(*current_token) >= precedence(*highest_token))
-			|| (brackets_level > 0
-				&& precedence(*current_token) > precedence(*highest_token))
-			|| highest_token->type == TOKEN_BRACKET_L
-			|| highest_token->type == TOKEN_BRACKET_R)
+		if (highest_token == NULL
+			|| precedence(*current_token) > precedence(*highest_token)
+			|| (precedence(*current_token) == precedence(*highest_token)
+				&& brackets_level <= highest_token_brackets_level))
 		{
 			highest_token = current_token;
 			highest_token_brackets_level = brackets_level;
@@ -285,6 +283,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		}
 		return ;
 	}
+	if (highest_token->next == NULL)
+		return ;
 	left_arm = tokens;
 	current_token = tokens;
 	while (current_token->next != highest_token)
@@ -468,9 +468,9 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
-		if (current->type == TOKEN_SINGLE_QUOTE)
+		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
-		else if (current->type == TOKEN_DOUBLE_QUOTE)
+		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
 			dquote = !dquote;
 		else if (current->type == TOKEN_BRACKET_L)
 			parenthesis++;
@@ -479,7 +479,7 @@ int	input_validation(t_token **tokens)
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
-		return (free_token(tokens), printf("Invalid input!\n"), 1);
+		return (printf("Invalid input!\n"), 1);
 	current = *tokens;
 	prev = NULL;
 	while (current)
@@ -523,6 +523,15 @@ void	retokenize(t_token **tokens)
 	prev = NULL;
 	while (current)
 	{
+		if ((current->type == TOKEN_SINGLE_QUOTE
+				|| current->type == TOKEN_DOUBLE_QUOTE) && current->next
+			&& current->next->type == current->type)
+		{
+			new_token = create_token(TOKEN_WORD, "\0");
+			temp = current->next;
+			current->next = new_token;
+			new_token->next = temp;
+		}
 		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
 			value = current->value;
@@ -547,3 +556,4 @@ void	retokenize(t_token **tokens)
 		}
 	}
 }
+// test

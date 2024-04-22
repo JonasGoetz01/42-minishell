@@ -16,7 +16,7 @@
 # include <unistd.h>
 
 # define EXIT_ERROR 1
-# define DEBUG 1
+# define DEBUG 0
 
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -91,16 +91,22 @@ bool					ft_is_buildin_cmd(char *cmd);
 void					ft_exec_buildins(t_process *process, t_global *global);
 void					ft_error_buildin(const char *msg, const char *arg,
 							t_process *process, int exit_status);
+void					ft_error_buildin_env(const char *arg, t_process *process);
 void					ft_cd_buildin(t_process *process, t_global *global);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
 void					ft_unset_buildin(t_process *process, t_global *global);
-bool					ft_env_contains(char *str, char **env);
-bool					ft_set_env(char *str, t_global *global);
-bool					ft_add_env(char *str, t_global *global);
-void					ft_unset_env(char *str, t_global *global);
-char					*ft_get_env(char *name, t_global *global);
+bool					ft_env_contains(char *name, char **env);
+bool					ft_set_env_export(char *name, char *value, char ***envv);
+bool					ft_set_env_env(char *name, char *value, char ***envv);
+bool					ft_add_env_export(char *name, char *value, char ***envv);
+bool					ft_add_env_env(char *name, char *value, char ***envv);
+void					ft_unset_env(char *name, t_global *global);
+char					*ft_get_env(char *name, char **envv);
+char					*ft_trim_to_equal(char *str);
+char					*ft_trim_from_equal(char *str);
+bool					ft_is_valid_identifier(char *str);
 
 t_token					*tokenize(const char *input);
 
@@ -119,8 +125,10 @@ void					ft_open_in_file(t_ast_node *node);
 void					ft_open_out_file(t_ast_node *node);
 void					ft_open_out_append_file(t_ast_node *node);
 void					ft_exec_here_doc(t_ast_node *node);
-void					ft_wait_for_processes(t_ast_node *node, t_global *global);
-void					ft_set_right_exit_code(t_ast_node *node, t_global *global);
+void					ft_wait_for_processes(t_ast_node *node,
+							t_global *global);
+void					ft_set_right_exit_code(t_ast_node *node,
+							t_global *global);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_process(t_process *process);
@@ -158,5 +166,7 @@ int						input_validation(t_token **tokens);
 void					retokenize(t_token **tokens);
 
 void					ft_print_error(const char *msg, const char *arg);
+
+void					free_token(t_token **tokens);
 
 #endif

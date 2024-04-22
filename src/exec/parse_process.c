@@ -94,7 +94,7 @@ bool	ft_verify_process(t_process *process, t_global *global)
 	}
 	lc_cmd = ft_strdup(process->cmd);
 	ft_lower_str(lc_cmd);
-	path = ft_get_env("PATH", global);
+	path = ft_get_env("PATH", global->envv);
 	new_cmd = ft_get_cmd_path(lc_cmd, path);
 	if (path == NULL && new_cmd == NULL)
 		return (false);

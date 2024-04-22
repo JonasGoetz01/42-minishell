@@ -4,18 +4,27 @@ void	process_input(char *input, t_global *global)
 {
 	t_token		*tokens;
 	t_ast_node	*ast;
+	char		*cwd;
 
 	ast = NULL;
-	ft_set_env(ft_strjoin("PWD=", getcwd(NULL, 0)), global);
+	cwd = getcwd(NULL, 0);
+	if (cwd)
+	{
+		ft_set_env_env("PWD", cwd, &global->envv);
+		ft_set_env_export("PWD", cwd, &global->env_export);
+		free(cwd);
+	}
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
 	retokenize(&tokens);
 	print_tokens(tokens);
 	remove_unused_spaces(&tokens);
-	if (input_validation(&tokens))
-		return (free(input));
 	print_tokens(tokens);
+	if (input_validation(&tokens))
+		return (free_token(&tokens), free(input));
+	else if (DEBUG)
+		printf("Input is valid\n");
 	combine_words_in_quotes(&tokens);
 	print_tokens(tokens);
 	rearrange_tokens(&tokens);
@@ -40,7 +49,7 @@ char	*build_prompt(t_global *global)
 	temp = ft_strjoin(prompt, "👤 ");
 	free(prompt);
 	prompt = temp;
-	username = ft_get_env("USER", global);
+	username = ft_get_env("USER", global->envv);
 	if (username == NULL)
 	{
 		temp = ft_strjoin(prompt, "user");

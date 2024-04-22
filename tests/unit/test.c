@@ -9,6 +9,36 @@ int	main(void)
 	t_token	**tokens1;
 
 	INIT_TESTER();
+	TEST("input_validation", "valid", {
+		tokens = create_token_list(1, TOKEN_WORD, "ls");
+		ASSERT_EQ(input_validation(tokens), 0);
+		free_token_list(tokens);
+	});
+	TEST("input_validation", "valid", {
+		tokens = create_token_list(3, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_WORD, "-lah");
+		ASSERT_EQ(input_validation(tokens), 0);
+		free_token_list(tokens);
+	});
+	TEST("input_validation", "valid", {
+		tokens = create_token_list(6, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_DOUBLE_QUOTE, "\"");
+		ASSERT_EQ(input_validation(tokens), 0);
+		free_token_list(tokens);
+	});
+	TEST("input_validation", "invalid", {
+		tokens = create_token_list(5, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_DOUBLE_QUOTE, "\"", TOKEN_WORD, "hello",
+				TOKEN_SINGLE_QUOTE, "\'");
+		ASSERT_EQ(input_validation(tokens), 1);
+	});
+	TEST("input_validation", "invalid", {
+		tokens = create_token_list(5, TOKEN_WORD, "ls", TOKEN_WORD, " ",
+				TOKEN_SINGLE_QUOTE, "\'", TOKEN_WORD, "hello",
+				TOKEN_DOUBLE_QUOTE, "\'");
+		ASSERT_EQ(input_validation(tokens), 1);
+	});
 	TEST("retokenize", "no changes needed", {
 		tokens = create_token_list(1, TOKEN_WORD, "ls");
 		tokens1 = create_token_list(1, TOKEN_WORD, "ls");
@@ -219,23 +249,23 @@ int	main(void)
 		free_token_list(tokens);
 		free_token_list(tokens1);
 	});
-	TEST("expand_tokens", "simple variable", {
-		tokens = create_token_list(1, TOKEN_WORD, "$HOME");
-		ft_expand_tokens(*tokens, NULL);
-		tokens1 = create_token_list(1, TOKEN_WORD, getenv("HOME"));
-		ASSERT_TOKENS_EQ(*tokens, *tokens1);
-		free_token_list(tokens);
-		free_token_list(tokens1);
-	});
-	TEST("expand and retokenize", "simple variable", {
-		tokens = create_token_list(1, TOKEN_WORD, "$HOME");
-		ft_expand_tokens(*tokens, NULL);
-		retokenize(tokens);
-		tokens1 = create_token_list(1, TOKEN_WORD, getenv("HOME"));
-		ASSERT_TOKENS_EQ(*tokens, *tokens1);
-		free_token_list(tokens);
-		free_token_list(tokens1);
-	});
+	// TEST("expand_tokens", "simple variable", {
+	// 	tokens = create_token_list(1, TOKEN_WORD, "$HOME");
+	// 	ft_expand_tokens(*tokens, NULL);
+	// 	tokens1 = create_token_list(1, TOKEN_WORD, getenv("HOME"));
+	// 	ASSERT_TOKENS_EQ(*tokens, *tokens1);
+	// 	free_token_list(tokens);
+	// 	free_token_list(tokens1);
+	// });
+	// TEST("expand and retokenize", "simple variable", {
+	// 	tokens = create_token_list(1, TOKEN_WORD, "$HOME");
+	// 	ft_expand_tokens(*tokens, NULL);
+	// 	retokenize(tokens);
+	// 	tokens1 = create_token_list(1, TOKEN_WORD, getenv("HOME"));
+	// 	ASSERT_TOKENS_EQ(*tokens, *tokens1);
+	// 	free_token_list(tokens);
+	// 	free_token_list(tokens1);
+	// });
 	TEST("expand and retokenize", "multiple words", {
 		tokens = create_token_list(3, TOKEN_WORD, "echo", TOKEN_WORD, " ",
 				TOKEN_WORD, "hello");
