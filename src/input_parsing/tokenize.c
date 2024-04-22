@@ -21,13 +21,13 @@ t_token	*tokenize(const char *input)
 	t_token			*new_token;
 	int				i;
 	int				tokenLen;
-	int				quote;
-	int				dquote;
+	// int				quote;
+	// int				dquote;
 
 	tokens = NULL;
 	i = 0;
-	quote = 0;
-	dquote = 0;
+	// quote = 0;
+	// dquote = 0;
 	while (input[i] != '\0')
 	{
 		if (ft_strchr(delimiters, input[i]))
