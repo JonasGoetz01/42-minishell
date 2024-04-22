@@ -89,16 +89,19 @@ bool					ft_is_buildin_cmd(char *cmd);
 void					ft_exec_buildins(t_process *process, t_global *global);
 void					ft_error_buildin(const char *msg, const char *arg,
 							t_process *process, int exit_status);
-void					ft_error_buildin_env(const char *arg, t_process *process);
+void					ft_error_buildin_env(const char *arg,
+							t_process *process);
 void					ft_cd_buildin(t_process *process, t_global *global);
 void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process);
 void					ft_export_buildin(t_process *process, t_global *global);
 void					ft_unset_buildin(t_process *process, t_global *global);
 bool					ft_env_contains(char *name, char **env);
-bool					ft_set_env_export(char *name, char *value, char ***envv);
+bool					ft_set_env_export(char *name, char *value,
+							char ***envv);
 bool					ft_set_env_env(char *name, char *value, char ***envv);
-bool					ft_add_env_export(char *name, char *value, char ***envv);
+bool					ft_add_env_export(char *name, char *value,
+							char ***envv);
 bool					ft_add_env_env(char *name, char *value, char ***envv);
 void					ft_unset_env(char *name, t_global *global);
 char					*ft_get_env(char *name, char **envv);

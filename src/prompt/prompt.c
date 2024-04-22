@@ -17,9 +17,9 @@ void	process_input(char *input, t_global *global)
 	tokens = tokenize(input);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
-	// retokenize(&tokens);
-	// print_tokens(tokens);
 	remove_unused_spaces(&tokens);
+	print_tokens(tokens);
+	retokenize(&tokens);
 	print_tokens(tokens);
 	if (input_validation(&tokens))
 		return (free_token(&tokens), free(input));
