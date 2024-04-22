@@ -25,7 +25,7 @@ static char	*ft_cd_env(const char *env, t_process *process, t_global *global)
 	char	*new_pwd;
 	char	*err_msg;
 
-	new_pwd = ft_get_env((char *) env, global);
+	new_pwd = ft_get_env((char *) env, global->envv);
 	if (!new_pwd)
 	{
 		err_msg = ft_strjoin(env, " not set");
@@ -37,15 +37,14 @@ static char	*ft_cd_env(const char *env, t_process *process, t_global *global)
 
 static void	ft_set_oldpwd(t_global *global)
 {
-	char	*old_pwd;
 	char	*value;
-
-	value = ft_get_env("PWD", global);
-	if (!value)
-		return ;
-	old_pwd = ft_strjoin("OLDPWD=", value);
-	ft_set_env(old_pwd, global);
-	free(old_pwd);
+	value = ft_get_env("PWD", global->envv);
+	if (value)
+	{
+		ft_set_env_export("OLDPWD", value, &global->env_export);
+		ft_set_env_env("OLDPWD", value, &global->envv);
+		free(value);
+	}
 }
 
 void	ft_cd_buildin(t_process *process, t_global *global)

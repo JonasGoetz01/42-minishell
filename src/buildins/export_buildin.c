@@ -1,5 +1,23 @@
 #include "../../inc/minishell.h"
 
+static void	ft_add_env(char *str, t_global *global)
+{
+	char	*name;
+	char	*value;
+
+	name = ft_trim_to_equal(str);
+	if (!name)
+		return ;
+	if (ft_env_contains(name, global->env_export))
+		return ;
+	value = ft_trim_from_equal(str);
+	ft_add_env_export(name, value, &global->env_export);
+	ft_add_env_env(name, value, &global->envv);
+	free(name);
+	if (value)
+		free(value);
+}
+
 void	ft_export_buildin(t_process *process, t_global *global)
 {
 	char	**export_env;
@@ -18,7 +36,10 @@ void	ft_export_buildin(t_process *process, t_global *global)
 	ind = 1;
 	while (process->args[ind])
 	{
-		ft_add_env(process->args[ind], global);
+		if (ft_is_valid_identifier(process->args[ind]))
+			ft_add_env(process->args[ind], global);
+		else
+			ft_error_buildin_env(process->args[ind], process);
 		ind++;
 	}
 }
