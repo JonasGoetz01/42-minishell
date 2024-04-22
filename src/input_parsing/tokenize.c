@@ -21,9 +21,9 @@ t_token	*tokenize(const char *input)
 	t_token			*new_token;
 	int				i;
 	int				tokenLen;
+
 	// int				quote;
 	// int				dquote;
-
 	tokens = NULL;
 	i = 0;
 	// quote = 0;
@@ -553,6 +553,13 @@ void	retokenize(t_token **tokens)
 			temp = current->next;
 			current->next = new_token;
 			new_token->next = temp;
+		}
+		if (current->type == TOKEN_SINGLE_QUOTE
+			|| current->type == TOKEN_DOUBLE_QUOTE)
+		{
+			temp = current;
+			while (current->next && current->next->type != temp->type)
+				current = current->next;
 		}
 		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
