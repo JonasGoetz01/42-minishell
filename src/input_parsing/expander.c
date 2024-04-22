@@ -42,6 +42,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			while (current_token->value[start] != '$'
 				&& current_token->value[start] != '\0')
 				start++;
+			if (current_token->value[start] == '\0')
+				break ;
 			end = start;
 			if (current_token->value[end] == '$')
 				end++;
