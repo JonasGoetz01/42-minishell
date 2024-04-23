@@ -30,9 +30,11 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 	int		start;
 	int		end;
 	char	*temp;
+	int 	finish;
 
 	current_token = tokens;
 	in_single_quotes = 0;
+	// tmp = NULL;
 	while (current_token != NULL)
 	{
 		if (current_token->type == TOKEN_SINGLE_QUOTE)
@@ -50,14 +52,26 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					end++;
 				if (end - start == 0)
 				{
+					finish = 0;
 					while (current_token->next != NULL
-						&& current_token->next->type != TOKEN_WORD)
+						&& (current_token->type != TOKEN_WORD
+							|| ft_strchr(current_token->value, '$') != NULL))
 					{
+						printf("IN WHILE %s\n", current_token->value);
 						tmp = current_token->next->next;
 						free(current_token->next->value);
 						free(current_token->next);
 						current_token->next = tmp;
 						current_token = current_token->next;
+						finish = 1;
+					}
+					if (finish)
+					{
+						tmp = current_token->next->next;
+						free(current_token->next->value);
+						free(current_token->next);
+						current_token->next = tmp;
+						finish = 0;
 					}
 					printf("Error: Invalid variable name\n");
 					break ;
@@ -71,6 +85,24 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				current_token->value = ft_strdup(temp);
 				free(temp);
 			}
+		}
+		current_token = current_token->next;
+	}
+	current_token = tokens;
+	while (current_token != NULL)
+	{
+		if (current_token->next && current_token->next->type == TOKEN_WORD 
+			&& ft_strlen(current_token->next->value) == 1 
+			&& current_token->next->value[0] == '$')
+		{
+			temp = ft_expand_word(current_token->next->next->value, global);
+			free(current_token->next->value);
+			current_token->next->value = ft_strdup(temp);
+			free(temp);
+			tmp = current_token->next->next->next;
+			free(current_token->next->next->value);
+			free(current_token->next->next);
+			current_token->next->next = tmp;
 		}
 		current_token = current_token->next;
 	}
