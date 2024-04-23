@@ -17,7 +17,7 @@ void	ft_exec_here_doc(t_ast_node *node, t_global *global)
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 		{
 			free(line);
 			break ;
@@ -28,6 +28,8 @@ void	ft_exec_here_doc(t_ast_node *node, t_global *global)
 	}
 	close(fd_pipe[PIPE_WRITE]);
 	t_fd *fd = ft_add_t_fd(global);
+	if (!fd)
+		return ;
 	fd->fd_pipe[PIPE_READ] = fd_pipe[PIPE_READ];
 	node->left->fd_in[PIPE_READ] = &fd->fd_pipe[PIPE_READ];
 }
