@@ -253,10 +253,12 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 		ast->process = NULL;
 		ast->left = NULL;
 		ast->right = NULL;
-		ast->fd_in[0] = -1;
-		ast->fd_in[1] = -1;
-		ast->fd_out[0] = -1;
-		ast->fd_out[1] = -1;
+		ast->file_in = NULL;
+		ast->fd_in[0] = NULL;
+		ast->fd_in[1] = NULL;
+		ast->fd_out[0] = NULL;
+		ast->fd_out[1] = NULL;
+		ast->file_out = NULL;
 		ast->exit_status = -1;
 		*root = ast;
 	}

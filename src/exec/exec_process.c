@@ -1,5 +1,4 @@
 #include "../../inc/minishell.h"
-#include <stdio.h>
 
 static void	ft_exec_buildin(t_process *process, t_global *global)
 {
@@ -8,19 +7,27 @@ static void	ft_exec_buildin(t_process *process, t_global *global)
 
 	dup_STDIN = -1;
 	dup_STDOUT = -1;
-	if (process->pipe_fd_in[PIPE_READ] != -1)
+	if (ft_get_fd(process->file_in) != -1)
 	{
 		dup_STDIN = dup(STDIN_FILENO);
-		dup2(process->pipe_fd_in[PIPE_READ], STDIN_FILENO);
+		dup2(ft_get_fd(process->file_in), STDIN_FILENO);
 	}
-	if (process->pipe_fd_out[PIPE_WRITE] != -1)
+	else if (ft_get_fd(process->fd_in[PIPE_READ]) != -1)
+	{
+		dup_STDIN = dup(STDIN_FILENO);
+		dup2(ft_get_fd(process->fd_in[PIPE_READ]), STDIN_FILENO);
+	}
+	if (ft_get_fd(process->file_out) != -1)
 	{
 		dup_STDOUT = dup(STDOUT_FILENO);
-		dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
+		dup2(ft_get_fd(process->file_out), STDOUT_FILENO);
+	}
+	else if (ft_get_fd(process->fd_out[PIPE_WRITE]) != -1)
+	{
+		dup_STDOUT = dup(STDOUT_FILENO);
+		dup2(ft_get_fd(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
 	}
 	ft_exec_buildins(process, global);
-	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
-	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
 	if (dup_STDIN != -1)
 		dup2(dup_STDIN, STDIN_FILENO);
 	ft_close_fd(&dup_STDIN);
@@ -38,22 +45,22 @@ void	ft_execute_process(t_process *process, t_global *global)
 	}
 	process->pid = fork();
 	if (process->pid == -1)
-		return ;
+		return (ft_print_error(strerror(errno), process->cmd));
 	if (process->pid == 0)
 	{
-		if (process->pipe_fd_in[PIPE_READ] != -1)
-			dup2(process->pipe_fd_in[PIPE_READ], STDIN_FILENO);
-		ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
-		ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
-		if (process->pipe_fd_out[PIPE_WRITE] != -1)
-			dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
-		ft_close_fd(&process->pipe_fd_out[PIPE_READ]);
-		ft_close_fd(&process->pipe_fd_out[PIPE_WRITE]);
+		if (ft_get_fd(process->file_in) != -1)
+			dup2(ft_get_fd(process->file_in), STDIN_FILENO);
+		else if (ft_get_fd(process->fd_in[PIPE_READ]) != -1)
+			dup2(ft_get_fd(process->fd_in[PIPE_READ]), STDIN_FILENO);
+		if (ft_get_fd(process->file_out) != -1)
+			dup2(ft_get_fd(process->file_out), STDOUT_FILENO);
+		else if (ft_get_fd(process->fd_out[PIPE_WRITE]) != -1)
+			dup2(ft_get_fd(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
+		ft_close_all_fds(global);
 		execve(process->cmd, process->args, global->envv);
+		ft_print_error(strerror(errno), process->cmd);
 		exit(1);
 	}
-	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
-	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
 }
 
 void	ft_wait_for_processes(t_ast_node *node, t_global *global)

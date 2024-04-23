@@ -22,9 +22,15 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	}
 	process = ft_create_process(cmd, args, node);
 	if (DEBUG)
-		printf("executing %s: in %d out %d\n", process->cmd, process->pipe_fd_in[PIPE_READ], process->pipe_fd_out[PIPE_WRITE]);
+		printf("executing %s: in %d out %d\n", process->cmd, ft_get_fd(process->fd_in[PIPE_READ]), ft_get_fd(process->fd_out[PIPE_WRITE]));
 	if (ft_verify_process(process, global))
+	{
 		ft_execute_process(process, global);
+		ft_close_fd(node->fd_in[PIPE_READ]);
+		ft_close_fd(node->fd_in[PIPE_WRITE]);
+		ft_close_fd(node->file_in);
+		ft_close_fd(node->file_out);
+	}
 	else
 		printf("minishell: %s: command not found\n", process->cmd);
 	node->exit_status = process->exit_status;
@@ -35,7 +41,6 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 {
 	t_token			*token;
 	t_token_type	type;
-	int				fd_pipe[2];
 	bool			next_wait;
 	bool			exit_on_err;
 
@@ -60,13 +65,13 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 		}
 		if (type == TOKEN_LESS)
-			ft_open_in_file(node);
+			ft_open_in_file(node, global);
 		else if (type == TOKEN_GREATER)
-			ft_open_out_file(node);
+			ft_open_out_file(node, global);
 		else if (type == TOKEN_DOUBLE_GREATER)
-			ft_open_out_append_file(node);
+			ft_open_out_append_file(node, global);
 		else if(type == TOKEN_DOUBLE_LESS)
-			ft_exec_here_doc(node);
+			ft_exec_here_doc(node, global);
 		else if (type == TOKEN_DOUBLE_PIPE)
 			wait = false;
 		else if (type == TOKEN_DOUBLE_AMPERSAND)
@@ -76,24 +81,13 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 		}
 		else if (type == TOKEN_PIPE)
 		{
-			if (pipe(fd_pipe) != 0)
-			{
-				printf("Handle Error pipe\n");
+			if (!ft_handle_pipe_token(node, global))
 				return ;
-			}
-			node->left->fd_out[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
-			node->left->fd_out[PIPE_READ] = fd_pipe[PIPE_READ];
-			node->right->fd_in[PIPE_READ] = fd_pipe[PIPE_READ];
-			node->right->fd_in[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
-			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-			node->right->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
-			node->right->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
 			next_wait = false;
 		}
-		else if (type == TOKEN_CMD && node->fd_in[PIPE_READ] != -2 && node->fd_out[PIPE_WRITE] != -2 && !node->process)
+		else if (type == TOKEN_CMD && ft_get_fd(node->file_in) != -2 && ft_get_fd(node->file_out) != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, global);
-		else if (type == TOKEN_CMD && (node->fd_in[PIPE_READ] == -2 || node->fd_out[PIPE_WRITE] == -2) && !node->process)
+		else if (type == TOKEN_CMD && (ft_get_fd(node->file_in) == -2 || ft_get_fd(node->file_out) == -2) && !node->process)
 			node->exit_status = 1;
 		token = token->next;
 	}
@@ -114,5 +108,5 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	ft_org_tokens(node);
 	print_ast(&node, 0);
 	ft_execute_nodes(node, true, global);
-	ft_close_all_fds(node);
+	ft_close_all_fds(global);
 }

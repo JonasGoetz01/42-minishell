@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-void	ft_exec_here_doc(t_ast_node *node)
+void	ft_exec_here_doc(t_ast_node *node, t_global *global)
 {
 	char	*line;
 	char	*limiter;
@@ -27,5 +27,7 @@ void	ft_exec_here_doc(t_ast_node *node)
 		free(line);
 	}
 	close(fd_pipe[PIPE_WRITE]);
-	node->left->fd_in[PIPE_READ] = fd_pipe[PIPE_READ];
+	t_fd *fd = ft_add_t_fd(global);
+	fd->fd_pipe[PIPE_READ] = fd_pipe[PIPE_READ];
+	node->left->fd_in[PIPE_READ] = &fd->fd_pipe[PIPE_READ];
 }
