@@ -28,6 +28,8 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 		ft_execute_process(process, global);
 		ft_close_fd(&node->fd_in[PIPE_READ]);
 		ft_close_fd(&node->fd_in[PIPE_WRITE]);
+		ft_close_fd(&node->file_in);
+		ft_close_fd(&node->file_out);
 	}
 	else
 		printf("minishell: %s: command not found\n", process->cmd);

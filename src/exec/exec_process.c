@@ -47,7 +47,7 @@ void	ft_execute_process(t_process *process, t_global *global)
 	}
 	process->pid = fork();
 	if (process->pid == -1)
-		return ;
+		return (ft_print_error(strerror(errno), process->cmd));
 	if (process->pid == 0)
 	{
 		if (process->file_in != -1)
@@ -76,8 +76,6 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
-		ft_close_fd(&node->file_in);
-		ft_close_fd(&node->file_out);
 		if (!node->process->is_buildin)
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
