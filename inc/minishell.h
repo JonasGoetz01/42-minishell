@@ -59,10 +59,10 @@ typedef struct s_ast_node
 	t_token				*token;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
-	int					file_in;
-	int					fd_out[2];
-	int					fd_in[2];
-	int					file_out;
+	int					*file_in;
+	int					*(fd_out[2]);
+	int					*(fd_in[2]);
+	int					*file_out;
 	int					exit_status;
 	t_process			*process;
 }						t_ast_node;
@@ -72,6 +72,7 @@ typedef struct s_global
 	int					exit_status;
 	char				**envv;
 	char				**env_export;
+	t_fd				*fds;
 }						t_global;
 
 int						show_prompt(t_global *global);
@@ -121,19 +122,20 @@ void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
 void					ft_expand_tokens(t_token *tokens, t_global *global);
-void					ft_open_in_file(t_ast_node *node);
-void					ft_open_out_file(t_ast_node *node);
-void					ft_open_out_append_file(t_ast_node *node);
-void					ft_exec_here_doc(t_ast_node *node);
+void					ft_open_in_file(t_ast_node *node, t_global *global);
+void					ft_open_out_file(t_ast_node *node, t_global *global);
+void					ft_open_out_append_file(t_ast_node *node, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node, t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,
 							t_global *global);
+bool					ft_handle_pipe_token(t_ast_node *node, t_global *global);
 
 void					ft_close_fd(int *fd);
-void					ft_close_fd_process(t_process *process);
 void					ft_close_fd_node(t_ast_node *node);
-void					ft_close_all_fds(t_ast_node *node);
+void					ft_close_all_fds(t_global *global);
+t_fd					*ft_add_t_fd(t_global *global);
 
 void					ft_org_tokens(t_ast_node *token);
 void					ft_execute_process(t_process *process,

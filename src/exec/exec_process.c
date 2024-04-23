@@ -7,25 +7,25 @@ static void	ft_exec_buildin(t_process *process, t_global *global)
 
 	dup_STDIN = -1;
 	dup_STDOUT = -1;
-	if (process->file_in != -1)
+	if (*(process->file_in) != -1)
 	{
 		dup_STDIN = dup(STDIN_FILENO);
-		dup2(process->file_in, STDIN_FILENO);
+		dup2(*(process->file_in), STDIN_FILENO);
 	}
-	else if (process->pipe_fd_in[PIPE_READ] != -1)
+	else if (*(process->fd_in[PIPE_READ]) != -1)
 	{
 		dup_STDIN = dup(STDIN_FILENO);
-		dup2(process->pipe_fd_in[PIPE_READ], STDIN_FILENO);
+		dup2(*(process->fd_in[PIPE_READ]), STDIN_FILENO);
 	}
-	if (process->file_out != -1)
+	if (*(process->file_out) != -1)
 	{
 		dup_STDOUT = dup(STDOUT_FILENO);
-		dup2(process->file_out, STDOUT_FILENO);
+		dup2(*(process->file_out), STDOUT_FILENO);
 	}
-	else if (process->pipe_fd_out[PIPE_WRITE] != -1)
+	else if (*(process->fd_out[PIPE_WRITE]) != -1)
 	{
 		dup_STDOUT = dup(STDOUT_FILENO);
-		dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
+		dup2(*(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
 	}
 	ft_exec_buildins(process, global);
 	if (dup_STDIN != -1)
@@ -48,15 +48,15 @@ void	ft_execute_process(t_process *process, t_global *global)
 		return (ft_print_error(strerror(errno), process->cmd));
 	if (process->pid == 0)
 	{
-		if (process->file_in != -1)
-			dup2(process->file_in, STDIN_FILENO);
-		else if (process->pipe_fd_in[PIPE_READ] != -1)
-			dup2(process->pipe_fd_in[PIPE_READ], STDIN_FILENO);
-		if (process->file_out != -1)
-			dup2(process->file_out, STDOUT_FILENO);
-		else if (process->pipe_fd_out[PIPE_WRITE] != -1)
-			dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
-		ft_close_fd_process(process);
+		if (*(process->file_in) != -1)
+			dup2(*(process->file_in), STDIN_FILENO);
+		else if (*(process->fd_in[PIPE_READ]) != -1)
+			dup2(*(process->fd_in[PIPE_READ]), STDIN_FILENO);
+		if (*(process->file_out) != -1)
+			dup2(*(process->file_out), STDOUT_FILENO);
+		else if (*(process->fd_out[PIPE_WRITE]) != -1)
+			dup2(*(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
+		ft_close_all_fds(global);
 		execve(process->cmd, process->args, global->envv);
 		ft_print_error(strerror(errno), process->cmd);
 		exit(1);
