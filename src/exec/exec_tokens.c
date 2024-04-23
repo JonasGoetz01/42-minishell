@@ -58,11 +58,14 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
 			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+			wait = false;
 		}
 		else if (type == TOKEN_GREATER || type == TOKEN_DOUBLE_GREATER)
 		{
 			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
 			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
+			node->left->file_out = node->file_out;
+			wait = false;
 		}
 		if (type == TOKEN_LESS)
 			ft_open_in_file(node, global);
