@@ -28,8 +28,6 @@ static void	ft_exec_buildin(t_process *process, t_global *global)
 		dup2(process->pipe_fd_out[PIPE_WRITE], STDOUT_FILENO);
 	}
 	ft_exec_buildins(process, global);
-	ft_close_fd(&process->pipe_fd_in[PIPE_READ]);
-	ft_close_fd(&process->pipe_fd_in[PIPE_WRITE]);
 	if (dup_STDIN != -1)
 		dup2(dup_STDIN, STDIN_FILENO);
 	ft_close_fd(&dup_STDIN);
