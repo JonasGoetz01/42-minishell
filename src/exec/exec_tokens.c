@@ -22,7 +22,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	}
 	process = ft_create_process(cmd, args, node);
 	if (DEBUG)
-		printf("executing %s: in %d out %d\n", process->cmd, *(process->fd_in[PIPE_READ]), *(process->fd_out[PIPE_WRITE]));
+		printf("executing %s: in %d out %d\n", process->cmd, ft_get_fd(process->fd_in[PIPE_READ]), ft_get_fd(process->fd_out[PIPE_WRITE]));
 	if (ft_verify_process(process, global))
 	{
 		ft_execute_process(process, global);
@@ -85,9 +85,9 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 				return ;
 			next_wait = false;
 		}
-		else if (type == TOKEN_CMD && *(node->file_in) != -2 && *(node->file_out) != -2 && !node->process)
+		else if (type == TOKEN_CMD && ft_get_fd(node->file_in) != -2 && ft_get_fd(node->file_out) != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, global);
-		else if (type == TOKEN_CMD && (*(node->file_in) == -2 || *(node->file_out) == -2) && !node->process)
+		else if (type == TOKEN_CMD && (ft_get_fd(node->file_in) == -2 || ft_get_fd(node->file_out) == -2) && !node->process)
 			node->exit_status = 1;
 		token = token->next;
 	}

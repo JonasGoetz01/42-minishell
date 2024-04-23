@@ -136,6 +136,7 @@ void					ft_close_fd(int *fd);
 void					ft_close_fd_node(t_ast_node *node);
 void					ft_close_all_fds(t_global *global);
 t_fd					*ft_add_t_fd(t_global *global);
+int						ft_get_fd(int *fd);
 
 void					ft_org_tokens(t_ast_node *token);
 void					ft_execute_process(t_process *process,

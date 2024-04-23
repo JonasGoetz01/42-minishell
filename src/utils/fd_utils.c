@@ -2,6 +2,8 @@
 
 void	ft_close_fd(int *fd)
 {
+	if (!fd)
+		return ;
 	if (*fd != -1 && *fd != -2)
 	{
 		if (close(*fd) != 0)
@@ -70,4 +72,11 @@ void	ft_close_all_fds(t_global *global)
 		free(tmp);
 	}
 	global->fds = NULL;
+}
+
+int	ft_get_fd(int *fd)
+{
+	if (fd)
+		return (*fd);
+	return (-1);
 }
