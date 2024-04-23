@@ -1,31 +1,36 @@
 #include "../../inc/minishell.h"
 
-void	ft_exec_here_doc(t_ast_node *node, t_global *global)
+static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
 {
 	char	*line;
-	char	*limiter;
-	int		fd_pipe[2];
 
-	limiter = node->right->token->value;
-	if (pipe(fd_pipe) == -1)
-	{
-		ft_print_error(strerror(errno), NULL);
-		return ;
-	}
 	while (true)
 	{
-		line = readline("> ");
+		ft_putstr_fd("> ", STDOUT_FILENO);
+		line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
 		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 		{
 			free(line);
+			get_next_line(-1);
 			break ;
 		}
 		ft_putstr_fd(line, fd_pipe[PIPE_WRITE]);
 		ft_putstr_fd("\n", fd_pipe[PIPE_WRITE]);
 		free(line);
 	}
+}
+
+void	ft_exec_here_doc(t_ast_node *node, t_global *global)
+{
+	char	*limiter;
+	int		fd_pipe[2];
+
+	limiter = node->right->token->value;
+	if (pipe(fd_pipe) == -1)
+		return (ft_print_error(strerror(errno), NULL));
+	ft_read_here_doc(limiter, fd_pipe);
 	close(fd_pipe[PIPE_WRITE]);
 	t_fd *fd = ft_add_t_fd(global);
 	if (!fd)
