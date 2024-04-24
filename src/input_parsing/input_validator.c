@@ -20,16 +20,12 @@ int	validator(char *input)
 	{
 		if (input[i] == '\'' && dquote == 0)
 			quote = !quote;
-		if (input[i] == '\"' && (i == 0 || input[i - 1] != '\\') && quote == 0)
+		if (input[i] == '\"' && i == 0 && quote == 0)
 			dquote = !dquote;
-		if (input[i] == '(' && (i == 0 || input[i - 1] != '\\') && dquote == 0
-			&& quote == 0)
+		if (input[i] == '(' && i == 0 && dquote == 0 && quote == 0)
 			parenthesis++;
-		if (input[i] == ')' && (i == 0 || input[i - 1] != '\\') && dquote == 0
-			&& quote == 0)
+		if (input[i] == ')' && i == 0 && dquote == 0 && quote == 0)
 			parenthesis--;
-		if (input[i] == '\\' && !input[i + 1])
-			return (1);
 		i++;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
@@ -44,7 +40,6 @@ int	input_validation(t_token **tokens)
 	int		dquote;
 	int		parenthesis;
 
-	// t_token	*prev;mak
 	current = *tokens;
 	quote = 0;
 	dquote = 0;
@@ -63,38 +58,5 @@ int	input_validation(t_token **tokens)
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
 		return (printf("Invalid input!\n"), 1);
-	// current = *tokens;
-	// prev = NULL;
-	// while (current)
-	// {
-	// 	if ((current->type == TOKEN_LESS || current->type == TOKEN_GREATER)
-	// 		&& (prev == NULL || (prev->type != TOKEN_WORD
-	// && prev->type != TOKEN_DOUBLE_QUOTE
-	// && prev->type != TOKEN_SINGLE_QUOTE
-	// && prev->type != TOKEN_BRACKET_R)))
-	// 	{
-	// 		if (current->next == NULL || current->next->type != TOKEN_WORD
-	// 			|| current->next->next == NULL
-	// 			|| current->next->next->type != TOKEN_WORD)
-	// 		{
-	// 			printf("Invalid input 2!\n");
-	// 			return (1);
-	// 		}
-	// 	}
-	// 	else if ((current->type == TOKEN_LESS || current->type == TOKEN_GREATER)
-	// 		&& (prev == NULL || (prev->type != TOKEN_WORD
-	// && prev->type != TOKEN_DOUBLE_QUOTE
-	// && prev->type != TOKEN_SINGLE_QUOTE
-	// && prev->type != TOKEN_BRACKET_R)))
-	// 	{
-	// 		if (current->next == NULL || current->next->type != TOKEN_WORD)
-	// 		{
-	// 			printf("Invalid input 3!\n");
-	// 			return (1);
-	// 		}
-	// 	}
-	// 	prev = current;
-	// 	current = current->next;
-	// }
 	return (0);
 }
