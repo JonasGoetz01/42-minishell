@@ -49,7 +49,8 @@ SOURCES	:=	main.c \
 			alloc_utils.c \
 			init_utils.c \
 			env_utils.c \
-			error_msg.c
+			error_msg.c \
+			file_utils.c
 
 
 OBJDIR	:=	obj
