@@ -53,3 +53,22 @@ jobs:
       uses: test-summary/action@v2
       with:
         paths: tests_summary.xml
+    
+    - name: Comment on pull request
+      if: always()
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const xml = fs.readFileSync('tests_summary.xml', 'utf8');
+          const testsuite = xml.match(/<testsuite[^>]*>(.*?)<\/testsuite>/s);
+          const passed = testsuite[0].match(/tests="(\d+)"/)[1];
+          const failed = testsuite[0].match(/failures="(\d+)"/)[1];
+          const comment = `## Test Summary\n\nTotal tests: ${parseInt(passed) + parseInt(failed)}\nPassed: ${passed}\nFailed: ${failed}`;
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
