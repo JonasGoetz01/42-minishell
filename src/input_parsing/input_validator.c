@@ -1,3 +1,5 @@
+#include "../../inc/minishell.h"
+
 // checks if the input is valid
 // checks for parenthesis, quotes, and other special characters
 // returns 0 if the input is valid, 1 if it is not
@@ -32,5 +34,67 @@ int	validator(char *input)
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
 		return (1);
+	return (0);
+}
+
+int	input_validation(t_token **tokens)
+{
+	t_token	*current;
+	int		quote;
+	int		dquote;
+	int		parenthesis;
+
+	// t_token	*prev;mak
+	current = *tokens;
+	quote = 0;
+	dquote = 0;
+	parenthesis = 0;
+	while (current)
+	{
+		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
+			quote = !quote;
+		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
+			dquote = !dquote;
+		else if (current->type == TOKEN_BRACKET_L)
+			parenthesis++;
+		else if (current->type == TOKEN_BRACKET_R)
+			parenthesis--;
+		current = current->next;
+	}
+	if (parenthesis != 0 || quote != 0 || dquote != 0)
+		return (printf("Invalid input!\n"), 1);
+	// current = *tokens;
+	// prev = NULL;
+	// while (current)
+	// {
+	// 	if ((current->type == TOKEN_LESS || current->type == TOKEN_GREATER)
+	// 		&& (prev == NULL || (prev->type != TOKEN_WORD
+	// && prev->type != TOKEN_DOUBLE_QUOTE
+	// && prev->type != TOKEN_SINGLE_QUOTE
+	// && prev->type != TOKEN_BRACKET_R)))
+	// 	{
+	// 		if (current->next == NULL || current->next->type != TOKEN_WORD
+	// 			|| current->next->next == NULL
+	// 			|| current->next->next->type != TOKEN_WORD)
+	// 		{
+	// 			printf("Invalid input 2!\n");
+	// 			return (1);
+	// 		}
+	// 	}
+	// 	else if ((current->type == TOKEN_LESS || current->type == TOKEN_GREATER)
+	// 		&& (prev == NULL || (prev->type != TOKEN_WORD
+	// && prev->type != TOKEN_DOUBLE_QUOTE
+	// && prev->type != TOKEN_SINGLE_QUOTE
+	// && prev->type != TOKEN_BRACKET_R)))
+	// 	{
+	// 		if (current->next == NULL || current->next->type != TOKEN_WORD)
+	// 		{
+	// 			printf("Invalid input 3!\n");
+	// 			return (1);
+	// 		}
+	// 	}
+	// 	prev = current;
+	// 	current = current->next;
+	// }
 	return (0);
 }

@@ -12,9 +12,9 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/select.h>
-# include <sys/wait.h>
-# include <sys/types.h>
 # include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 # define EXIT_ERROR 1
@@ -63,8 +63,8 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					*file_in;
-	int					*(fd_out[2]);
-	int					*(fd_in[2]);
+	int *(fd_out[2]);
+	int *(fd_in[2]);
 	int					*file_out;
 	int					exit_status;
 	t_process			*process;
@@ -128,16 +128,19 @@ t_token					*create_token(t_token_type type, char *value);
 void					free_tokens(t_token *tokens);
 void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
+int						token_length(const char *input, const char *delimiters);
 void					ft_expand_tokens(t_token *tokens, t_global *global);
 void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
-void					ft_open_out_append_file(t_ast_node *node, t_global *global);
+void					ft_open_out_append_file(t_ast_node *node,
+							t_global *global);
 void					ft_exec_here_doc(t_ast_node *node, t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,
 							t_global *global);
-bool					ft_handle_pipe_token(t_ast_node *node, t_global *global);
+bool					ft_handle_pipe_token(t_ast_node *node,
+							t_global *global);
 
 void					ft_close_fd(int *fd);
 void					ft_close_fd_node(t_ast_node *node);
