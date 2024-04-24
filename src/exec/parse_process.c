@@ -42,6 +42,7 @@ char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 	cmd_path = tmp;
 	if (access(cmd_path, F_OK | X_OK) == 0)
 		return (cmd_path);
+	errno = 0;
 	free(cmd_path);
 	return (NULL);
 }
@@ -101,7 +102,7 @@ bool	ft_verify_process(t_process *process, t_global *global)
 	path = ft_get_env("PATH", global->envv);
 	new_cmd = ft_get_cmd_path(lc_cmd, path);
 	if (path == NULL && new_cmd == NULL)
-		return (false);
+		return (errno = 0, false);
 	free(lc_cmd);
 	if (!path)
 		free(path);
@@ -110,7 +111,5 @@ bool	ft_verify_process(t_process *process, t_global *global)
 		free(process->cmd);
 		process->cmd = new_cmd;
 	}
-	else
-		process->exit_status = 127;
 	return (new_cmd != NULL);
 }
