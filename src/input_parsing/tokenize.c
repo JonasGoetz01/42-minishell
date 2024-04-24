@@ -22,13 +22,9 @@ t_token	*tokenize(const char *input)
 	int				i;
 	int				tokenLen;
 
-	// int				quote;
-	// int				dquote;
 	tokens = NULL;
 	i = 0;
-	// quote = 0;
-	// dquote = 0;
-	while (input[i] != '\0')
+	while (i < (int)ft_strlen(input) && input[i] != '\0')
 	{
 		if (ft_strchr(delimiters, input[i]))
 		{
@@ -83,6 +79,11 @@ t_token	*tokenize(const char *input)
 			}
 			else if (input[i] == '\"')
 			{
+				if (input[i + 1] == '\"')
+				{
+					i += 1;
+					continue ;
+				}
 				type = TOKEN_DOUBLE_QUOTE;
 				value = ft_substr(input, i, 1);
 				new_token = create_token(type, value);
@@ -98,6 +99,11 @@ t_token	*tokenize(const char *input)
 			}
 			else if (input[i] == '\'')
 			{
+				if (input[i + 1] == '\'')
+				{
+					i += 2;
+					continue ;
+				}
 				type = TOKEN_SINGLE_QUOTE;
 				value = ft_substr(input, i, 1);
 				new_token = create_token(type, value);
