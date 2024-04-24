@@ -12,11 +12,20 @@ t_token	*tokenize(const char *input)
 
 	tokens = NULL;
 	i = 0;
+	if (ft_strlen(input) == 2)
+	{
+		if ((input[0] == '\"' && input[1] == '\"') || (input[0] == '\''
+				&& input[1] == '\''))
+		{
+			new_token = create_token(TOKEN_DOUBLE_AMPERSAND, NULL);
+			append_token(&tokens, new_token);
+			return (tokens);
+		}
+	}
 	while (i < (int)ft_strlen(input) && input[i] != '\0')
 	{
 		if (ft_strchr(delimiters, input[i]))
 		{
-			// Check for quotes and double quotes before handling other delimiters
 			if (input[i] == '\"')
 			{
 				if (input[i + 1] == '\"')
