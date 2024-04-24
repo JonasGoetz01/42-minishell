@@ -48,7 +48,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				start++;
 				end = start;
 				while (current_token->value[end]
-					&& ft_isalnum(current_token->value[end]))
+					&& (ft_isalnum(current_token->value[end]) || current_token->value[end] == '?'))
 					end++;
 				if (end - start == 0)
 				{
