@@ -9,8 +9,8 @@ static void	ft_set_env(char *str, t_global *global)
 	if (!name)
 		return ;
 	value = ft_trim_from_equal(str);
-	ft_set_env_env(name, value, &global->env_export);
-	ft_set_env_export(name, value, &global->envv);
+	ft_set_env_env(name, value, &global->envv);
+	ft_set_env_export(name, value, &global->env_export);
 	free(name);
 	if (value)
 		free(value);
