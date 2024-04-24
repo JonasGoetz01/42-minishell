@@ -31,6 +31,8 @@ void	process_input(char *input, t_global *global)
 	rearrange_tokens(&tokens);
 	print_tokens(tokens);
 	gen_ast(&ast, tokens);
+	if (DEBUG)
+		print_ast(&ast, 1);
 	ft_exec_all(ast, global);
 	free(input);
 }
