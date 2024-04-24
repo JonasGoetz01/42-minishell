@@ -20,6 +20,14 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y make gcc curl nano exa git wget lsb-release sudo build-essential clang libreadline8 libreadline-dev
+
+    - name: Replace CFLAGS line in Makefile
+      run: |
+        sed -i 's/^CFLAGS\s*:=\s*-Wextra -Wall -Werror\s*#.*$/CFLAGS\t:=\t-Wextra -Wall -Werror #-g -fsanitize=address -O1/' Makefile
+
+    - name: Replace DEBUG definition in minishell.h
+      run: |
+        sed -i 's/^#define DEBUG .*/#define DEBUG 0/' inc/minishell.h
       
     - name: Run tests and redirect output to file
       run: make tester > output.txt 2>&1
