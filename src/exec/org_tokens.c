@@ -23,7 +23,13 @@ void	ft_org_tokens(t_ast_node *ast)
 	else if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER
 		|| token->type == TOKEN_DOUBLE_GREATER
 		|| token->type == TOKEN_DOUBLE_LESS)
-		ast->right->token->type = TOKEN_ARG;
+	{
+		if (ast->right)
+		{
+			if (ast->right->token)
+				ast->right->token->type = TOKEN_ARG;
+		}
+	}
 	ft_org_tokens(ast->left);
 	ft_org_tokens(ast->right);
 }
