@@ -25,16 +25,83 @@ char	*ft_expand_word(char *word, t_global *global)
 void	ft_expand_tokens(t_token *tokens, t_global *global)
 {
 	t_token	*current_token;
+	t_token	*tmp;
 	int		in_single_quotes;
+	int		start;
+	int		end;
+	char	*temp;
+	int 	finish;
 
 	current_token = tokens;
 	in_single_quotes = 0;
+	// tmp = NULL;
 	while (current_token != NULL)
 	{
 		if (current_token->type == TOKEN_SINGLE_QUOTE)
 			in_single_quotes = !in_single_quotes;
 		if (current_token->type == TOKEN_WORD && !in_single_quotes)
-			current_token->value = ft_expand_word(current_token->value, global);
+		{
+			while (ft_strchr(current_token->value, '$'))
+			{
+				start = ft_strchr(current_token->value, '$')
+					- current_token->value;
+				start++;
+				end = start;
+				while (current_token->value[end]
+					&& ft_isalnum(current_token->value[end]))
+					end++;
+				if (end - start == 0)
+				{
+					finish = 0;
+					while (current_token->next != NULL
+						&& (current_token->type != TOKEN_WORD
+							|| ft_strchr(current_token->value, '$') != NULL))
+					{
+						tmp = current_token->next->next;
+						free(current_token->next->value);
+						free(current_token->next);
+						current_token->next = tmp;
+						current_token = current_token->next;
+						finish = 1;
+					}
+					if (finish)
+					{
+						tmp = current_token->next->next;
+						free(current_token->next->value);
+						free(current_token->next);
+						current_token->next = tmp;
+						finish = 0;
+					}
+					break ;
+				}
+				temp = ft_substr(current_token->value, 0, start - 1);
+				temp = ft_strjoin(temp,
+						ft_expand_word(ft_substr(current_token->value, start
+								- 1, end - (start - 1)), global));
+				temp = ft_strjoin(temp, &current_token->value[end]);
+				free(current_token->value);
+				current_token->value = ft_strdup(temp);
+				free(temp);
+			}
+		}
+		current_token = current_token->next;
+	}
+	current_token = tokens;
+	while (current_token != NULL)
+	{
+		if (current_token->next && current_token->next->type == TOKEN_WORD 
+			&& ft_strlen(current_token->next->value) == 1 
+			&& current_token->next->value[0] == '$')
+		{
+			temp = ft_expand_word(ft_strjoin("$", current_token->next->next->value), global) ;
+			free(current_token->next->value);
+			current_token->next->value = ft_strdup(temp);
+			// free(temp);
+			tmp = current_token->next->next->next;
+			free(current_token->next->next->value);
+			free(current_token->next->next);
+			current_token->next->next = tmp;
+		}
 		current_token = current_token->next;
 	}
 }

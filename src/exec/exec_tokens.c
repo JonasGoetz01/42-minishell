@@ -49,6 +49,7 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 	next_wait = wait;
 	exit_on_err = false;
 	token = node->token;
+	type = token->type;
 	while (token)
 	{
 		type = token->type;
