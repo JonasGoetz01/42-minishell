@@ -1,35 +1,38 @@
 #include "../../inc/minishell.h"
 
-void	ft_org_tokens(t_ast_node *ast)
+static void	ft_set_token_type_args(t_token **token, t_ast_node *node)
+{
+	(*token)->type = TOKEN_CMD;
+	(*token) = (*token)->next;
+	while ((*token))
+	{
+		if ((*token)->type == TOKEN_WORD)
+			(*token)->type = TOKEN_ARG;
+		(*token) = (*token)->next;
+	}
+}
+
+void	ft_org_tokens(t_ast_node *node)
 {
 	t_token	*token;
 
-	if (!ast)
+	if (!node)
 		return ;
-	token = ast->token;
+	token = node->token;
 	if (!token)
 		return ;
 	if (token->type == TOKEN_WORD)
-	{
-		token->type = TOKEN_CMD;
-		token = token->next;
-		while (token)
-		{
-			if (token->type == TOKEN_WORD)
-				token->type = TOKEN_ARG;
-			token = token->next;
-		}
-	}
+		ft_set_token_type_args(&token, node);
 	else if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER
 		|| token->type == TOKEN_DOUBLE_GREATER
 		|| token->type == TOKEN_DOUBLE_LESS)
 	{
-		if (ast->right)
+		if (node->right)
 		{
-			if (ast->right->token)
-				ast->right->token->type = TOKEN_ARG;
+			if (node->right->token)
+				node->right->token->type = TOKEN_ARG;
 		}
 	}
-	ft_org_tokens(ast->left);
-	ft_org_tokens(ast->right);
+	ft_org_tokens(node->left);
+	ft_org_tokens(node->right);
 }
