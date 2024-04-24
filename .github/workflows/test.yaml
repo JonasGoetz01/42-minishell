@@ -33,7 +33,7 @@ jobs:
         failed_tests_result=$(echo "$result_block" | grep -o '❌ [0-9]*' | awk '{print $2}')
         passed_tests=$(echo "$result_block" | grep -o '✅ [0-9]*' | awk '{print $2}')
         failed_tests=$(echo "$result_block" | grep -o '❌ [0-9]*' | awk '{print $2}')
-        xml="<testsuites><testsuite name=\"ExampleSuite\" tests=\"$(($passed_tests + $failed_tests))\" failures=\"$failed_tests\"></testsuite></testsuites>"
+        xml="<testsuites><testsuite name=\"ExampleSuite\" tests=\"$(($passed_tests + $failed_tests))\" passed=\"$passed_tests\" failures=\"$failed_tests\"></testsuite></testsuites>"
         echo "$xml" > tests_summary.xml
       
     - name: Print test summary XML
@@ -59,7 +59,7 @@ jobs:
           const fs = require('fs');
           const xml = fs.readFileSync('tests_summary.xml', 'utf8');
           const testsuite = xml.match(/<testsuite[^>]*>(.*?)<\/testsuite>/s);
-          const passed = testsuite[0].match(/tests="(\d+)"/)[1];
+          const passed = testsuite[0].match(/passed="(\d+)"/)[1];
           const failed = testsuite[0].match(/failures="(\d+)"/)[1];
           const comment = `## Test Summary\n\nTotal tests: ${parseInt(passed) + parseInt(failed)}\nPassed: ${passed}\nFailed: ${failed}`;
           github.issues.createComment({
