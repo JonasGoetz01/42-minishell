@@ -33,13 +33,6 @@ jobs:
         failed_tests_result=$(echo "$result_block" | grep -o '❌ [0-9]*' | awk '{print $2}')
         passed_tests=$(echo "$result_block" | grep -o '✅ [0-9]*' | awk '{print $2}')
         failed_tests=$(echo "$result_block" | grep -o '❌ [0-9]*' | awk '{print $2}')
-
-      
-    - name: Generate test summary XML
-      id: generate_xml
-      run: |
-        passed_tests=$(echo "${{ steps.parse_results.outputs.passed_tests }}")
-        failed_tests=$(echo "${{ steps.parse_results.outputs.failed_tests }}")
         xml="<testsuites><testsuite name=\"ExampleSuite\" tests=\"$(($passed_tests + $failed_tests))\" failures=\"$failed_tests\"></testsuite></testsuites>"
         echo "$xml" > tests_summary.xml
       
