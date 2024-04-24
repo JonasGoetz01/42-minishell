@@ -27,10 +27,16 @@ void	ft_open_in_file(t_ast_node *node, t_global *global)
 		ft_print_error(strerror(errno), file_name);
 		fd->fd_file = -2;
 	}
-	if (!node->left->file_in)
-		node->left->file_in = &fd->fd_file;
-	else
-		ft_close_fd(&fd->fd_file);
+	if (node->left)
+	{
+		if (!node->left->file_in)
+		{
+			node->left->file_in = &fd->fd_file;
+			return ;
+		}
+	}
+	ft_close_fd(&fd->fd_file);
+	global->exit_status = 1;
 }
 
 void	ft_open_out_file(t_ast_node *node, t_global *global)
@@ -48,10 +54,16 @@ void	ft_open_out_file(t_ast_node *node, t_global *global)
 		ft_print_error(strerror(errno), file_name);
 		fd->fd_file = -2;
 	}
-	if (!node->left->file_out)
-		node->left->file_out = &fd->fd_file;
-	else
-		ft_close_fd(&fd->fd_file);
+	if (node->left)
+	{
+		if (!node->left->file_out)
+		{
+			node->left->file_out = &fd->fd_file;
+			return ;
+		}
+	}
+	ft_close_fd(&fd->fd_file);
+	global->exit_status = 1;
 }
 
 void	ft_open_out_append_file(t_ast_node *node, t_global *global)
@@ -69,8 +81,14 @@ void	ft_open_out_append_file(t_ast_node *node, t_global *global)
 		ft_print_error(strerror(errno), file_name);
 		fd->fd_file = -2;
 	}
-	if (!node->left->file_out)
-		node->left->file_out = &fd->fd_file;
-	else
-		ft_close_fd(&fd->fd_file);
+	if (node->left)
+	{
+		if (!node->left->file_out)
+		{
+			node->left->file_out = &fd->fd_file;
+			return ;
+		}
+	}
+	ft_close_fd(&fd->fd_file);
+	global->exit_status = 1;
 }
