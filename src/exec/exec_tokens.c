@@ -8,11 +8,14 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 
 	cmd = token->value;
 	args = ft_arr_create_len(2);
-	// ToDo Error
-	// if (!args)
+	if (args == NULL)
+		return (NULL);
 	args[0] = ft_strdup(cmd);
-	// ToDo Error
-	// if (!args[0])
+	if (args[0] == NULL)
+	{
+		ft_arr_free((void **) args);
+		return (NULL);
+	}
 	token = token->next;
 	while (token)
 	{
