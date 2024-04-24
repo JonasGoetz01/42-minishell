@@ -21,6 +21,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y make gcc curl nano exa git wget lsb-release sudo build-essential clang libreadline8 libreadline-dev
       
+    - name: Run tests and redirect output to file
+      run: make tester > output.txt 2>&1
+      
     - name: Parse test results
       id: parse_results
       run: |
@@ -35,7 +38,15 @@ jobs:
         failed_tests_result=$(echo "$result_block" | grep -o '❌' | wc -l)
         echo "::set-output name=passed_tests_result::$passed_tests_result"
         echo "::set-output name=failed_tests_result::$failed_tests_result"
-        
+      
+    - name: Generate test summary XML
+      id: generate_xml
+      run: |
+        passed_tests=$(echo "${{ steps.parse_results.outputs.passed_tests }}")
+        failed_tests=$(echo "${{ steps.parse_results.outputs.failed_tests }}")
+        xml="<testsuites><testsuite name=\"ExampleSuite\" tests=\"$(($passed_tests + $failed_tests))\" failures=\"$failed_tests\"></testsuite></testsuites>"
+        echo "$xml" > tests_summary.xml
+      
     - name: Print test summary XML
       run: cat tests_summary.xml
       
