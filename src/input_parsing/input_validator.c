@@ -1,3 +1,5 @@
+#include "../../inc/minishell.h"
+
 // checks if the input is valid
 // checks for parenthesis, quotes, and other special characters
 // returns 0 if the input is valid, 1 if it is not
@@ -18,19 +20,43 @@ int	validator(char *input)
 	{
 		if (input[i] == '\'' && dquote == 0)
 			quote = !quote;
-		if (input[i] == '\"' && (i == 0 || input[i - 1] != '\\') && quote == 0)
+		if (input[i] == '\"' && i == 0 && quote == 0)
 			dquote = !dquote;
-		if (input[i] == '(' && (i == 0 || input[i - 1] != '\\') && dquote == 0
-			&& quote == 0)
+		if (input[i] == '(' && i == 0 && dquote == 0 && quote == 0)
 			parenthesis++;
-		if (input[i] == ')' && (i == 0 || input[i - 1] != '\\') && dquote == 0
-			&& quote == 0)
+		if (input[i] == ')' && i == 0 && dquote == 0 && quote == 0)
 			parenthesis--;
-		if (input[i] == '\\' && !input[i + 1])
-			return (1);
 		i++;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
 		return (1);
+	return (0);
+}
+
+int	input_validation(t_token **tokens)
+{
+	t_token	*current;
+	int		quote;
+	int		dquote;
+	int		parenthesis;
+
+	current = *tokens;
+	quote = 0;
+	dquote = 0;
+	parenthesis = 0;
+	while (current)
+	{
+		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
+			quote = !quote;
+		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
+			dquote = !dquote;
+		else if (current->type == TOKEN_BRACKET_L)
+			parenthesis++;
+		else if (current->type == TOKEN_BRACKET_R)
+			parenthesis--;
+		current = current->next;
+	}
+	if (parenthesis != 0 || quote != 0 || dquote != 0)
+		return (printf("Invalid input!\n"), 1);
 	return (0);
 }

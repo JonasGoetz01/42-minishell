@@ -58,3 +58,15 @@ void	append_token(t_token **head, t_token *new_token)
 		current->next = new_token;
 	}
 }
+
+// length of the token
+// figures out the length of the token by checking for delimiters
+int	token_length(const char *input, const char *delimiters)
+{
+	int	length;
+
+	length = 0;
+	while (input[length] != '\0' && !ft_strchr(delimiters, input[length]))
+		length++;
+	return (length);
+}

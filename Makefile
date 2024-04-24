@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	:=	-Wextra -Wall -Werror #-g -fsanitize=address -O1
+CFLAGS	:=	-Wextra -Wall -Werror -g -fsanitize=address -O1
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
 
@@ -50,7 +50,14 @@ SOURCES	:=	main.c \
 			init_utils.c \
 			env_utils.c \
 			error_msg.c \
-			file_utils.c
+			file_utils.c \
+			ast.c \
+			combine_words.c \
+			precedence.c \
+			rearrange_tokens.c \
+			remove_unused_spaces.c \
+			retokenize.c \
+			token_utils_2.c
 
 
 OBJDIR	:=	obj
