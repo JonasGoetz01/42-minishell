@@ -1,11 +1,23 @@
 #include "../../inc/minishell.h"
 
+static char	*ft_get_file_name(t_ast_node *node)
+{
+	if (node->right)
+	{
+		if (node->right->token)
+		{
+			return (node->right->token->value);
+		}
+	}
+	return (NULL);
+}
+
 void	ft_open_in_file(t_ast_node *node, t_global *global)
 {
 	char	*file_name;
 	t_fd	*fd;
 
-	file_name = node->right->token->value;
+	file_name = ft_get_file_name(node);
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
@@ -26,7 +38,7 @@ void	ft_open_out_file(t_ast_node *node, t_global *global)
 	char	*file_name;
 	t_fd	*fd;
 
-	file_name = node->right->token->value;
+	file_name = ft_get_file_name(node);
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
@@ -47,7 +59,7 @@ void	ft_open_out_append_file(t_ast_node *node, t_global *global)
 	char	*file_name;
 	t_fd	*fd;
 
-	file_name = node->right->token->value;
+	file_name = ft_get_file_name(node);
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;

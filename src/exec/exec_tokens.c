@@ -49,23 +49,32 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 	next_wait = wait;
 	exit_on_err = false;
 	token = node->token;
-	type = token->type;
+	type = 0;
 	while (token)
 	{
 		type = token->type;
 		if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
 		{
-			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
-			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+			if (node->right)
+			{
+				node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+				node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
+			}
+			if (node->left)
+			{
+				node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
+				node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+			}
 			wait = false;
 		}
 		else if (type == TOKEN_GREATER || type == TOKEN_DOUBLE_GREATER)
 		{
-			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-			node->left->file_out = node->file_out;
+			if (node->left)
+			{
+				node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
+				node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
+				node->left->file_out = node->file_out;
+			}
 			wait = false;
 		}
 		if (type == TOKEN_LESS)

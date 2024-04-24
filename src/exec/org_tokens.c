@@ -9,14 +9,6 @@ void	ft_org_tokens(t_ast_node *ast)
 	token = ast->token;
 	if (!token)
 		return ;
-	// while (token)
-	// {
-	// 	if (token->type == TOKEN_WORD)
-	// 		break ;
-	// 	token = token->next;
-	// }
-	// if (token)
-	// {
 	if (token->type == TOKEN_WORD)
 	{
 		token->type = TOKEN_CMD;
@@ -32,7 +24,6 @@ void	ft_org_tokens(t_ast_node *ast)
 		|| token->type == TOKEN_DOUBLE_GREATER
 		|| token->type == TOKEN_DOUBLE_LESS)
 		ast->right->token->type = TOKEN_ARG;
-	// }
 	ft_org_tokens(ast->left);
 	ft_org_tokens(ast->right);
 }
