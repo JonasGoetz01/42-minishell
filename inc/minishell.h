@@ -73,6 +73,7 @@ typedef struct s_global
 	char				**envv;
 	char				**env_export;
 	t_fd				*fds;
+	bool				isatty;
 }						t_global;
 
 int						show_prompt(t_global *global);
@@ -96,7 +97,7 @@ void					ft_error_buildin_env(const char *arg,
 							t_process *process);
 void					ft_cd_buildin(t_process *process, t_global *global);
 void					ft_echo_buildin(t_process *process);
-void					ft_exit_buildin(t_process *process);
+void					ft_exit_buildin(t_process *process, t_global *global);
 void					ft_export_buildin(t_process *process, t_global *global);
 void					ft_unset_buildin(t_process *process, t_global *global);
 bool					ft_env_contains(char *name, char **env);

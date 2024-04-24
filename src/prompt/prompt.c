@@ -107,7 +107,7 @@ int	show_prompt(t_global *global)
 	char	*input;
 	char	*prompt;
 
-	if (isatty(fileno(stdin)))
+	if (global->isatty)
 	{
 		prompt = build_prompt(global);
 		input = readline(prompt);

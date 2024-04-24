@@ -1,12 +1,12 @@
 #include "../../inc/minishell.h"
 
-void	ft_exit_buildin(t_process *process)
+void	ft_exit_buildin(t_process *process, t_global *global)
 {
 	size_t	ind;
 	char	*arg1;
 
 	arg1 = process->args[1];
-	if (isatty(fileno(stdin)))
+	if (global->isatty)
 		ft_putstr_fd("exit\n", 1);
 	if (!arg1)
 		exit(0);
