@@ -44,7 +44,7 @@ int	main(int argc, char **argv, char **envv)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	ft_init_t_global(&global, envv);
-	if (isatty(fileno(stdin)))
+	if (global.isatty)
 		print_welcome_message(&global);
 	while (1)
 	{

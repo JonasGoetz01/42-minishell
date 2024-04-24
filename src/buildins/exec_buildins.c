@@ -15,7 +15,7 @@ void	ft_exec_buildins(t_process *process, t_global *global)
 	else if (ft_strncmp(process->cmd, "env", 4) == 0)
 		ft_env_buildin(global->envv);
 	else if (ft_strncmp(process->cmd, "exit", 5) == 0)
-		ft_exit_buildin(process);
+		ft_exit_buildin(process, global);
 	if (process->exit_status == -1)
 		process->exit_status = 0;
 }

@@ -40,4 +40,5 @@ void	ft_init_t_global(t_global *global, char **envv)
 	ft_env_cpy(global->envv, &global->env_export);
 	global->exit_status = 0;
 	global->fds = NULL;
+	global->isatty = isatty(STDIN_FILENO);
 }
