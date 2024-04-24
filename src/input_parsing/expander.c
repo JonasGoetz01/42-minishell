@@ -41,47 +41,61 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			in_single_quotes = !in_single_quotes;
 		if (current_token->type == TOKEN_WORD && !in_single_quotes)
 		{
-			while (ft_strchr(current_token->value, '$'))
+			while (ft_strchr(current_token->value, '$') || ft_strchr(current_token->value, '~'))
 			{
-				start = ft_strchr(current_token->value, '$')
-					- current_token->value;
-				start++;
-				end = start;
-				while (current_token->value[end]
-					&& (ft_isalnum(current_token->value[end]) || current_token->value[end] == '?'))
-					end++;
-				if (end - start == 0)
+				if (ft_strchr(current_token->value, '$') && !ft_strchr(current_token->value, '~'))
 				{
-					finish = 0;
-					while (current_token->next != NULL
-						&& (current_token->type != TOKEN_WORD
-							|| ft_strchr(current_token->value, '$') != NULL))
+					start = ft_strchr(current_token->value, '$')
+						- current_token->value;
+					start++;
+					end = start;
+					while (current_token->value[end]
+						&& (ft_isalnum(current_token->value[end]) || current_token->value[end] == '?'))
+						end++;
+					if (end - start == 0)
 					{
-						tmp = current_token->next->next;
-						free(current_token->next->value);
-						free(current_token->next);
-						current_token->next = tmp;
-						current_token = current_token->next;
-						finish = 1;
-					}
-					if (finish)
-					{
-						tmp = current_token->next->next;
-						free(current_token->next->value);
-						free(current_token->next);
-						current_token->next = tmp;
 						finish = 0;
+						while (current_token->next != NULL
+							&& (current_token->type != TOKEN_WORD
+								|| ft_strchr(current_token->value, '$') != NULL))
+						{
+							tmp = current_token->next->next;
+							free(current_token->next->value);
+							free(current_token->next);
+							current_token->next = tmp;
+							current_token = current_token->next;
+							finish = 1;
+						}
+						if (finish)
+						{
+							tmp = current_token->next->next;
+							free(current_token->next->value);
+							free(current_token->next);
+							current_token->next = tmp;
+							finish = 0;
+						}
+						break ;
 					}
-					break ;
+					temp = ft_substr(current_token->value, 0, start - 1);
+					temp = ft_strjoin(temp,
+							ft_expand_word(ft_substr(current_token->value, start
+									- 1, end - (start - 1)), global));
+					temp = ft_strjoin(temp, &current_token->value[end]);
+					free(current_token->value);
+					current_token->value = ft_strdup(temp);
+					free(temp);
 				}
-				temp = ft_substr(current_token->value, 0, start - 1);
-				temp = ft_strjoin(temp,
-						ft_expand_word(ft_substr(current_token->value, start
-								- 1, end - (start - 1)), global));
-				temp = ft_strjoin(temp, &current_token->value[end]);
-				free(current_token->value);
-				current_token->value = ft_strdup(temp);
-				free(temp);
+				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$'))
+				{
+					start = ft_strchr(current_token->value, '~')
+						- current_token->value;
+					temp = ft_substr(current_token->value, 0, start);
+					temp = ft_strjoin(temp, ft_get_env("HOME", global->envv));
+					temp = ft_strjoin(temp, &current_token->value[start + 1]);
+					free(current_token->value);
+					current_token->value = ft_strdup(temp);
+					free(temp);
+				}
 			}
 		}
 		current_token = current_token->next;
