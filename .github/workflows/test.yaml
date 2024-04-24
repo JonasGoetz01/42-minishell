@@ -58,7 +58,7 @@ jobs:
       if: always()
       uses: actions/github-script@v4
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.SECRET_TOKEN }}
         script: |
           const fs = require('fs');
           const xml = fs.readFileSync('tests_summary.xml', 'utf8');
