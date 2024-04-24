@@ -13,6 +13,8 @@
 # include <string.h>
 # include <sys/select.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <unistd.h>
 
 # define EXIT_ERROR 1
@@ -175,5 +177,7 @@ void					retokenize(t_token **tokens);
 void					ft_print_error(const char *msg, const char *arg);
 
 void					free_token(t_token **tokens);
+
+bool					ft_is_directory(const char *path);
 
 #endif

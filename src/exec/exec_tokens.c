@@ -37,7 +37,12 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 		ft_close_fd(node->file_out);
 	}
 	else
-		ft_print_error("command not found", process->cmd);
+	{
+		if (errno == 21)
+			ft_print_error(strerror(errno), process->cmd);
+		else
+			ft_print_error("command not found", process->cmd);
+	}
 	node->exit_status = process->exit_status;
 	return (process);
 }

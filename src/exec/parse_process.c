@@ -52,6 +52,8 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 	char	*cmd_path;
 	int		ind;
 
+	if (ft_is_directory(cmd))
+		return (errno = 21, NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (ft_strdup(cmd));
 	if (!path)
