@@ -21,6 +21,8 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 		token = token->next;
 	}
 	process = ft_create_process(cmd, args, node);
+	if (process == NULL)
+		return (NULL);
 	if (DEBUG)
 		printf("executing %s: in %d out %d\n", process->cmd, ft_get_fd(process->fd_in[PIPE_READ]), ft_get_fd(process->fd_out[PIPE_WRITE]));
 	if (ft_verify_process(process, global))
@@ -32,7 +34,7 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 		ft_close_fd(node->file_out);
 	}
 	else
-		printf("minishell: %s: command not found\n", process->cmd);
+		ft_print_error("command not found", process->cmd);
 	node->exit_status = process->exit_status;
 	return (process);
 }

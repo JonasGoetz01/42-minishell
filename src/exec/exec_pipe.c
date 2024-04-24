@@ -15,6 +15,8 @@ bool	ft_handle_pipe_token(t_ast_node *node, t_global *global)
 		return (false);
 	fd->fd_pipe[PIPE_READ] = fd_pipe[PIPE_READ];
 	fd->fd_pipe[PIPE_WRITE] = fd_pipe[PIPE_WRITE];
+	if (node->left == NULL || node->right == NULL)
+		return (false);
 	node->left->fd_out[PIPE_WRITE] = &fd->fd_pipe[PIPE_WRITE];
 	node->left->fd_out[PIPE_READ] = &fd->fd_pipe[PIPE_READ];
 	node->right->fd_in[PIPE_READ] = &fd->fd_pipe[PIPE_READ];

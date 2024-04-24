@@ -5,6 +5,8 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 	t_process	*process;
 
 	process = malloc(sizeof(t_process));
+	if (process == NULL)
+		return (NULL);
 	process->is_buildin = false;
 	process->cmd = cmd;
 	process->args = args;
