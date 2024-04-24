@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static void	ft_set_token_type_args(t_token **token, t_ast_node *node)
+static void	ft_set_token_type_args(t_token **token)
 {
 	(*token)->type = TOKEN_CMD;
 	(*token) = (*token)->next;
@@ -22,7 +22,7 @@ void	ft_org_tokens(t_ast_node *node)
 	if (!token)
 		return ;
 	if (token->type == TOKEN_WORD)
-		ft_set_token_type_args(&token, node);
+		ft_set_token_type_args(&token);
 	else if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER
 		|| token->type == TOKEN_DOUBLE_GREATER
 		|| token->type == TOKEN_DOUBLE_LESS)
