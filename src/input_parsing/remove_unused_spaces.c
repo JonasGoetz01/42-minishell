@@ -8,30 +8,15 @@ void	remove_unused_spaces(t_token **tokens)
 
 	current = *tokens;
 	prev = NULL;
-	temp = NULL;
 	while (current)
 	{
-		if (current->type == TOKEN_DOUBLE_QUOTE
-			|| current->type == TOKEN_SINGLE_QUOTE)
+		if (current->type == TOKEN_SPACE)
 		{
-			prev = current;
-			current = current->next;
-			while (current && current->type != prev->type)
-			{
-				temp = current;
-				current = current->next;
-			}
-			prev = current;
-			current = current->next;
-		}
-		else if (current->type == TOKEN_WORD && strcmp(current->value,
-				" ") == 0)
-		{
-			temp = current;
-			if (prev == NULL)
+			if (!prev)
 				*tokens = current->next;
 			else
 				prev->next = current->next;
+			temp = current;
 			current = current->next;
 			free(temp->value);
 			free(temp);
@@ -39,8 +24,7 @@ void	remove_unused_spaces(t_token **tokens)
 		else
 		{
 			prev = current;
-			if (current)
-				current = current->next;
+			current = current->next;
 		}
 	}
 }

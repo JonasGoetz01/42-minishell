@@ -19,8 +19,8 @@
 
 # define EXIT_ERROR 1
 # ifndef DEBUG
-	// !!!change in makefile!!!
-	# define DEBUG 1
+// !!!change in makefile!!!
+#  define DEBUG 1
 # endif
 
 # include <readline/history.h>
@@ -186,5 +186,6 @@ void					ft_print_error(const char *msg, const char *arg);
 void					free_token(t_token **tokens);
 
 bool					ft_is_directory(const char *path);
+int						isOperator(t_token token);
 
 #endif

@@ -86,6 +86,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	current_token->next = NULL;
 	right_arm = highest_token->next;
 	ast->token->next = NULL;
+	if (left_arm == highest_token)
+		left_arm = create_token(TOKEN_SPACE, "");
 	gen_ast(&(ast->left), left_arm);
 	gen_ast(&(ast->right), right_arm);
 }

@@ -33,7 +33,9 @@ void	rearrange_tokens(t_token **tokens)
 		current = current->next;
 	}
 	// If < is the first token
-	if (prev == NULL)
+	if (prev == NULL && current != NULL && current->next
+		&& current->next->type == TOKEN_WORD && current->next->next
+		&& current->next->next->type == TOKEN_WORD)
 	{
 		redirect = *tokens;
 		file = redirect->next;
@@ -50,10 +52,21 @@ void	rearrange_tokens(t_token **tokens)
 		if (file->next != NULL)
 			rearrange_tokens(&file->next);
 	}
+	else if (prev == NULL && current != NULL && current->next
+		&& current->next->type == TOKEN_WORD && !current->next->next)
+	{
+		redirect = *tokens;
+		file = redirect->next;
+		current = create_token(TOKEN_SPACE, ft_strdup(" "));
+		current->next = redirect;
+		*tokens = current;
+	}
 	// If < is not the first token
 	else if (current != NULL && (prev == NULL || (prev->type != TOKEN_WORD
 				&& prev->type != TOKEN_DOUBLE_QUOTE
-				&& prev->type != TOKEN_SINGLE_QUOTE)))
+				&& prev->type != TOKEN_SINGLE_QUOTE)) && current->next
+		&& current->next->type == TOKEN_WORD && current->next->next
+		&& current->next->next->type == TOKEN_WORD)
 	{
 		redirect = current;
 		file = current->next;
