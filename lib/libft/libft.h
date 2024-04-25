@@ -52,6 +52,7 @@ char	**ft_arr_create_len(size_t len);
 bool	ft_arr_rm(size_t ind, char ***arr);
 size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
+char	*ft_strtok(char *str, const char *delim);
 char	*get_next_line(int fd);
 
 #endif

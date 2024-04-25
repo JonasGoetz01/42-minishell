@@ -45,17 +45,6 @@ bool	ft_env_contains(char *name, char **env)
 	return (false);
 }
 
-static bool	ft_add_env_arr(char *str, char ***envv)
-{
-	char	**temp;
-
-	temp = ft_arr_add(str, *envv);
-	if (!temp)
-		return (false);
-	*envv = temp;
-	return (true);
-}
-
 bool	ft_add_env_export(char *name, char *value, char ***envv)
 {
 	char	*temp;
@@ -65,7 +54,7 @@ bool	ft_add_env_export(char *name, char *value, char ***envv)
 	if (!temp)
 		return (false);
 	if (!value)
-		return (ft_add_env_arr(temp, envv));
+		return (ft_arr_add(temp, envv));
 	str = ft_strjoin(temp, "=\"");
 	free(temp);
 	if (!str)
@@ -78,7 +67,7 @@ bool	ft_add_env_export(char *name, char *value, char ***envv)
 	free(temp);
 	if (!str)
 		return (false);
-	return (ft_add_env_arr(str, envv));
+	return (ft_arr_add(str, envv));
 }
 
 bool	ft_add_env_env(char *name, char *value, char ***envv)
@@ -99,7 +88,7 @@ bool	ft_add_env_env(char *name, char *value, char ***envv)
 	free(str);
 	if (!temp)
 		return (false);
-	return (ft_add_env_arr(temp, envv));
+	return (ft_arr_add(temp, envv));
 }
 
 static char	**ft_find_env(char *name, char **envv)
