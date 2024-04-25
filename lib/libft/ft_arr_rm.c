@@ -19,17 +19,17 @@ bool	ft_arr_rm(size_t ind, char ***arr)
 
 	len = ft_arr_len(*arr);
 	if (ind > len - 1)
-		return (NULL);
+		return (false);
 	new = ft_arr_create_len(len);
 	if (!new)
 		return (false);
-	arr[ind] = NULL;
+	(*arr)[ind] = NULL;
 	if (!ft_arr_cpy(*arr, new))
 	{
 		free(new);
 		return (false);
 	}
-	if (!ft_arr_cpy(&(*arr[ind + 1]), &(new[ind])))
+	if (!ft_arr_cpy(&((*arr)[ind + 1]), &(new[ind])))
 	{
 		free(new);
 		return (false);
@@ -37,5 +37,5 @@ bool	ft_arr_rm(size_t ind, char ***arr)
 	new[len - 1] = NULL;
 	ft_arr_free((void **) *arr);
 	*arr = new;
-	return (new);
+	return (true);
 }
