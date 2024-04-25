@@ -21,11 +21,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y make gcc curl nano exa git wget lsb-release sudo build-essential clang libreadline8 libreadline-dev
 
-    - name: Replace debug flags and test
+    - name: Run tests
       run: |
-        sed -i 's/^CFLAGS\s*:=\s*-Wextra -Wall -Werror\s*#.*$/CFLAGS\t:=\t-Wextra -Wall -Werror #-g -fsanitize=address -O1/' Makefile
-        sed -i 's/^#define DEBUG .*/#define DEBUG 0/' inc/minishell.h
-        make tester > output.txt 2>&1
+        make DEBUG=0 CFLAGS="-Wextra -Wall -Werror" tester > output.txt 2>&1
       
     - name: Parse test results
       id: parse_results
