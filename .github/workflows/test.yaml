@@ -52,7 +52,7 @@ jobs:
         paths: tests_summary.xml
     
     - name: Comment on pull request
-      if: always()
+      if: github.event_name == 'pull_request'
       uses: actions/github-script@v4
       with:
         github-token: ${{ secrets.SECRET_TOKEN }}
