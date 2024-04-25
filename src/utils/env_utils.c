@@ -232,13 +232,19 @@ void	ft_unset_env(char *name, t_global *global)
 	{
 		ind = ft_find_env_ind(name, global->env_export);
 		if (!(ind == -1))
-			global->env_export = ft_arr_rm(ind, global->env_export);
+		{
+			if (!ft_arr_rm(ind, &global->env_export))
+				return ;
+		}
 	}
 	if (ft_env_contains(name, global->envv))
 	{
 		ind = ft_find_env_ind(name, global->envv);
 		if (!(ind == -1))
-			global->envv = ft_arr_rm(ind, global->envv);
+		{
+			if (!ft_arr_rm(ind, &global->envv))
+				return ;
+		}
 	}
 }
 

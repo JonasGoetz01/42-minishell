@@ -6,34 +6,36 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:43:11 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/16 13:14:58 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:15:39 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_arr_rm(size_t	ind, char **arr)
+bool	ft_arr_rm(size_t ind, char ***arr)
 {
 	char	**new;
 	size_t	len;
 
-	len = ft_arr_len(arr);
+	len = ft_arr_len(*arr);
 	if (ind > len - 1)
 		return (NULL);
 	new = ft_arr_create_len(len);
 	if (!new)
-		return (NULL);
+		return (false);
 	arr[ind] = NULL;
-	if (!ft_arr_cpy(arr, new))
+	if (!ft_arr_cpy(*arr, new))
 	{
 		free(new);
-		return (NULL);
+		return (false);
 	}
-	if (!ft_arr_cpy(&(arr[ind + 1]), &(new[ind])))
+	if (!ft_arr_cpy(&(*arr[ind + 1]), &(new[ind])))
 	{
 		free(new);
-		return (NULL);
+		return (false);
 	}
 	new[len - 1] = NULL;
+	ft_arr_free((void **) *arr);
+	*arr = new;
 	return (new);
 }

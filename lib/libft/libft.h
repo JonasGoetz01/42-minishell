@@ -46,13 +46,12 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 int		ft_atoi(const char *str);
 void	ft_arr_free(void **array);
-char	**ft_arr_add(char *str, char **arr);
+bool	ft_arr_add(char *str, char ***arr);
 char	**ft_arr_create(void);
 char	**ft_arr_create_len(size_t len);
+bool	ft_arr_rm(size_t ind, char ***arr);
 size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
-char	*ft_strtok(char *str, const char *delim);
-char	**ft_arr_rm(size_t ind, char **arr);
 char	*get_next_line(int fd);
 
 #endif
