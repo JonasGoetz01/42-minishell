@@ -23,7 +23,7 @@ void	process_input(char *input, t_global *global)
 	retokenize(&tokens);
 	print_tokens(tokens);
 	if (input_validation(&tokens))
-		return (free_token(&tokens), free(input));
+		return (free(input));
 	else if (DEBUG)
 		printf("Input is valid\n");
 	combine_words_in_quotes(&tokens);

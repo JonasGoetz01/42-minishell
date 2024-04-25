@@ -36,16 +36,23 @@ int	validator(char *input)
 int	input_validation(t_token **tokens)
 {
 	t_token	*current;
+	t_token	*prev;
 	int		quote;
 	int		dquote;
 	int		parenthesis;
 
 	current = *tokens;
+	prev = NULL;
 	quote = 0;
 	dquote = 0;
 	parenthesis = 0;
 	while (current)
 	{
+		if (!prev && (current->type == TOKEN_PIPE))
+			return (printf("Invalid input!\n"), 1);
+		if (current->type == TOKEN_LESS && current->next
+			&& current->next->type == TOKEN_GREATER)
+			return (printf("Invalid input!\n"), 1);
 		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
 		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
@@ -54,6 +61,7 @@ int	input_validation(t_token **tokens)
 			parenthesis++;
 		else if (current->type == TOKEN_BRACKET_R)
 			parenthesis--;
+		prev = current;
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
