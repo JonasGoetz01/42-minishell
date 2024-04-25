@@ -18,7 +18,10 @@
 # include <unistd.h>
 
 # define EXIT_ERROR 1
-# define DEBUG 0
+# ifndef DEBUG
+	// !!!change in makefile!!!
+	# define DEBUG 1
+# endif
 
 # include <readline/history.h>
 # include <readline/readline.h>
