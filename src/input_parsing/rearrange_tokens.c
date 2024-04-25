@@ -33,7 +33,9 @@ void	rearrange_tokens(t_token **tokens)
 		current = current->next;
 	}
 	// If < is the first token
-	if (prev == NULL)
+	if (prev == NULL && current != NULL && current->next
+		&& current->next->type == TOKEN_WORD && current->next->next
+		&& current->next->next->type == TOKEN_WORD)
 	{
 		redirect = *tokens;
 		file = redirect->next;
