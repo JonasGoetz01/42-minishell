@@ -23,7 +23,7 @@ jobs:
 
     - name: Run tests
       run: |
-        make DEBUG=0 CFLAGS="-Wextra -Wall -Werror" tester > output.txt 2>&1
+        make CFLAGS="-Wextra -Wall -Werror -DDEBUG=0" tester > output.txt 2>&1
       
     - name: Parse test results
       id: parse_results
