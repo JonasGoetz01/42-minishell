@@ -137,11 +137,13 @@ void	remove_unused_spaces(t_token **tokens)
 					prev->next = current->next;
 				temp = current;
 				current = current->next;
+				free(temp->value);
 				free(temp);
 				continue ;
 			}
 		}
 		prev = current;
-		current = current->next;
+		if (current)
+			current = current->next;
 	}
 }
