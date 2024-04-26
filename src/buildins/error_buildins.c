@@ -1,6 +1,7 @@
 #include "../../inc/minishell.h"
 
-void	ft_error_buildin(const char *msg, const char *arg, t_process *process, int exit_status)
+void	ft_error_buildin(const char *msg, const char *arg,
+			t_process *process, int exit_status)
 {
 	process->exit_status = exit_status;
 	ft_putstr_fd("minishell: ", 2);
