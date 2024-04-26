@@ -77,17 +77,14 @@ void	remove_spaces_before_arguments(t_token **tokens)
 {
 	t_token	*current;
 	t_token	*prev;
-	bool	after_cmd;
 	t_token	*temp;
 
 	current = *tokens;
 	prev = NULL;
-	after_cmd = false;
 	while (current)
 	{
-		if (current->type == TOKEN_WORD && after_cmd == false)
+		if (current->type == TOKEN_WORD)
 		{
-			after_cmd = true;
 			prev = current;
 			current = current->next;
 			while (current && current->type == TOKEN_SPACE)
@@ -126,7 +123,8 @@ void	remove_spaces_after_arguments(t_token **tokens)
 				free(temp);
 			}
 		}
-		current = current ? current->next : NULL;
+		if (current)
+			current = current->next;
 	}
 }
 
@@ -157,7 +155,8 @@ void	remove_spaces_at_beginning_end(t_token **tokens)
 			}
 		}
 		prev = current;
-		current = current ? current->next : NULL;
+		if (current)
+			current = current->next;
 	}
 }
 
