@@ -17,11 +17,11 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define EXIT_ERROR 1
 # ifndef DEBUG
 // !!!change in makefile!!!
 #  define DEBUG 1
 # endif
+# define LINUX 1
 
 # include <readline/history.h>
 # include <readline/readline.h>

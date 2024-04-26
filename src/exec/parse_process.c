@@ -71,13 +71,13 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 
 bool	ft_is_buildin_cmd(char *cmd)
 {
-	return (ft_strncmp(cmd, "echo", 5) == 0 ||
-			ft_strncmp(cmd, "cd", 3) == 0 ||
-			ft_strncmp(cmd, "pwd", 4) == 0 ||
-			ft_strncmp(cmd, "export", 7) == 0 ||
-			ft_strncmp(cmd, "unset", 6) == 0 ||
-			ft_strncmp(cmd, "env", 4) == 0 ||
-			ft_strncmp(cmd, "exit", 5) == 0);
+	return (ft_strncmp(cmd, "echo", 5) == 0
+		|| ft_strncmp(cmd, "cd", 3) == 0
+		|| ft_strncmp(cmd, "pwd", 4) == 0
+		|| ft_strncmp(cmd, "export", 7) == 0
+		|| ft_strncmp(cmd, "unset", 6) == 0
+		|| ft_strncmp(cmd, "env", 4) == 0
+		|| ft_strncmp(cmd, "exit", 5) == 0);
 }
 
 bool	ft_verify_process(t_process *process, t_global *global)
@@ -92,10 +92,11 @@ bool	ft_verify_process(t_process *process, t_global *global)
 		return (true);
 	}
 	lc_cmd = ft_strdup(process->cmd);
-	// ft_lower_str(lc_cmd);
+	if (!LINUX)
+		ft_lower_str(lc_cmd);
 	path = ft_get_env("PATH", global->envv);
 	new_cmd = ft_get_cmd_path(lc_cmd, path);
-	if ((path == NULL && new_cmd == NULL) || (path[0] = 0 && new_cmd == NULL))
+	if ((path == NULL && new_cmd == NULL) || (path[0] == 0 && new_cmd == NULL))
 		return (false);
 	free(lc_cmd);
 	if (!path)
