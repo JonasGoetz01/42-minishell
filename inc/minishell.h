@@ -84,10 +84,10 @@ typedef struct s_global
 
 typedef struct s_exec_flags
 {
-	bool	wait;
-	bool	next_wait;
-	bool	exit_on_err;
-}				t_exec_flags;
+	bool				wait;
+	bool				next_wait;
+	bool				exit_on_err;
+}						t_exec_flags;
 
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
@@ -129,7 +129,7 @@ char					*ft_get_file_name(t_ast_node *node);
 char					**ft_fill_args(t_token *token, char *cmd);
 void					ft_handle_verify_process_error(t_process *process);
 t_token_type			ft_exec_tokens_loop(t_ast_node *node, t_token *token,
-		t_exec_flags *exec_flags, t_global *global);
+							t_exec_flags *exec_flags, t_global *global);
 
 t_token					*tokenize(const char *input);
 
