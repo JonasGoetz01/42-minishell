@@ -28,21 +28,14 @@ char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 
 	cmd_path = ft_strjoin(dirs[ind], "/");
 	if (!cmd_path)
-	{
-		ft_arr_free((void **)dirs);
-		// ft_exit_error(args, "malloc failed");
-	}
+		return (NULL);
 	tmp = ft_strjoin(cmd_path, cmd);
 	free(cmd_path);
 	if (!tmp)
-	{
-		ft_arr_free((void **)dirs);
-		// ft_exit_error(args, "malloc failed");
-	}
+		return (NULL);
 	cmd_path = tmp;
 	if (access(cmd_path, F_OK | X_OK) == 0)
 		return (cmd_path);
-	errno = 0;
 	free(cmd_path);
 	return (NULL);
 }
@@ -57,7 +50,7 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 		return (errno = 21, NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (ft_strdup(cmd));
-	if (!path)
+	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0 || ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
 		return (NULL);
 	dirs = ft_split(path, ':');
 	ind = 0;
@@ -72,6 +65,7 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 		ind++;
 	}
 	ft_arr_free((void **)dirs);
+	errno = 0;
 	return (NULL);
 }
 
@@ -98,11 +92,11 @@ bool	ft_verify_process(t_process *process, t_global *global)
 		return (true);
 	}
 	lc_cmd = ft_strdup(process->cmd);
-	ft_lower_str(lc_cmd);
+	// ft_lower_str(lc_cmd);
 	path = ft_get_env("PATH", global->envv);
 	new_cmd = ft_get_cmd_path(lc_cmd, path);
-	if (path == NULL && new_cmd == NULL)
-		return (errno = 0, false);
+	if ((path == NULL && new_cmd == NULL) || (path[0] = 0 && new_cmd == NULL))
+		return (false);
 	free(lc_cmd);
 	if (!path)
 		free(path);
