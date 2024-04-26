@@ -38,6 +38,7 @@ static char	*ft_cd_env(const char *env, t_process *process, t_global *global)
 static void	ft_set_oldpwd(t_global *global)
 {
 	char	*value;
+
 	value = ft_get_env("PWD", global->envv);
 	if (value)
 	{

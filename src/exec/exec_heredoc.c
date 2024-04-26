@@ -26,15 +26,24 @@ void	ft_exec_here_doc(t_ast_node *node, t_global *global)
 {
 	char	*limiter;
 	int		fd_pipe[2];
+	t_fd	*fd;
 
-	limiter = node->right->token->value;
-	if (pipe(fd_pipe) == -1)
+	limiter = ft_get_file_name(node);
+	if (pipe(fd_pipe) != 0)
 		return (ft_print_error(strerror(errno), NULL));
 	ft_read_here_doc(limiter, fd_pipe);
 	close(fd_pipe[PIPE_WRITE]);
-	t_fd *fd = ft_add_t_fd(global);
+	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
 	fd->fd_pipe[PIPE_READ] = fd_pipe[PIPE_READ];
-	node->left->fd_in[PIPE_READ] = &fd->fd_pipe[PIPE_READ];
+	if (node->left)
+	{
+		if (!node->left->fd_in[PIPE_READ])
+		{
+			node->left->fd_in[PIPE_READ] = &fd->fd_pipe[PIPE_READ];
+			return ;
+		}
+	}
+	ft_close_fd(&fd->fd_pipe[PIPE_READ]);
 }

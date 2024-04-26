@@ -14,6 +14,20 @@ static void	ft_set_token_type_args(t_token *token)
 	}
 }
 
+static void	ft_set_token_type_redirs(t_ast_node *node, t_token *token)
+{
+	if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER
+		|| token->type == TOKEN_DOUBLE_GREATER
+		|| token->type == TOKEN_DOUBLE_LESS)
+	{
+		if (node->right)
+		{
+			if (node->right->token)
+				node->right->token->type = TOKEN_ARG;
+		}
+	}
+}
+
 void	ft_org_tokens(t_ast_node *node)
 {
 	t_token	*token;
@@ -26,21 +40,12 @@ void	ft_org_tokens(t_ast_node *node)
 	while (token)
 	{
 		if (token->type == TOKEN_WORD)
-			break;
+			break ;
 		token = token->next;
 	}
 	ft_set_token_type_args(token);
 	token = node->token;
-	if (token->type == TOKEN_LESS || token->type == TOKEN_GREATER
-		|| token->type == TOKEN_DOUBLE_GREATER
-		|| token->type == TOKEN_DOUBLE_LESS)
-	{
-		if (node->right)
-		{
-			if (node->right->token)
-				node->right->token->type = TOKEN_ARG;
-		}
-	}
+	ft_set_token_type_redirs(node, token);
 	ft_org_tokens(node->left);
 	ft_org_tokens(node->right);
 }
