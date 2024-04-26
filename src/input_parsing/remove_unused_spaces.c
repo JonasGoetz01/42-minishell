@@ -73,33 +73,18 @@ bool	next_is_brackets(t_token *token)
 	return (false);
 }
 
-/// @brief Remove all unused spaces from the token list
-/// @param tokens
-/// @return void
-/// Main logic:
-/// Spaces are not needed when:
-/// 1. They are at the beginning of the line
-/// 2. They are at the end of the line
-/// 3. They are before or after arguments
-///
-/// Spaces are needed:
-/// 1. Between arguments
-/// 2. in a string
-void	remove_unused_spaces(t_token **tokens)
+void	remove_spaces_before_arguments(t_token **tokens)
 {
 	t_token	*current;
 	t_token	*prev;
-	bool	after_cmd;
 	t_token	*temp;
 
 	current = *tokens;
 	prev = NULL;
-	after_cmd = false;
 	while (current)
 	{
-		if (current->type == TOKEN_WORD && after_cmd == false)
+		if (current->type == TOKEN_WORD)
 		{
-			after_cmd = true;
 			prev = current;
 			current = current->next;
 			while (current && current->type == TOKEN_SPACE)
@@ -114,9 +99,22 @@ void	remove_unused_spaces(t_token **tokens)
 				}
 			}
 		}
-		else if (isOperator(*current))
+		prev = current;
+		if (current)
+			current = current->next;
+	}
+}
+
+void	remove_spaces_after_arguments(t_token **tokens)
+{
+	t_token	*current;
+	t_token	*temp;
+
+	current = *tokens;
+	while (current)
+	{
+		if (isOperator(*current))
 		{
-			after_cmd = false;
 			while (current->next && current->next->type == TOKEN_SPACE)
 			{
 				temp = current->next;
@@ -125,9 +123,23 @@ void	remove_unused_spaces(t_token **tokens)
 				free(temp);
 			}
 		}
-		else if (current->type == TOKEN_SPACE)
+		if (current)
+			current = current->next;
+	}
+}
+
+void	remove_spaces_at_beginning_end(t_token **tokens)
+{
+	t_token	*current;
+	t_token	*prev;
+	t_token	*temp;
+
+	current = *tokens;
+	prev = NULL;
+	while (current)
+	{
+		if (current->type == TOKEN_SPACE)
 		{
-			// If the space is at the beginning or end of the line
 			if (prev == NULL || next_is_newline(current)
 				|| next_is_operator(current))
 			{
@@ -137,11 +149,32 @@ void	remove_unused_spaces(t_token **tokens)
 					prev->next = current->next;
 				temp = current;
 				current = current->next;
+				free(temp->value);
 				free(temp);
 				continue ;
 			}
 		}
 		prev = current;
-		current = current->next;
+		if (current)
+			current = current->next;
 	}
+}
+
+/// @brief Remove all unused spaces from the token list
+/// @param tokens
+/// @return void
+/// Main logic:
+/// Spaces are not needed when:
+/// 1. They are at the beginning of the line
+/// 2. They are at the end of the line
+/// 3. They are before or after arguments
+///
+/// Spaces are needed:
+/// 1. Between arguments
+/// 2. in a string
+void	remove_unused_spaces(t_token **tokens)
+{
+	remove_spaces_before_arguments(tokens);
+	remove_spaces_after_arguments(tokens);
+	remove_spaces_at_beginning_end(tokens);
 }
