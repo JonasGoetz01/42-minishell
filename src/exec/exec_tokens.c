@@ -47,7 +47,10 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 		if (errno == 21 || errno == 2)
 		{
 			ft_print_error(strerror(errno), process->cmd);
-			process->exit_status = 126;
+			if (errno == 21)
+				process->exit_status = 126;
+			else
+				process->exit_status = 127;
 		}
 		else
 		{
