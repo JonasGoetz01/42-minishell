@@ -1,17 +1,5 @@
 #include "../../inc/minishell.h"
 
-static char	*ft_get_file_name(t_ast_node *node)
-{
-	if (node->right)
-	{
-		if (node->right->token)
-		{
-			return (node->right->token->value);
-		}
-	}
-	return (NULL);
-}
-
 void	ft_open_in_file(t_ast_node *node, t_global *global)
 {
 	char	*file_name;
