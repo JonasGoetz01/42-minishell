@@ -12,7 +12,7 @@ char	*ft_get_file_name(t_ast_node *node)
 	return (NULL);
 }
 
-char	**ft_fill_args(t_token *token, char *cmd)
+static char	**ft_init_args_arr(char *cmd)
 {
 	char	**args;
 
@@ -25,12 +25,26 @@ char	**ft_fill_args(t_token *token, char *cmd)
 		ft_arr_free((void **) args);
 		return (NULL);
 	}
+	return (args);
+}
+
+char	**ft_fill_args(t_token *token, char *cmd)
+{
+	char	**args;
+	char	*tmp;
+
+	args = ft_init_args_arr(cmd);
+	if (args == NULL)
+		return (NULL);
 	token = token->next;
 	while (token)
 	{
 		if (token->type == TOKEN_ARG)
 		{
-			if (!ft_arr_add(token->value, &args))
+			tmp = ft_strdup(token->value);
+			if (tmp == NULL)
+				return (ft_arr_free((void **) args), NULL);
+			if (!ft_arr_add(tmp, &args))
 			{
 				ft_arr_free((void **) args);
 				return (NULL);

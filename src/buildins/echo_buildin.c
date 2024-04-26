@@ -29,6 +29,24 @@ static bool	ft_is_new_line(t_process *process, size_t *ind)
 	return (new_line);
 }
 
+static void	ft_print(t_process *process)
+{
+	t_token *token;
+
+	token = process->token;
+	while (token)
+	{
+		if (token->type == TOKEN_ARG)
+		{
+			if (token->value)
+				ft_putstr_fd(token->value, 1);
+		}
+		else if (token->type == TOKEN_SPACE)
+			ft_putchar_fd(' ', 1);
+		token = token->next;
+	}
+}
+
 void	ft_echo_buildin(t_process *process)
 {
 	bool	new_line;
@@ -36,13 +54,7 @@ void	ft_echo_buildin(t_process *process)
 
 	ind = 1;
 	new_line = ft_is_new_line(process, &ind);
-	while (process->args[ind])
-	{
-		printf("%s", process->args[ind]);
-		if (process->args[ind + 1])
-			printf(" ");
-		ind++;
-	}
+	ft_print(process);
 	if (new_line)
 		printf("\n");
 }

@@ -3,7 +3,6 @@
 
 # include "../lib/libft/libft.h"
 # include "colors.h"
-# include "exec.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <signal.h>
@@ -15,6 +14,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/types.h>
 # include <unistd.h>
 
 # ifndef DEBUG
@@ -27,6 +27,9 @@
 # include <readline/readline.h>
 
 # define MAX_BUFFER_SIZE 4096
+
+# define PIPE_READ 0
+# define PIPE_WRITE 1
 
 typedef enum e_token_type
 {
@@ -54,6 +57,27 @@ typedef struct s_token
 	char				*value;
 	struct s_token		*next;
 }						t_token;
+
+typedef struct s_fd
+{
+	int			fd_file;
+	int			fd_pipe[2];
+	struct s_fd	*next;
+}				t_fd;
+
+typedef struct s_process
+{
+	bool		is_buildin;
+	int			*file_in;
+	int			*fd_out[2];
+	int			*fd_in[2];
+	int			*file_out;
+	char		*cmd;
+	char		**args;
+	pid_t		pid;
+	int			exit_status;
+	t_token		*token;
+}				t_process;
 
 typedef struct s_stack_new
 {
@@ -89,6 +113,7 @@ typedef struct s_exec_flags
 	bool				exit_on_err;
 	t_token_type		tok_typ;
 }						t_exec_flags;
+
 
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
