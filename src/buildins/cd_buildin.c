@@ -56,9 +56,14 @@ void	ft_cd_buildin(t_process *process, t_global *global)
 		temp = ft_cd_env("HOME", process, global);
 	else if (ft_strncmp(process->args[1], "-", 2) == 0)
 	{
-		temp = ft_cd_env("OLDPWD", process, global);
-		if (temp)
-			printf("%s\n", temp);
+		if (ft_arr_len(process->args) > 2)
+			return (ft_error_buildin("too many arguments", NULL, process, 1));
+		else
+		{
+			temp = ft_cd_env("OLDPWD", process, global);
+			if (temp)
+				printf("%s\n", temp);
+		}
 	}
 	else if (process->args[1][0] == '/' || process->args[1][0] == '.')
 		temp = ft_strdup(process->args[1]);
