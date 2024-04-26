@@ -50,19 +50,19 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 		return (errno = 21, NULL);
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (ft_strdup(cmd));
-	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0 || ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
+	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0
+		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
 		return (NULL);
 	dirs = ft_split(path, ':');
 	ind = 0;
 	while (dirs[ind])
 	{
-		cmd_path = ft_check_cmd_path(dirs, cmd, ind);
+		cmd_path = ft_check_cmd_path(dirs, cmd, ind++);
 		if (cmd_path)
 		{
 			ft_arr_free((void **)dirs);
 			return (cmd_path);
 		}
-		ind++;
 	}
 	ft_arr_free((void **)dirs);
 	errno = 0;
