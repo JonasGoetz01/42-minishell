@@ -118,6 +118,7 @@ char					*ft_get_env(char *name, char **envv);
 char					*ft_trim_to_equal(char *str);
 char					*ft_trim_from_equal(char *str);
 bool					ft_is_valid_identifier(char *str);
+char					*ft_get_file_name(t_ast_node *node);
 
 t_token					*tokenize(const char *input);
 

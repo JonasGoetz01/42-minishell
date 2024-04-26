@@ -1,39 +1,44 @@
 #include "../../inc/minishell.h"
 
-static void	ft_exec_buildin(t_process *process, t_global *global)
+static void	ft_buildin_dup(t_process *process, int *dup_stdin, int *dup_stdout)
 {
-	int	dup_STDIN;
-	int	dup_STDOUT;
-
-	dup_STDIN = -1;
-	dup_STDOUT = -1;
 	if (ft_get_fd(process->file_in) != -1)
 	{
-		dup_STDIN = dup(STDIN_FILENO);
+		*dup_stdin = dup(STDIN_FILENO);
 		dup2(ft_get_fd(process->file_in), STDIN_FILENO);
 	}
 	else if (ft_get_fd(process->fd_in[PIPE_READ]) != -1)
 	{
-		dup_STDIN = dup(STDIN_FILENO);
+		*dup_stdin = dup(STDIN_FILENO);
 		dup2(ft_get_fd(process->fd_in[PIPE_READ]), STDIN_FILENO);
 	}
 	if (ft_get_fd(process->file_out) != -1)
 	{
-		dup_STDOUT = dup(STDOUT_FILENO);
+		*dup_stdout = dup(STDOUT_FILENO);
 		dup2(ft_get_fd(process->file_out), STDOUT_FILENO);
 	}
 	else if (ft_get_fd(process->fd_out[PIPE_WRITE]) != -1)
 	{
-		dup_STDOUT = dup(STDOUT_FILENO);
+		*dup_stdout = dup(STDOUT_FILENO);
 		dup2(ft_get_fd(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
 	}
+}
+
+static void	ft_exec_buildin(t_process *process, t_global *global)
+{
+	int	dup_stdin;
+	int	dup_stdout;
+
+	dup_stdin = -1;
+	dup_stdout = -1;
+	ft_buildin_dup(process, &dup_stdin, &dup_stdout);
 	ft_exec_buildins(process, global);
-	if (dup_STDIN != -1)
-		dup2(dup_STDIN, STDIN_FILENO);
-	ft_close_fd(&dup_STDIN);
-	if (dup_STDOUT != -1)
-		dup2(dup_STDOUT, STDOUT_FILENO);
-	ft_close_fd(&dup_STDOUT);
+	if (dup_stdin != -1)
+		dup2(dup_stdin, STDIN_FILENO);
+	ft_close_fd(&dup_stdin);
+	if (dup_stdout != -1)
+		dup2(dup_stdout, STDOUT_FILENO);
+	ft_close_fd(&dup_stdout);
 }
 
 void	ft_execute_process(t_process *process, t_global *global)

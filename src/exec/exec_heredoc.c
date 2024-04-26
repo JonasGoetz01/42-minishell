@@ -29,7 +29,7 @@ void	ft_exec_here_doc(t_ast_node *node, t_global *global)
 	t_fd	*fd;
 
 	limiter = ft_get_file_name(node);
-	if (pipe(fd_pipe) == -1)
+	if (pipe(fd_pipe) != 0)
 		return (ft_print_error(strerror(errno), NULL));
 	ft_read_here_doc(limiter, fd_pipe);
 	close(fd_pipe[PIPE_WRITE]);
