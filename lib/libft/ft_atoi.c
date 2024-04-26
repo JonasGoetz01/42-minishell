@@ -27,9 +27,5 @@ int	ft_atoi(const char *str)
 			sign *= -1;
 	while (ft_isdigit(*str))
 		ret = ret * 10 + sign * (*str++ - '0');
-	if (ret > 2147483647)
-		return (-1);
-	else if (ret < -2147483648)
-		return (0);
 	return ((int)ret);
 }
