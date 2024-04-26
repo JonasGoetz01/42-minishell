@@ -20,7 +20,13 @@ t_process	*ft_exec_cmd(t_token *token, t_ast_node *node, t_global *global)
 	while (token)
 	{
 		if (token->type == TOKEN_ARG)
-			args = ft_arr_add(token->value, args);
+		{
+			if (!ft_arr_add(token->value, &args))
+			{
+				ft_arr_free((void **) args);
+				return (NULL);
+			}
+		}
 		token = token->next;
 	}
 	process = ft_create_process(cmd, args, node);
