@@ -1,25 +1,51 @@
 #include "../../inc/minishell.h"
 
-static void	ft_set_env(char *str, t_global *global)
+static void	ft_set_env(char *name, char *value, t_global *global)
 {
+	ft_set_env_env(name, value, &global->envv);
+	ft_set_env_export(name, value, &global->env_export);
+}
+
+static void	ft_loop_args(t_process *process, t_global *global)
+{
+	t_token	*token;
 	char	*name;
 	char	*value;
 
-	name = ft_trim_to_equal(str);
-	if (!name)
-		return ;
-	value = ft_trim_from_equal(str);
-	ft_set_env_env(name, value, &global->envv);
-	ft_set_env_export(name, value, &global->env_export);
-	free(name);
-	if (value)
-		free(value);
+	name = NULL;
+	value = NULL;
+	token = process->token;
+	while (token)
+	{
+		if (token->type == TOKEN_ARG)
+		{
+			if (token->value[0] != '=')
+			{
+				if (name == NULL)
+					name = token->value;
+				else
+					value = token->value;
+			}
+		}
+		else if (token->type != TOKEN_SINGLE_QUOTE && token->type != TOKEN_DOUBLE_QUOTE)
+		{
+			if (name != NULL)
+			{
+				if (ft_is_valid_identifier(name))
+					ft_set_env(name, value, global);
+				else
+					ft_error_buildin_env(token->value, process);
+			}
+			name = NULL;
+			value = NULL;
+		}
+		token = token->next;
+	}
 }
 
 void	ft_export_buildin(t_process *process, t_global *global)
 {
 	char	**export_env;
-	size_t	ind;
 
 	export_env = global->env_export;
 	if (!process->args[1])
@@ -31,13 +57,5 @@ void	ft_export_buildin(t_process *process, t_global *global)
 		}
 		return ;
 	}
-	ind = 1;
-	while (process->args[ind])
-	{
-		if (ft_is_valid_identifier(process->args[ind]))
-			ft_set_env(process->args[ind], global);
-		else
-			ft_error_buildin_env(process->args[ind], process);
-		ind++;
-	}
+	ft_loop_args(process, global);
 }
