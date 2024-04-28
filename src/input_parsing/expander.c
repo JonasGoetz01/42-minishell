@@ -45,7 +45,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			in_double_quotes = !in_double_quotes;
 		if (current_token->type == TOKEN_WORD && !in_single_quotes)
 		{
-			while (ft_strchr(current_token->value, '$') || (ft_strchr(current_token->value, '~') && !in_double_quotes))
+			while (ft_strchr(current_token->value, '$') || (ft_strchr(current_token->value, '~') && !in_double_quotes && ft_strlen(current_token->value) == 1))
 			{
 				if (ft_strchr(current_token->value, '$') && !ft_strchr(current_token->value, '~'))
 				{
