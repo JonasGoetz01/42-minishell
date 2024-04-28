@@ -85,6 +85,9 @@ static bool	ft_handle_redirects(t_ast_node *node, t_global *global,
 bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 	t_exec_flags *exec_flags, t_global *global)
 {
+	t_token_type	type;
+
+	type = 0;
 	while (token)
 	{
 		exec_flags->tok_typ = token->type;

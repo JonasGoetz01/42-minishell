@@ -26,8 +26,8 @@ void	process_input(char *input, t_global *global)
 		return (free(input));
 	else if (DEBUG)
 		printf("Input is valid\n");
-	combine_words_in_quotes(&tokens);
-	print_tokens(tokens);
+	//combine_words_in_quotes(&tokens);
+	//print_tokens(tokens);
 	rearrange_tokens(&tokens);
 	print_tokens(tokens);
 	gen_ast(&ast, tokens);
