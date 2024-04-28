@@ -75,20 +75,17 @@ void	remove_spaces_before_arguments(t_token **tokens)
 	prev = NULL;
 	while (current)
 	{
-		if (current->type == TOKEN_WORD)
+		if ((current->type == TOKEN_WORD && !prev) || (prev && isOperator(*prev) && current->next && current->next->type == TOKEN_SPACE))
 		{
 			prev = current;
 			current = current->next;
 			while (current && current->type == TOKEN_SPACE)
 			{
-				while (current->type == TOKEN_SPACE)
-				{
-					temp = current;
-					prev->next = current->next;
-					free(temp->value);
-					free(temp);
-					current = prev->next;
-				}
+				temp = current;
+				prev->next = current->next;
+				free(temp->value);
+				free(temp);
+				current = prev->next;
 			}
 		}
 		prev = current;
