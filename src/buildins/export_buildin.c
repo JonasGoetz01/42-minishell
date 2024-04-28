@@ -1,10 +1,27 @@
 #include "../../inc/minishell.h"
 
+static size_t	ft_count_equals(char *str)
+{
+	size_t	count;
+
+	if (str == NULL)
+		return (0);
+	count = 0;
+	while (*str)
+	{
+		count++;
+		str++;
+	}
+	return (count);
+}
+
 static void	ft_set_env(char *name, char *value, t_token *token, t_process *process, t_global *global)
 {
 	char	*trim_name;
 	char	*trim_value;
 
+	if (ft_count_equals(name) + ft_count_equals(value) > 1)
+		return ;
 	trim_name = ft_trim_to_equal(name);
 	trim_value = NULL;
 	if (trim_name == NULL)
