@@ -22,6 +22,14 @@ void	retokenize(t_token **tokens)
 			if (current->next)
 				current = current->next;
 		}
+		while (current->type == TOKEN_SPACE && current->next && current->next->type == TOKEN_SPACE)
+		{
+			temp = current->next;
+			current->next = temp->next;
+			free(temp->value);
+			free(temp);
+			//current = current->next;
+		}
 		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
 			value = current->value;
