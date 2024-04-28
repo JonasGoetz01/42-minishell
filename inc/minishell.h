@@ -235,4 +235,5 @@ bool					next_is_brackets(t_token *token);
 
 void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
+
 #endif
