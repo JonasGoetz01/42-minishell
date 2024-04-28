@@ -235,11 +235,4 @@ bool					next_is_brackets(t_token *token);
 
 void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
-
-bool					next_is_operator(t_token *token);
-bool					next_is_word(t_token *token);
-bool					next_is_newline(t_token *token);
-bool					next_is_quotes(t_token *token);
-bool					next_is_brackets(t_token *token);
-
 #endif
