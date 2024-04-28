@@ -49,10 +49,10 @@ int	input_validation(t_token **tokens)
 	while (current)
 	{
 		if (!prev && (current->type == TOKEN_PIPE))
-			return (printf("Invalid input!\n"), 1);
+			return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_LESS && current->next
 			&& current->next->type == TOKEN_GREATER)
-			return (printf("Invalid input!\n"), 1);
+			return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
 		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
@@ -65,6 +65,6 @@ int	input_validation(t_token **tokens)
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
-		return (printf("Invalid input!\n"), 1);
+		return (ft_print_error("syntax error", NULL), 1);
 	return (0);
 }
