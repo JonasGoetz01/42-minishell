@@ -73,8 +73,8 @@ char	*build_prompt(t_global *global)
 	temp = ft_strjoin(prompt, KMAG);
 	free(prompt);
 	prompt = temp;
-	temp = ft_strjoin(prompt, get_hostname());
-	free(prompt);
+	// temp = ft_strjoin(prompt, get_hostname());
+	// free(prompt);
 	prompt = temp;
 	temp = ft_strjoin(prompt, reset_color);
 	free(prompt);

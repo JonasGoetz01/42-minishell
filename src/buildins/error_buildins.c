@@ -28,4 +28,5 @@ void	ft_error_buildin_env(const char *arg, t_process *process)
 	if (!str)
 		return (free(temp));
 	ft_error_buildin("not a valid identifier", str, process, 1);
+	process->exit_status = 1;
 }
