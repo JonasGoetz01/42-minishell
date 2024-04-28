@@ -19,6 +19,8 @@ void	retokenize(t_token **tokens)
 			temp = current;
 			while (current->next && current->next->type != temp->type)
 				current = current->next;
+			if (current->next)
+				current = current->next;
 		}
 		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
