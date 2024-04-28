@@ -2,11 +2,19 @@
 
 char	*ft_get_file_name(t_ast_node *node)
 {
+	t_token	*token;
+
 	if (node->right)
 	{
 		if (node->right->token)
 		{
-			return (node->right->token->value);
+			token = node->right->token;
+			while (token)
+			{
+				if (token->type == TOKEN_ARG)
+					return (token->value);
+				token = token->next;
+			}
 		}
 	}
 	return (NULL);
