@@ -90,8 +90,8 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					*file_in;
-	int *(fd_out[2]);
-	int *(fd_in[2]);
+	int					*(fd_out[2]);
+	int					*(fd_in[2]);
 	int					*file_out;
 	int					exit_status;
 	t_process			*process;
@@ -99,6 +99,7 @@ typedef struct s_ast_node
 
 typedef struct s_global
 {
+	bool				should_exit;
 	int					exit_status;
 	char				**envv;
 	char				**env_export;
@@ -231,5 +232,8 @@ bool					next_is_word(t_token *token);
 bool					next_is_newline(t_token *token);
 bool					next_is_quotes(t_token *token);
 bool					next_is_brackets(t_token *token);
+
+void					ft_free_nodes(t_ast_node *node);
+void					ft_free_global(t_global *global);
 
 #endif

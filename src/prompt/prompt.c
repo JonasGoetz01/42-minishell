@@ -32,6 +32,7 @@ void	process_input(char *input, t_global *global)
 	print_tokens(tokens);
 	gen_ast(&ast, tokens);
 	ft_exec_all(ast, global);
+	ft_free_nodes(ast);
 	free(input);
 }
 
@@ -41,7 +42,9 @@ char	*build_prompt(t_global *global)
 	char	*temp;
 	char	*reset_color;
 	char	*username;
+	char	*pwd;
 
+	pwd = getcwd(NULL, 0);
 	prompt = ft_strdup("");
 	reset_color = ft_strdup(KNRM);
 	temp = ft_strjoin(prompt, KGRN);
@@ -85,7 +88,7 @@ char	*build_prompt(t_global *global)
 	temp = ft_strjoin(prompt, KBLU);
 	free(prompt);
 	prompt = temp;
-	temp = ft_strjoin(prompt, getcwd(NULL, 0));
+	temp = ft_strjoin(prompt, pwd);
 	free(prompt);
 	prompt = temp;
 	temp = ft_strjoin(prompt, KGRN);
@@ -97,6 +100,7 @@ char	*build_prompt(t_global *global)
 	temp = ft_strjoin(prompt, reset_color);
 	free(prompt);
 	free(reset_color);
+	free(pwd);
 	return (temp);
 }
 

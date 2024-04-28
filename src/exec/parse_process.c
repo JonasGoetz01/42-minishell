@@ -8,7 +8,7 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 	if (process == NULL)
 		return (NULL);
 	process->is_buildin = false;
-	process->cmd = cmd;
+	process->cmd = ft_strdup(cmd);
 	process->args = args;
 	process->file_in = node->file_in;
 	process->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
@@ -98,7 +98,7 @@ bool	ft_verify_process(t_process *process, t_global *global)
 	path = ft_get_env("PATH", global->envv);
 	new_cmd = ft_get_cmd_path(lc_cmd, path);
 	free(lc_cmd);
-	if (!path)
+	if (path)
 		free(path);
 	if (new_cmd)
 	{
