@@ -87,6 +87,7 @@ t_token_type	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 {
 	t_token_type	type;
 
+	type = 0;
 	while (token)
 	{
 		type = token->type;

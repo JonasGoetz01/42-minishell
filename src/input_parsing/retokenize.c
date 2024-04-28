@@ -13,20 +13,13 @@ void	retokenize(t_token **tokens)
 	prev = NULL;
 	while (current)
 	{
-		if ((current->type == TOKEN_SINGLE_QUOTE
-				|| current->type == TOKEN_DOUBLE_QUOTE) && current->next
-			&& current->next->type == current->type)
-		{
-			new_token = create_token(TOKEN_WORD, "\0");
-			temp = current->next;
-			current->next = new_token;
-			new_token->next = temp;
-		}
 		if (current->type == TOKEN_SINGLE_QUOTE
 			|| current->type == TOKEN_DOUBLE_QUOTE)
 		{
 			temp = current;
 			while (current->next && current->next->type != temp->type)
+				current = current->next;
+			if (current->next)
 				current = current->next;
 		}
 		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
