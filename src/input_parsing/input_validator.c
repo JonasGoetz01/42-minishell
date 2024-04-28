@@ -20,11 +20,11 @@ int	validator(char *input)
 	{
 		if (input[i] == '\'' && dquote == 0)
 			quote = !quote;
-		if (input[i] == '\"' && i == 0 && quote == 0)
+		if (input[i] == '\"' && quote == 0)
 			dquote = !dquote;
-		if (input[i] == '(' && i == 0 && dquote == 0 && quote == 0)
+		if (input[i] == '(' && dquote == 0 && quote == 0)
 			parenthesis++;
-		if (input[i] == ')' && i == 0 && dquote == 0 && quote == 0)
+		if (input[i] == ')' && dquote == 0 && quote == 0)
 			parenthesis--;
 		i++;
 	}
