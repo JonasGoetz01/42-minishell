@@ -6,8 +6,6 @@ void	ft_open_in_file(t_ast_node *node, t_global *global)
 	t_fd	*fd;
 
 	file_name = ft_get_file_name(node);
-	if (file_name == NULL)
-		return ;
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
@@ -41,8 +39,6 @@ void	ft_open_out_file(t_ast_node *node, t_global *global)
 	t_fd	*fd;
 
 	file_name = ft_get_file_name(node);
-	if (file_name == NULL)
-		return ;
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
@@ -76,8 +72,6 @@ void	ft_open_out_append_file(t_ast_node *node, t_global *global)
 	t_fd	*fd;
 
 	file_name = ft_get_file_name(node);
-	if (file_name == NULL)
-		return ;
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
