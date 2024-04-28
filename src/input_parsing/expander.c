@@ -65,7 +65,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					if (end - start == 0)
 					{
 						finish = 0;
-						while (current_token->next != NULL
+						while (current_token && current_token->next != NULL
 							&& (current_token->type != TOKEN_WORD
 								|| ft_strchr(current_token->value, '$') != NULL))
 						{
@@ -76,7 +76,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 							current_token = current_token->next;
 							finish = 1;
 						}
-						if (finish)
+						if (finish && current_token && current_token->next && current_token->next->next)
 						{
 							tmp = current_token->next->next;
 							free(current_token->next->value);
@@ -108,7 +108,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				}
 			}
 		}
-		current_token = current_token->next;
+		if (current_token)
+			current_token = current_token->next;
 	}
 	current_token = tokens;
 	while (current_token != NULL)
