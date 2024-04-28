@@ -1,5 +1,17 @@
 #include "../../inc/minishell.h"
 
+t_token_type get_next_type(t_token *token)
+{
+	t_token *current;
+
+	current = token;
+	while (current && current->type == TOKEN_SPACE)
+		current = current->next;
+	if (current)
+		return (current->type);
+	return (TOKEN_WORD);
+}
+
 // checks if the input is valid
 // checks for parenthesis, quotes, and other special characters
 // returns 0 if the input is valid, 1 if it is not
@@ -48,11 +60,29 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
-		if (!prev && (current->type == TOKEN_PIPE))
-			return (printf("Invalid input!\n"), 1);
-		if (current->type == TOKEN_LESS && current->next
-			&& current->next->type == TOKEN_GREATER)
-			return (printf("Invalid input!\n"), 1);
+		if ((!prev && (current->type == TOKEN_PIPE)) 
+			|| (current == *tokens && next_is_operator(current)))
+		{
+			while (current->type == TOKEN_SPACE)
+				current = current->next;
+			if (current->type == TOKEN_PIPE)
+				return (ft_print_error("syntax error", NULL), 1);
+		}
+		// if pipe comes after a operator
+		if (next_is_operator(current))
+		{
+			while (current->type == TOKEN_SPACE)
+				current = current->next;
+			if (next_is_operator(current->next))
+				return (ft_print_error("syntax error", NULL), 1);
+		}
+		// if the first token is a pipe
+		if ((current == *tokens) && (get_next_type(current) == TOKEN_PIPE))
+			return (ft_print_error("syntax error", NULL), 1);
+		// > needs word after it
+		if (current->type == TOKEN_GREATER && current->next &&
+			next_is_operator(current->next))
+			return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
 		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
@@ -65,6 +95,6 @@ int	input_validation(t_token **tokens)
 		current = current->next;
 	}
 	if (parenthesis != 0 || quote != 0 || dquote != 0)
-		return (printf("Invalid input!\n"), 1);
+		return (ft_print_error("syntax error", NULL), 1);
 	return (0);
 }

@@ -130,7 +130,7 @@ int	show_prompt(t_global *global)
 	add_history(input);
 	if (validator(input))
 	{
-		printf("Invalid input\n");
+		ft_print_error("syntax error", NULL);
 		free(input);
 		return (0);
 	}
