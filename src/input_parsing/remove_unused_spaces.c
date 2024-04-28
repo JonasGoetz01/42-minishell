@@ -163,6 +163,12 @@ void	remove_spaces_at_beginning_end(t_token **tokens)
 /// 2. in a string
 void	remove_unused_spaces(t_token **tokens)
 {
+	if (!tokens || !*tokens)
+		return ;
+	if ((*tokens)->type == TOKEN_SPACE && !(*tokens)->next)
+	{
+		(*tokens)->type = TOKEN_AMPERSAND;
+	}
 	remove_spaces_before_arguments(tokens);
 	remove_spaces_after_arguments(tokens);
 	remove_spaces_at_beginning_end(tokens);
