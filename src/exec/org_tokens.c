@@ -4,7 +4,7 @@ static void	ft_set_token_type_args(t_token *token)
 {
 	if (token == NULL)
 		return ;
-	token->type = TOKEN_CMD;
+	token->type = 0;
 	token = token->next;
 	while (token)
 	{
