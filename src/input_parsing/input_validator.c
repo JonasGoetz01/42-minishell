@@ -60,7 +60,8 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
-		if ((!prev && (current->type == TOKEN_PIPE)) || (current == *tokens && next_is_operator(current)))
+		if ((!prev && (current->type == TOKEN_PIPE)) 
+			|| (current == *tokens && next_is_operator(current)))
 		{
 			while (current->type == TOKEN_SPACE)
 				current = current->next;
