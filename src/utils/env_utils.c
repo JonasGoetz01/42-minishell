@@ -120,11 +120,10 @@ static bool ft_replace_env(char *name, char *str, char **envv)
 	if (!line)
 		return (false);
 	old_line = *line;
-	*line = ft_strdup(str);
+	*line = str;
 	if (!line)
 	{
 		*line = old_line;
-		free(name);
 		return (false);
 	}
 	free(old_line);

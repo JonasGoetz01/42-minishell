@@ -1,36 +1,48 @@
 #include "../../inc/minishell.h"
 
-void	ft_exit_buildin(t_process *process, t_global *global)
+static void	ft_start_exit(int exit_status, t_global *global)
+{
+	global->should_exit = true;
+	global->exit_status = exit_status;
+}
+
+static bool	ft_con_num(char *arg1)
 {
 	size_t	ind;
-	char	*arg1;
 
-	arg1 = process->args[1];
-	if (global->isatty)
-		ft_putstr_fd("exit\n", 1);
-	if (!arg1)
-		exit(0);
 	ind = 0;
 	if (arg1[ind] == '+' || arg1[ind] == '-')
 		ind++;
 	while (arg1[ind])
 	{
 		if (!ft_isdigit(arg1[ind]))
-		{
-			ft_error_buildin("numeric argument required", arg1, process, 2);
-			exit(2);
-		}
+			return (true);
 		ind++;
 	}
-	if (process->args[2])
-	{
-		ft_error_buildin("too many arguments", NULL, process, 1);
-		return ;
-	}
-	if (arg1[0] == 0)
+	return (false);
+}
+
+void	ft_exit_buildin(t_process *process, t_global *global)
+{
+	char	*arg1;
+
+	arg1 = process->args[1];
+	if (global->isatty)
+		ft_putstr_fd("exit\n", 1);
+	if (!arg1)
+		ft_start_exit(0, global);
+	else if (ft_con_num(arg1))
 	{
 		ft_error_buildin("numeric argument required", arg1, process, 2);
-		exit(2);
+		ft_start_exit(2, global);
 	}
-	exit(ft_atoi(arg1));
+	else if (process->args[2])
+		ft_error_buildin("too many arguments", NULL, process, 1);
+	else if (arg1[0] == 0)
+	{
+		ft_error_buildin("numeric argument required", arg1, process, 2);
+		ft_start_exit(2, global);
+	}
+	else
+		ft_start_exit(ft_atoi(arg1), global);
 }
