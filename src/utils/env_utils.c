@@ -136,11 +136,11 @@ bool	ft_replace_env_export(char *name, char *value, char **envv)
 	char	*temp;
 	char	*str;
 
+	if (value == NULL)
+		return (false);
 	temp = ft_strdup(name);
 	if (!temp)
 		return (false);
-	if (!value)
-		return (ft_replace_env(name, temp, envv));
 	str = ft_strjoin(temp, "=\"");
 	free(temp);
 	if (!str)
@@ -161,7 +161,7 @@ bool	ft_replace_env_env(char *name, char *value, char **envv)
 	char	*temp;
 	char	*str;
 
-	if (!value)
+	if (value == NULL)
 		return false;
 	temp = ft_strdup(name);
 	if (!temp)
