@@ -82,33 +82,30 @@ static bool	ft_handle_redirects(t_ast_node *node, t_global *global,
 	return (true);
 }
 
-t_token_type	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
+bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 	t_exec_flags *exec_flags, t_global *global)
 {
-	t_token_type	type;
-
-	type = 0;
 	while (token)
 	{
-		type = token->type;
-		ft_parseon_fds(node, type, exec_flags);
-		if (ft_handle_redirects(node, global, type, exec_flags))
+		exec_flags->tok_typ = token->type;
+		ft_parseon_fds(node, exec_flags->tok_typ, exec_flags);
+		if (ft_handle_redirects(node, global, exec_flags->tok_typ, exec_flags))
 			;
-		else if (type == TOKEN_PIPE)
+		else if (exec_flags->tok_typ == TOKEN_PIPE)
 		{
 			if (!ft_handle_pipe_token(node, global))
-				return (-1);
+				return (false);
 			exec_flags->next_wait = false;
 		}
-		else if (type == TOKEN_CMD && ft_get_fd(node->file_in) != -2
+		else if (exec_flags->tok_typ == TOKEN_CMD && ft_get_fd(node->file_in) != -2
 			&& ft_get_fd(node->file_out) != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, global);
-		else if (type == TOKEN_CMD
+		else if (exec_flags->tok_typ == TOKEN_CMD
 			&& (ft_get_fd(node->file_in) == -2
 				|| ft_get_fd(node->file_out) == -2)
 			&& !node->process)
 			node->exit_status = 1;
 		token = token->next;
 	}
-	return (type);
+	return (true);
 }

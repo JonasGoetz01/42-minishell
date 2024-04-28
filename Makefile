@@ -18,7 +18,6 @@ VPATH	:=	src \
 			tests/unit
 
 INC		:=	colors.h \
-			exec.h \
 			minishell.h
 
 SOURCES	:=	main.c \
