@@ -27,6 +27,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 	t_token	*current_token;
 	t_token	*tmp;
 	int		in_single_quotes;
+	int		in_double_quotes;
 	int		start;
 	int		end;
 	char	*temp;
@@ -34,14 +35,17 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 
 	current_token = tokens;
 	in_single_quotes = 0;
+	in_double_quotes = 0;
 	// tmp = NULL;
 	while (current_token != NULL)
 	{
 		if (current_token->type == TOKEN_SINGLE_QUOTE)
 			in_single_quotes = !in_single_quotes;
+		if (current_token->type == TOKEN_DOUBLE_QUOTE)
+			in_double_quotes = !in_double_quotes;
 		if (current_token->type == TOKEN_WORD && !in_single_quotes)
 		{
-			while (ft_strchr(current_token->value, '$') || ft_strchr(current_token->value, '~'))
+			while (ft_strchr(current_token->value, '$') || (ft_strchr(current_token->value, '~') && !in_double_quotes))
 			{
 				if (ft_strchr(current_token->value, '$') && !ft_strchr(current_token->value, '~'))
 				{
