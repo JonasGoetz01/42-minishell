@@ -97,8 +97,6 @@ bool	ft_verify_process(t_process *process, t_global *global)
 		ft_lower_str(lc_cmd);
 	path = ft_get_env("PATH", global->envv);
 	new_cmd = ft_get_cmd_path(lc_cmd, path);
-	if ((path == NULL && new_cmd == NULL) || (path[0] == 0 && new_cmd == NULL))
-		return (false);
 	free(lc_cmd);
 	if (!path)
 		free(path);

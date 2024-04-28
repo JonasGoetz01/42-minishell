@@ -57,13 +57,13 @@ char	**ft_fill_args(t_token *token, char *cmd)
 
 void	ft_handle_verify_process_error(t_process *process)
 {
-	if (errno == 21 || errno == 2)
+	if (errno != 0)
 	{
 		ft_print_error(strerror(errno), process->cmd);
-		if (errno == 21)
-			process->exit_status = 126;
-		else
+		if (errno != 21 && errno != 13)
 			process->exit_status = 127;
+		else
+			process->exit_status = 126;
 	}
 	else
 	{
