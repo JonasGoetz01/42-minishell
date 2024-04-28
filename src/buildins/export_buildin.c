@@ -9,7 +9,8 @@ static size_t	ft_count_equals(char *str)
 	count = 0;
 	while (*str)
 	{
-		count++;
+		if (*str == '=')
+			count++;
 		str++;
 	}
 	return (count);
