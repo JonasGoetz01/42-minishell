@@ -99,6 +99,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					temp = ft_strjoin(temp, &current_token->value[end]);
 					free(current_token->value);
 					current_token->value = ft_strdup(temp);
+					if (current_token->value[0] == '\0')
+						current_token->type = TOKEN_AMPERSAND;
 					free(temp);
 				}
 				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$'))
@@ -110,6 +112,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					temp = ft_strjoin(temp, &current_token->value[start + 1]);
 					free(current_token->value);
 					current_token->value = ft_strdup(temp);
+					if (current_token->value[0] == '\0')
+						current_token->type = TOKEN_AMPERSAND;
 					free(temp);
 				}
 			}
@@ -129,6 +133,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			temp = ft_expand_word(ft_strjoin("$", current_token->next->next->value), global) ;
 			free(current_token->next->value);
 			current_token->next->value = ft_strdup(temp);
+			if (current_token->next->value[0] == '\0')
+						current_token->type = TOKEN_AMPERSAND;
 			// free(temp);
 			tmp = current_token->next->next->next;
 			free(current_token->next->next->value);
