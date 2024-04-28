@@ -1,5 +1,17 @@
 #include "../../inc/minishell.h"
 
+t_token_type get_next_type(t_token *token)
+{
+	t_token *current;
+
+	current = token;
+	while (current && current->type == TOKEN_SPACE)
+		current = current->next;
+	if (current)
+		return (current->type);
+	return (TOKEN_WORD);
+}
+
 // checks if the input is valid
 // checks for parenthesis, quotes, and other special characters
 // returns 0 if the input is valid, 1 if it is not
@@ -48,7 +60,17 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
-		if (!prev && (current->type == TOKEN_PIPE))
+		if ((!prev && (current->type == TOKEN_PIPE)) || (current == *tokens && next_is_operator(current)))
+		{
+			while (current->type == TOKEN_SPACE)
+				current = current->next;
+			if (current->type == TOKEN_PIPE)
+				return (ft_print_error("syntax error", NULL), 1);
+		}
+		if ((current == *tokens) && ((get_next_type(current) == TOKEN_PIPE) || 
+			((get_next_type(current) == TOKEN_LESS 
+			&& current->next 
+			&& get_next_type(current->next) == TOKEN_PIPE))))
 			return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_LESS && current->next
 			&& current->next->type == TOKEN_GREATER)

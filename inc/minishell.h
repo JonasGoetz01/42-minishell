@@ -226,4 +226,10 @@ void					free_token(t_token **tokens);
 bool					ft_is_directory(const char *path);
 int						isOperator(t_token token);
 
+bool					next_is_operator(t_token *token);
+bool					next_is_word(t_token *token);
+bool					next_is_newline(t_token *token);
+bool					next_is_quotes(t_token *token);
+bool					next_is_brackets(t_token *token);
+
 #endif
