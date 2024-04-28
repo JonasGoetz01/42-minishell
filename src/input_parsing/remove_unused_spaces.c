@@ -7,10 +7,8 @@ bool	next_is_operator(t_token *token)
 	current = token;
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
-	{
-		if (isOperator(*current))
-			return (true);
-	}
+	if (current && isOperator(*current))
+		return (true);
 	return (false);
 }
 
@@ -21,10 +19,8 @@ bool	next_is_word(t_token *token)
 	current = token;
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
-	{
-		if (current->type == TOKEN_WORD)
-			return (true);
-	}
+	if (current && current->type == TOKEN_WORD)
+		return (true);
 	return (false);
 }
 
@@ -36,10 +32,8 @@ bool	next_is_newline(t_token *token)
 	current = token;
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
-	{
-		if (current)
-			return (false);
-	}
+	if (current)
+		return (false);
 	return (true);
 }
 
@@ -50,11 +44,9 @@ bool	next_is_quotes(t_token *token)
 	current = token;
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
-	{
-		if (current->type == TOKEN_SINGLE_QUOTE
-			|| current->type == TOKEN_DOUBLE_QUOTE)
-			return (true);
-	}
+	if (current && (current->type == TOKEN_SINGLE_QUOTE
+		|| current->type == TOKEN_DOUBLE_QUOTE))
+		return (true);
 	return (false);
 }
 
