@@ -34,7 +34,8 @@ void	free_tokens(t_token *tokens)
 	while (tokens != NULL)
 	{
 		next = tokens->next;
-		free(tokens->value);
+		if (tokens->value)
+			free(tokens->value);
 		free(tokens);
 		tokens = next;
 	}
