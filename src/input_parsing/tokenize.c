@@ -30,6 +30,10 @@ t_token	*tokenize(const char *input)
 			{
 				if (input[i + 1] == '\"')
 				{
+					type = TOKEN_WORD;
+					value = ft_strdup("");
+					new_token = create_token(type, value);
+					append_token(&tokens, new_token);
 					i += 2;
 					continue ;
 				}
