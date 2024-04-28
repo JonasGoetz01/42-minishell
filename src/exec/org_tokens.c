@@ -23,7 +23,15 @@ static void	ft_set_token_type_redirs(t_ast_node *node, t_token *token)
 		if (node->right)
 		{
 			if (node->right->token)
-				node->right->token->type = TOKEN_ARG;
+			{
+				token = node->right->token;
+				while (token)
+				{
+					if (token->type == TOKEN_WORD)
+						token->type = TOKEN_ARG;
+					token = token->next;
+				}
+			}
 		}
 	}
 }
@@ -37,6 +45,7 @@ void	ft_org_tokens(t_ast_node *node)
 	token = node->token;
 	if (!token)
 		return ;
+	ft_set_token_type_redirs(node, token);
 	while (token)
 	{
 		if (token->type == TOKEN_WORD)
@@ -44,8 +53,6 @@ void	ft_org_tokens(t_ast_node *node)
 		token = token->next;
 	}
 	ft_set_token_type_args(token);
-	token = node->token;
-	ft_set_token_type_redirs(node, token);
 	ft_org_tokens(node->left);
 	ft_org_tokens(node->right);
 }
