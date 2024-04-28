@@ -9,7 +9,13 @@ void	ft_open_in_file(t_ast_node *node, t_global *global)
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
-	fd->fd_file = open(file_name, O_RDONLY);
+	if (file_name == NULL)
+	{
+		fd->fd_file = -1;
+		errno = 11;
+	}
+	else
+		fd->fd_file = open(file_name, O_RDONLY);
 	if (fd->fd_file == -1)
 	{
 		ft_print_error(strerror(errno), file_name);
@@ -36,7 +42,13 @@ void	ft_open_out_file(t_ast_node *node, t_global *global)
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
-	fd->fd_file = open(file_name, O_TRUNC | O_WRONLY | O_CREAT, 0644);
+	if (file_name == NULL)
+	{
+		fd->fd_file = -1;
+		errno = 11;
+	}
+	else
+		fd->fd_file = open(file_name, O_TRUNC | O_WRONLY | O_CREAT, 0644);
 	if (fd->fd_file == -1)
 	{
 		ft_print_error(strerror(errno), file_name);
@@ -63,7 +75,13 @@ void	ft_open_out_append_file(t_ast_node *node, t_global *global)
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
-	fd->fd_file = open(file_name, O_APPEND | O_WRONLY | O_CREAT, 0644);
+	if (file_name == NULL)
+	{
+		fd->fd_file = -1;
+		errno = 11;
+	}
+	else
+		fd->fd_file = open(file_name, O_APPEND | O_WRONLY | O_CREAT, 0644);
 	if (fd->fd_file == -1)
 	{
 		ft_print_error(strerror(errno), file_name);

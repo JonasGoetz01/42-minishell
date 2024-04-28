@@ -4,22 +4,25 @@ static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
 {
 	char	*line;
 
+	limiter = ft_strjoin(limiter, "\n");
+	if (limiter == NULL)
+		return ;
 	while (true)
 	{
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
-		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
 		{
 			free(line);
 			get_next_line(-1);
 			break ;
 		}
 		ft_putstr_fd(line, fd_pipe[PIPE_WRITE]);
-		ft_putstr_fd("\n", fd_pipe[PIPE_WRITE]);
 		free(line);
 	}
+	free(limiter);
 }
 
 void	ft_exec_here_doc(t_ast_node *node, t_global *global)
