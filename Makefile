@@ -60,7 +60,8 @@ SOURCES	:=	main.c \
 			rearrange_tokens.c \
 			remove_unused_spaces.c \
 			retokenize.c \
-			token_utils_2.c
+			token_utils_2.c \
+			cleanup.c
 
 
 OBJDIR	:=	obj

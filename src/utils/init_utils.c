@@ -30,6 +30,7 @@ static bool	ft_env_cpy(char **src, char ***dst)
 
 void	ft_init_t_global(t_global *global, char **envv)
 {
+	global->should_exit = false;
 	global->envv = ft_arr_create_len(ft_arr_len(envv) + 1);
 	if (!global->envv)
 		exit(1);

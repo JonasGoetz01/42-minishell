@@ -46,10 +46,11 @@ int	main(int argc, char **argv, char **envv)
 	ft_init_t_global(&global, envv);
 	if (global.isatty)
 		print_welcome_message(&global);
-	while (1)
+	while (true)
 	{
-		if (show_prompt(&global))
+		if (show_prompt(&global) || global.should_exit)
 			break ;
 	}
+	ft_free_global(&global);
 	return (global.exit_status);
 }

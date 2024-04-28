@@ -4,7 +4,7 @@ void	ft_execute_nodes(t_ast_node *node, bool wait, t_global *global)
 {
 	t_exec_flags	exec_flags;
 
-	if (!node)
+	if (!node || global->should_exit)
 		return ;
 	exec_flags.wait = wait;
 	exec_flags.next_wait = wait;
