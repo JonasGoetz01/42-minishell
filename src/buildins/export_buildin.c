@@ -1,9 +1,52 @@
 #include "../../inc/minishell.h"
 
-static void	ft_set_env(char *name, char *value, t_global *global)
+static void	ft_set_env(char *name, char *value, t_token *token, t_process *process, t_global *global)
 {
-	ft_set_env_env(name, value, &global->envv);
-	ft_set_env_export(name, value, &global->env_export);
+	char	*trim_name;
+	char	*trim_value;
+
+	trim_name = ft_trim_to_equal(name);
+	trim_value = NULL;
+	if (trim_name == NULL)
+		return ;
+	if (ft_is_valid_identifier(trim_name))
+	{
+		if (value == NULL)
+			value = ft_trim_from_equal(name);
+		else
+		{
+			trim_value = ft_trim_from_equal(value);
+			if (trim_value != NULL)
+				value = trim_value;
+		}
+		ft_set_env_env(trim_name, value, &global->envv);
+		ft_set_env_export(trim_name, value, &global->env_export);
+	}
+	else
+		ft_error_buildin_env(token->value, process);
+	free(trim_name);
+	if (trim_value != NULL)
+		free(trim_value);
+}
+
+static bool	ft_ignore_equals(t_token *token)
+{
+	if (ft_strncmp(token->value, "=", 2) == 0)
+	{
+		if (token->next)
+			return (token->next->type == TOKEN_SINGLE_QUOTE || token->next->type == TOKEN_DOUBLE_QUOTE);
+	}
+	return (false);
+}
+
+static bool	ft_next_token_invalid(t_token *token)
+{
+	if (token->next)
+	{
+		token = token->next;
+		return (token->type == TOKEN_SPACE);
+	}
+	return (true);
 }
 
 static void	ft_loop_args(t_process *process, t_global *global)
@@ -19,7 +62,7 @@ static void	ft_loop_args(t_process *process, t_global *global)
 	{
 		if (token->type == TOKEN_ARG)
 		{
-			if (token->value[0] != '=')
+			if (!ft_ignore_equals(token))
 			{
 				if (name == NULL)
 					name = token->value;
@@ -27,15 +70,10 @@ static void	ft_loop_args(t_process *process, t_global *global)
 					value = token->value;
 			}
 		}
-		else if (token->type != TOKEN_SINGLE_QUOTE && token->type != TOKEN_DOUBLE_QUOTE)
+		if (ft_next_token_invalid(token))
 		{
 			if (name != NULL)
-			{
-				if (ft_is_valid_identifier(name))
-					ft_set_env(name, value, global);
-				else
-					ft_error_buildin_env(token->value, process);
-			}
+				ft_set_env(name, value, token, process, global);
 			name = NULL;
 			value = NULL;
 		}
