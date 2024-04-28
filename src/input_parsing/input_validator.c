@@ -72,8 +72,9 @@ int	input_validation(t_token **tokens)
 			&& current->next 
 			&& get_next_type(current->next) == TOKEN_PIPE))))
 			return (ft_print_error("syntax error", NULL), 1);
-		if (current->type == TOKEN_LESS && current->next
-			&& current->next->type == TOKEN_GREATER)
+		// > needs word after it
+		if (current->type == TOKEN_GREATER && current->next &&
+			next_is_operator(current->next))
 			return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;
