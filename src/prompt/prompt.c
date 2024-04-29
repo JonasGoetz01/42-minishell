@@ -117,7 +117,7 @@ int	show_prompt(t_global *global)
 	}
 	else
 	{
-		input = get_next_line(fileno(stdin));
+		input = get_next_line(STDIN_FILENO);
 		input = ft_strtrim(input, "\n");
 	}
 	if (!input)
