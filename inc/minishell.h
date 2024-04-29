@@ -48,7 +48,8 @@ typedef enum e_token_type
 	TOKEN_SINGLE_QUOTE,
 	TOKEN_CMD,
 	TOKEN_ARG,
-	TOKEN_SPACE
+	TOKEN_SPACE,
+	TOKEN_IGNORE
 }						t_token_type;
 
 typedef struct s_token
