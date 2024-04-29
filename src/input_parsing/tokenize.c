@@ -17,7 +17,7 @@ t_token	*tokenize(const char *input)
 		if ((input[0] == '\"' && input[1] == '\"') || (input[0] == '\''
 				&& input[1] == '\''))
 		{
-			new_token = create_token(TOKEN_DOUBLE_AMPERSAND, NULL);
+			new_token = create_token(TOKEN_WORD, ft_strdup(""));
 			append_token(&tokens, new_token);
 			return (tokens);
 		}
