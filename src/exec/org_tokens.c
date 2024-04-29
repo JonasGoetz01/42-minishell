@@ -9,9 +9,9 @@ static void ft_combine_tokens(t_token *token1, t_token *token2)
 	new_value = ft_strjoin(token1->value, token2->value);
 	if (new_value == NULL)
 		return ;
-	free(token1->value);
-	token1->value = new_value;
-	token2->type = TOKEN_IGNORE;
+	free(token2->value);
+	token2->value = new_value;
+	token1->type = TOKEN_IGNORE;
 }
 
 static void ft_combine_words(t_token *token)
@@ -29,7 +29,8 @@ static void ft_combine_words(t_token *token)
 				{
 					ft_combine_tokens(token, next);
 					break ;
-				} else if (next->type == TOKEN_SPACE)
+				}
+				else if (next->type == TOKEN_SPACE)
 					break ;
 				next = next->next;
 			}
@@ -42,9 +43,9 @@ static void	ft_set_token_type_args(t_token *token)
 {
 	if (token == NULL)
 		return ;
+	ft_combine_words(token);
 	token->type = TOKEN_CMD;
 	token = token->next;
-	ft_combine_words(token);
 	while (token)
 	{
 		if (token->type == TOKEN_WORD)
