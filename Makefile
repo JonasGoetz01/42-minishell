@@ -30,8 +30,6 @@ SOURCES	:=	main.c \
 			exit_buildin.c \
 			unset_buildin.c \
 			export_buildin.c \
-			get_hostname.c \
-			exec_command.c \
 			exec_pipe.c \
 			exec_heredoc.c \
 			prompt.c \
