@@ -47,9 +47,9 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 		{
 			while (ft_strchr(current_token->value, '$') || (ft_strchr(current_token->value, '~') && !in_double_quotes && ft_strlen(current_token->value) == 1))
 			{
-				if (ft_strchr(current_token->value, '$') && !ft_strchr(current_token->value, '~'))
+				if (ft_strchr(current_token->value, '$') && ft_strlen(current_token->value) > 1 && !ft_strchr(current_token->value, '~'))
 				{
-					if (ft_strlen(current_token->value) == 1 && (!current_token->next || current_token->next->value[0] == ' '))
+					if (ft_strlen(current_token->value) == 1 && (!current_token->next || current_token->next->value[0] == ' ' || current_token->next->value[0] == '\0'))
 					{
 						if (current_token->next)
 						{
@@ -116,6 +116,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						current_token->type = TOKEN_AMPERSAND;
 					free(temp);
 				}
+				if (ft_strlen(current_token->value) <= 1)
+					current_token = current_token->next;
 			}
 		}
 		if (current_token)
@@ -126,7 +128,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 	{
 		if (current_token->next && current_token->next->type == TOKEN_WORD 
 			&& ft_strlen(current_token->next->value) == 1 
-			&& current_token->next->value[0] == '$')
+			&& current_token->next->value[0] == '$' && ft_strlen(current_token->next->value) > 1)
 		{
 			if (!current_token->next->next)
 				break ;
