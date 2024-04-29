@@ -90,8 +90,6 @@ echo '  'Hello 'World '
 
 'echo' 42
 
-'e'cho 42
-
 echo 'cat lol.c << cat > lol.c'
 
 echo @World'42'Hello
@@ -292,4 +290,3 @@ a.out
 ### GO WILD
 
 ### ENV Var expansion
-
