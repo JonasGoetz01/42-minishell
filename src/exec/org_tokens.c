@@ -43,7 +43,6 @@ static void	ft_set_token_type_args(t_token *token)
 {
 	if (token == NULL)
 		return ;
-	ft_combine_words(token);
 	token->type = TOKEN_CMD;
 	token = token->next;
 	while (token)
@@ -86,6 +85,7 @@ void	ft_org_tokens(t_ast_node *node)
 	if (!token)
 		return ;
 	ft_set_token_type_redirs(node, token);
+	ft_combine_words(token);
 	while (token)
 	{
 		if (token->type == TOKEN_WORD)
