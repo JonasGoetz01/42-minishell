@@ -35,7 +35,7 @@ char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 	if (!tmp)
 		return (NULL);
 	cmd_path = tmp;
-	if (access(cmd_path, F_OK | X_OK) == 0)
+	if (!ft_is_directory(cmd_path) && access(cmd_path, F_OK | X_OK) == 0)
 		return (cmd_path);
 	free(cmd_path);
 	return (NULL);
@@ -47,9 +47,9 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 	char	*cmd_path;
 	int		ind;
 
-	if (ft_is_directory(cmd))
+	if (ft_is_directory(cmd) && ft_strncmp(cmd, "..", 2) != 0)
 		return (errno = 21, NULL);
-	if (access(cmd, F_OK | X_OK) == 0)
+	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, "..", 2) != 0)
 		return (ft_strdup(cmd));
 	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0
 		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
