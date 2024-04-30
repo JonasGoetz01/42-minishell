@@ -36,55 +36,16 @@ void	process_input(char *input, t_global *global)
 	free(input);
 }
 
-char	*build_prompt(t_global *global)
+char	*build_prompt(void)
 {
 	char	*prompt;
 	char	*temp;
 	char	*reset_color;
-	char	*username;
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	prompt = ft_strdup("");
 	reset_color = ft_strdup(KNRM);
-	temp = ft_strjoin(prompt, KGRN);
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, "👤 ");
-	free(prompt);
-	prompt = temp;
-	username = ft_get_env("USER", global->envv);
-	if (username == NULL)
-	{
-		temp = ft_strjoin(prompt, "user");
-		free(prompt);
-		prompt = temp;
-	}
-	else
-	{
-		temp = ft_strjoin(prompt, username);
-		free(prompt);
-		prompt = temp;
-	}
-	free(username);
-	temp = ft_strjoin(prompt, reset_color);
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, "@");
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, KMAG);
-	free(prompt);
-	prompt = temp;
-	// temp = ft_strjoin(prompt, get_hostname());
-	// free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, reset_color);
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, "\n");
-	free(prompt);
-	prompt = temp;
 	temp = ft_strjoin(prompt, KBLU);
 	free(prompt);
 	prompt = temp;
@@ -111,7 +72,7 @@ int	show_prompt(t_global *global)
 
 	if (global->isatty)
 	{
-		prompt = build_prompt(global);
+		prompt = build_prompt();
 		input = readline(prompt);
 		free(prompt);
 	}
