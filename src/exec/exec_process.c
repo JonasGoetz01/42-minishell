@@ -79,7 +79,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
-		if (ft_exec_buildin_in_fork(node->process))
+		if (!node->process->is_buildin || ft_exec_buildin_in_fork(node->process))
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
 				node->exit_status = WEXITSTATUS(exit_status);
