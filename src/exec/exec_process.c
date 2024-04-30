@@ -7,20 +7,10 @@ static void	ft_buildin_dup(t_process *process, int *dup_stdin, int *dup_stdout)
 		*dup_stdin = dup(STDIN_FILENO);
 		dup2(ft_get_fd(process->file_in), STDIN_FILENO);
 	}
-	else if (ft_get_fd(process->fd_in[PIPE_READ]) != -1)
-	{
-		*dup_stdin = dup(STDIN_FILENO);
-		dup2(ft_get_fd(process->fd_in[PIPE_READ]), STDIN_FILENO);
-	}
 	if (ft_get_fd(process->file_out) != -1)
 	{
 		*dup_stdout = dup(STDOUT_FILENO);
 		dup2(ft_get_fd(process->file_out), STDOUT_FILENO);
-	}
-	else if (ft_get_fd(process->fd_out[PIPE_WRITE]) != -1)
-	{
-		*dup_stdout = dup(STDOUT_FILENO);
-		dup2(ft_get_fd(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
 	}
 }
 
@@ -43,11 +33,10 @@ static void	ft_exec_buildin(t_process *process, t_global *global)
 
 void	ft_execute_process(t_process *process, t_global *global)
 {
-	if (process->is_buildin)
-	{
-		ft_exec_buildin(process, global);
-		return ;
-	}
+	int	exit_code;
+
+	if (ft_exec_buildin_in_fork(process))
+		return (ft_exec_buildin(process, global));
 	process->pid = fork();
 	if (process->pid == -1)
 		return (ft_print_error(strerror(errno), process->cmd));
@@ -62,9 +51,20 @@ void	ft_execute_process(t_process *process, t_global *global)
 		else if (ft_get_fd(process->fd_out[PIPE_WRITE]) != -1)
 			dup2(ft_get_fd(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
 		ft_close_all_fds(global);
-		execve(process->cmd, process->args, global->envv);
-		ft_print_error(strerror(errno), process->cmd);
-		exit(1);
+		if (process->is_buildin)
+		{
+			ft_exec_buildins(process, global);
+			exit_code = process->exit_status;
+			ft_free_nodes(process->ast);
+			ft_free_global(global);
+			exit(exit_code);
+		}
+		else
+		{
+			execve(process->cmd, process->args, global->envv);
+			ft_print_error(strerror(errno), process->cmd);
+			exit(1);
+		}
 	}
 }
 
@@ -79,7 +79,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
-		if (!node->process->is_buildin)
+		if (!node->process->is_buildin || ft_exec_buildin_in_fork(node->process))
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
 				node->exit_status = WEXITSTATUS(exit_status);

@@ -1,7 +1,7 @@
 #include "../../inc/minishell.h"
 
 static t_process	*ft_exec_cmd(t_token *token,
-									t_ast_node *node, t_global *global)
+									t_ast_node *node, t_ast_node *ast, t_global *global)
 {
 	char		*cmd;
 	char		**args;
@@ -9,7 +9,7 @@ static t_process	*ft_exec_cmd(t_token *token,
 
 	cmd = token->value;
 	args = ft_fill_args(token, cmd);
-	process = ft_create_process(cmd, args, node);
+	process = ft_create_process(cmd, args, node, ast);
 	if (process == NULL)
 		return (NULL);
 	if (DEBUG)
@@ -99,7 +99,7 @@ bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 		}
 		else if (exec_flags->tok_typ == TOKEN_CMD && ft_get_fd(node->file_in) != -2
 			&& ft_get_fd(node->file_out) != -2 && !node->process)
-			node->process = ft_exec_cmd(token, node, global);
+			node->process = ft_exec_cmd(token, node, exec_flags->ast, global);
 		else if (exec_flags->tok_typ == TOKEN_CMD
 			&& (ft_get_fd(node->file_in) == -2
 				|| ft_get_fd(node->file_out) == -2)
