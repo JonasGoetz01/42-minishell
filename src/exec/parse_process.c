@@ -47,9 +47,9 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 	char	*cmd_path;
 	int		ind;
 
-	if (ft_is_directory(cmd) && ft_strncmp(cmd, "..", 2) != 0)
+	if (ft_is_directory(cmd) && cmd[0] != '.')
 		return (errno = 21, NULL);
-	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, "..", 2) != 0)
+	if (access(cmd, F_OK | X_OK) == 0 && cmd[0] != '.')
 		return (ft_strdup(cmd));
 	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0
 		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
