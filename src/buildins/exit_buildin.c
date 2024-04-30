@@ -45,5 +45,5 @@ void	ft_exit_buildin(t_process *process, t_global *global)
 		ft_start_exit(2, process, global);
 	}
 	else
-		ft_start_exit(ft_atoi(arg1), process, global);
+		ft_start_exit((unsigned char) ft_atoi(arg1), process, global);
 }
