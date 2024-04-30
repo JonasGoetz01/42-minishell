@@ -3,14 +3,12 @@
 void	retokenize(t_token **tokens)
 {
 	t_token	*current;
-	t_token	*prev;
-	char	*value;
-	char	*token_value;
-	t_token	*new_token;
 	t_token	*temp;
+	t_token	*new_token;
+	int		i;
+	char	**split;
 
 	current = *tokens;
-	prev = NULL;
 	while (current)
 	{
 		if (current->type == TOKEN_SINGLE_QUOTE
@@ -22,35 +20,43 @@ void	retokenize(t_token **tokens)
 			if (current->next)
 				current = current->next;
 		}
-		while (current->type == TOKEN_SPACE && current->next && current->next->type == TOKEN_SPACE)
+		else if (current->type == TOKEN_SPACE && current->next
+			&& current->next->type == TOKEN_SPACE)
 		{
 			temp = current->next;
 			current->next = temp->next;
 			free(temp->value);
 			free(temp);
-			//current = current->next;
 		}
-		if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
+		else if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))
 		{
-			value = current->value;
-			token_value = ft_strtok(value, " ");
-			while (token_value != NULL)
+			split = ft_split(current->value, ' ');
+			i = 0;
+			while (split[i])
 			{
-				new_token = create_token(TOKEN_WORD, ft_strdup(token_value));
-				if (prev)
-					prev->next = new_token;
+				if (i == 0)
+				{
+					free(current->value);
+					current->value = ft_strdup(split[i]);
+				}
 				else
-					*tokens = new_token;
-				prev = new_token;
-				token_value = ft_strtok(NULL, " ");
+				{
+					new_token = create_token(TOKEN_WORD, ft_strdup(split[i]));
+					new_token->next = current->next;
+					current->next = new_token;
+					current = current->next;
+				}
+				if (split[i + 1] != NULL)
+				{
+					new_token = create_token(TOKEN_SPACE, ft_strdup(" "));
+					new_token->next = current->next;
+					current->next = new_token;
+					current = current->next;
+				}
+				i++;
 			}
-			temp = current->next;
-			current = temp;
 		}
-		else
-		{
-			prev = current;
+		if (current)
 			current = current->next;
-		}
 	}
 }
