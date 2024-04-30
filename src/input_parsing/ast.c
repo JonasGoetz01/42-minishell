@@ -15,6 +15,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	int			brackets_level;
 	t_token		*prev_token;
 
+	if (!tokens)
+		return ;
 	highest_token = NULL;
 	brackets_level = 0;
 	highest_token_brackets_level = 0;
@@ -87,7 +89,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	right_arm = highest_token->next;
 	ast->token->next = NULL;
 	if (left_arm == highest_token)
-		left_arm = create_token(TOKEN_SPACE, "");
+		left_arm = NULL;
 	gen_ast(&(ast->left), left_arm);
 	gen_ast(&(ast->right), right_arm);
 }

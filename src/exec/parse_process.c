@@ -87,6 +87,8 @@ bool	ft_verify_process(t_process *process, t_global *global)
 	char	*lc_cmd;
 	char	*path;
 
+	if (process->cmd == NULL || process->cmd[0] == '\0')
+		return (false);
 	if (ft_is_buildin_cmd(process->cmd))
 	{
 		process->is_buildin = true;

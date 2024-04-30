@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	?=  -Wextra -Wall -Werror #-g -fsanitize=address -O1
+CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
 DEBUG ?=  1
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
