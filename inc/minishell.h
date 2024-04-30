@@ -68,17 +68,17 @@ typedef struct s_fd
 
 typedef struct s_process
 {
-	bool		is_buildin;
-	int			*file_in;
-	int			*fd_out[2];
-	int			*fd_in[2];
-	int			*file_out;
-	char		*cmd;
-	char		**args;
-	pid_t		pid;
-	int			exit_status;
-	t_token		*token;
-}				t_process;
+	bool				is_buildin;
+	int					*file_in;
+	int					*fd_out[2];
+	int					*fd_in[2];
+	int					*file_out;
+	char				*cmd;
+	char				**args;
+	pid_t				pid;
+	int					exit_status;
+	struct s_ast_node	*ast;
+}						t_process;
 
 typedef struct s_stack_new
 {
@@ -114,6 +114,7 @@ typedef struct s_exec_flags
 	bool				next_wait;
 	bool				exit_on_err;
 	t_token_type		tok_typ;
+	t_ast_node			*ast;
 }						t_exec_flags;
 
 
@@ -196,8 +197,9 @@ void					ft_execute_process(t_process *process,
 							t_global *global);
 void					ft_exec_all(t_ast_node *token, t_global *global);
 t_process				*ft_create_process(char *cmd, char **args,
-							t_ast_node *node);
+							t_ast_node *node, t_ast_node *ast);
 bool					ft_verify_process(t_process *process, t_global *global);
+bool					ft_exec_buildin_in_fork(t_process *process);
 
 //----
 t_stack					*create_stack(void);

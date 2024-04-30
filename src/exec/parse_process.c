@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
+t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node, t_ast_node *ast)
 {
 	t_process	*process;
 
@@ -18,7 +18,7 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node)
 	process->file_out = node->file_out;
 	process->pid = -1;
 	process->exit_status = -1;
-	process->token = node->token;
+	process->ast = ast;
 	return (process);
 }
 
