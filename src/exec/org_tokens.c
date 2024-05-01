@@ -20,12 +20,12 @@ static void ft_combine_words(t_token *token)
 
 	while (token)
 	{
-		if (token->type == TOKEN_WORD)
+		if (token->type == TOKEN_WORD || token->type == TOKEN_ARG)
 		{
 			next = token->next;
 			while (next)
 			{
-				if (next->type == TOKEN_WORD)
+				if (next->type == TOKEN_WORD || next->type == TOKEN_ARG)
 				{
 					ft_combine_tokens(token, next);
 					break ;
