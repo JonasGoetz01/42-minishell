@@ -60,6 +60,7 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
+		// if pipe comes after pipe
 		if ((!prev && (current->type == TOKEN_PIPE)) 
 			|| (current == *tokens && next_is_operator(current)))
 		{
@@ -69,13 +70,13 @@ int	input_validation(t_token **tokens)
 				return (ft_print_error("syntax error", NULL), 1);
 		}
 		// if pipe comes after a operator
-		if (next_is_operator(current))
-		{
-			while (current->type == TOKEN_SPACE)
-				current = current->next;
-			if (next_is_operator(current->next))
-				return (ft_print_error("syntax error", NULL), 1);
-		}
+		// if (next_is_operator(current))
+		// {
+		// 	while (current->type == TOKEN_SPACE)
+		// 		current = current->next;
+		// 	if (next_is_operator(current->next))
+		// 		return (ft_print_error("syntax error", NULL), 1);
+		// }
 		// if the first token is a pipe
 		if ((current == *tokens) && (get_next_type(current) == TOKEN_PIPE))
 			return (ft_print_error("syntax error", NULL), 1);
