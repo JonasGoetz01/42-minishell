@@ -94,18 +94,3 @@ char	**ft_expand_wildcard(char *str)
 		return (ft_arr_free((void **) arr), NULL);
 	return (arr);
 }
-
-int	main(int argc, char **argv)
-{
-	char **files;
-	char	**temp;
-
-	files = ft_expand_wildcard(argv[1]);
-	temp = files;
-	while (files && *files)
-	{
-		printf("%s\n", *files);
-		files++;
-	}
-	ft_arr_free((void **) temp);
-}
