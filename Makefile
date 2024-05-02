@@ -44,6 +44,7 @@ SOURCES	:=	main.c \
 			org_tokens.c \
 			exec_tokens.c \
 			exec_tokens_utils.c \
+			exec_process_utils.c \
 			exec_utils.c \
 			exec_files.c \
 			parse_process.c \

@@ -66,9 +66,16 @@ typedef struct s_fd
 	struct s_fd	*next;
 }				t_fd;
 
+typedef enum e_process_type
+{
+	PROCESS_BUILDIN,
+	PROCESS_BUILDIN_FORK,
+	PROCESS_FORK
+}						t_process_type;
+
 typedef struct s_process
 {
-	bool				is_buildin;
+	t_process_type		type;
 	int					*file_in;
 	int					*fd_out[2];
 	int					*fd_in[2];
@@ -200,6 +207,7 @@ t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node, t_ast_node *ast);
 bool					ft_verify_process(t_process *process, t_global *global);
 bool					ft_exec_buildin_in_fork(t_process *process);
+void					ft_execute_child_process(t_process *process, t_global *global);
 
 //----
 t_stack					*create_stack(void);
