@@ -137,18 +137,26 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				}
 				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$') && !in_single_quotes)
 				{
-					start = ft_strchr(current_token->value, '~')
-						- current_token->value;
-					temp = ft_substr(current_token->value, 0, start);
-					temp = ft_strjoin(temp, ft_get_env("HOME", global->envv));
-					temp = ft_strjoin(temp, &current_token->value[start + 1]);
-					free(current_token->value);
-					current_token->value = ft_strdup(temp);
-					if (current_token->value[0] == '\0')
-						current_token->type = TOKEN_WORD;
-					free(temp);
+					if (ft_strlen(current_token->value) == 1)
+					{
+						start = ft_strchr(current_token->value, '~')
+							- current_token->value;
+						temp = ft_substr(current_token->value, 0, start);
+						temp = ft_strjoin(temp, ft_get_env("HOME", global->envv));
+						temp = ft_strjoin(temp, &current_token->value[start + 1]);
+						free(current_token->value);
+						current_token->value = ft_strdup(temp);
+						if (current_token->value[0] == '\0')
+							current_token->type = TOKEN_WORD;
+						free(temp);
+					}
+					else 
+					{
+						prev = current_token;
+						current_token = current_token->next;
+					}
 				}
-				if (ft_strlen(current_token->value) <= 1)
+				if (current_token && ft_strlen(current_token->value) <= 1)
 				{
 					prev = current_token;
 					current_token = current_token->next;
