@@ -135,7 +135,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						current_token->type = TOKEN_WORD;
 					free(temp);
 				}
-				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$') && !in_single_quotes)
+				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$') && !in_single_quotes && ft_strlen(current_token->value) == 1)
 				{
 					start = ft_strchr(current_token->value, '~')
 						- current_token->value;
