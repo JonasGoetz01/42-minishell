@@ -93,12 +93,14 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 							&& (current_token->type != TOKEN_WORD
 								|| ft_strchr(current_token->value, '$') != NULL) && !in_single_quotes)
 						{
-							tmp = current_token->next->next;
-							free(current_token->next->value);
-							free(current_token->next);
-							current_token->next = tmp;
+							// tmp = current_token->next->next;
+							// free(current_token->next->value);
+							// free(current_token->next);
+							// current_token->next = tmp;
 							prev = current_token;
 							current_token = current_token->next;
+							if (!current_token)
+								break ;
 							if (current_token->type == TOKEN_SINGLE_QUOTE)
 								in_single_quotes = !in_single_quotes;
 							if (current_token->type == TOKEN_DOUBLE_QUOTE)
