@@ -22,6 +22,8 @@ void	process_input(char *input, t_global *global)
 	// print_tokens(tokens);
 	retokenize(&tokens);
 	print_tokens(tokens);
+	rearrange_tokens(&tokens);
+	print_tokens(tokens);
 	if (input_validation(&tokens))
 	{
 		global->exit_status = 2;
@@ -31,8 +33,6 @@ void	process_input(char *input, t_global *global)
 		printf("Input is valid\n");
 	//combine_words_in_quotes(&tokens);
 	//print_tokens(tokens);
-	rearrange_tokens(&tokens);
-	print_tokens(tokens);
 	gen_ast(&ast, tokens);
 	ft_exec_all(ast, global);
 	ft_free_nodes(ast);
