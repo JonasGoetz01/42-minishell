@@ -72,6 +72,10 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						if (current_token->next)
 						{
 							current_token = current_token->next;
+							if (current_token->type == TOKEN_SINGLE_QUOTE)
+								in_single_quotes = !in_single_quotes;
+							if (current_token->type == TOKEN_DOUBLE_QUOTE)
+								in_double_quotes = !in_double_quotes;
 							continue ;
 						}
 						else
@@ -90,7 +94,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					{
 						finish = 0;
 						while (current_token && current_token->next
-							&& (current_token->type != TOKEN_WORD
+							&& ((current_token->type != TOKEN_WORD && isOperator(*current_token))
 								|| ft_strchr(current_token->value, '$') != NULL) && !in_single_quotes)
 						{
 							prev = current_token;
