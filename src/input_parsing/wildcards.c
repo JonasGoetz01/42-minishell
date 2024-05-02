@@ -28,53 +28,70 @@ static char	**ft_get_files(void)
 	return (arr);
 }
 
-char	**ft_expand_wildcard(char *str)
+static void	ft_check_file(size_t *ind_str, size_t *ind_file, char *str, char **files)
+{
+	while (str[*ind_str] && (*files)[*ind_file])
+	{
+		if (str[*ind_str] == '*')
+		{
+			(*ind_str)++;
+			while ((*files)[*ind_file])
+			{
+				if ((*files)[*ind_file] == str[*ind_str])
+					break ;
+				(*ind_file)++;
+			}
+			if ((*files)[*ind_file] != str[*ind_str])
+				break ;
+		}
+		else if (str[*ind_str] != (*files)[*ind_file])
+			break ;
+		else
+		{
+			(*ind_str)++;
+			(*ind_file)++;
+		}
+	}
+}
+
+static bool	ft_expand_wildcard_loop(char ***arr, char **files, char *str)
 {
 	size_t	ind_str;
 	size_t	ind_file;
-	char	**files;
-	char	**files_start;
-	char	**arr;
 
-	arr = ft_arr_create();
-	if (ft_strnstr(str, "*", ft_strlen(str)) == NULL)
-		return (NULL);
-	files = ft_get_files();
-	files_start = files;
 	while (files && *files)
 	{
 		ind_str = 0;
 		ind_file = 0;
-		while (str[ind_str] && (*files)[ind_file])
-		{
-			if (str[ind_str] == '*')
-			{
-				ind_str++;
-				while ((*files)[ind_file])
-				{
-					if ((*files)[ind_file] == str[ind_str])
-						break ;
-					ind_file++;
-				}
-				if ((*files)[ind_file] != str[ind_str])
-					break ;
-			}
-			else if (str[ind_str] != (*files)[ind_file])
-				break ;
-			else
-			{
-				ind_str++;
-				ind_file++;
-			}
-		}
+		ft_check_file(&ind_str, &ind_file, str, files);
 		if (str[ind_str] == 0 && (*files)[ind_file] == 0)
 		{
-			if (!ft_arr_add(ft_strdup(*files), &arr))
-				return (ft_arr_free((void **) files), ft_arr_free((void **) arr), NULL);
+			if (!ft_arr_add(ft_strdup(*files), arr))
+				return (false);
 		}
 		files++;
 	}
-	ft_arr_free((void **) files_start);
+	return (true);
+}
+
+char	**ft_expand_wildcard(char *str)
+{
+	char	**files;
+	char	**arr;
+	bool	result;
+
+	arr = ft_arr_create();
+	if (ft_strnstr(str, "*", ft_strlen(str)) == NULL)
+	{
+		if (!ft_arr_add(ft_strdup(str), &arr))
+			return (ft_arr_free((void **) arr), NULL);
+		return (arr);
+	}
+	files = ft_get_files();
+	result = ft_expand_wildcard_loop(&arr, files, str);
+	ft_arr_free((void **) files);
+	if (!result)
+		return (ft_arr_free((void **) arr), NULL);
 	return (arr);
 }
 
