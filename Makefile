@@ -110,4 +110,7 @@ $(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+no-debug:
+	make CFLAGS="-Wextra -Wall -Werror -DDEBUG=0" re
+
 .PHONY: all clean fclean re
