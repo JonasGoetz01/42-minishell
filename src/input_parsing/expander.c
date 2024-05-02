@@ -156,7 +156,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						current_token = current_token->next;
 					}
 				}
-				if (ft_strlen(current_token->value) <= 1)
+				if (current_token && ft_strlen(current_token->value) <= 1)
 				{
 					prev = current_token;
 					current_token = current_token->next;
