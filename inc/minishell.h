@@ -66,9 +66,16 @@ typedef struct s_fd
 	struct s_fd	*next;
 }				t_fd;
 
+typedef enum e_process_type
+{
+	PROCESS_BUILDIN,
+	PROCESS_BUILDIN_FORK,
+	PROCESS_FORK
+}						t_process_type;
+
 typedef struct s_process
 {
-	bool				is_buildin;
+	t_process_type		type;
 	int					*file_in;
 	int					*fd_out[2];
 	int					*fd_in[2];

@@ -35,8 +35,10 @@ void	ft_execute_process(t_process *process, t_global *global)
 {
 	int	exit_code;
 
-	if (ft_exec_buildin_in_fork(process))
+	if (!ft_exec_buildin_in_fork(process))
 		return (ft_exec_buildin(process, global));
+	if (process->type == PROCESS_BUILDIN)
+		process->type = PROCESS_BUILDIN_FORK;
 	process->pid = fork();
 	if (process->pid == -1)
 		return (ft_print_error(strerror(errno), process->cmd));
@@ -51,7 +53,7 @@ void	ft_execute_process(t_process *process, t_global *global)
 		else if (ft_get_fd(process->fd_out[PIPE_WRITE]) != -1)
 			dup2(ft_get_fd(process->fd_out[PIPE_WRITE]), STDOUT_FILENO);
 		ft_close_all_fds(global);
-		if (process->is_buildin)
+		if (process->type == PROCESS_BUILDIN_FORK)
 		{
 			ft_exec_buildins(process, global);
 			exit_code = process->exit_status;
@@ -79,7 +81,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
-		if (!node->process->is_buildin || ft_exec_buildin_in_fork(node->process))
+		if (node->process->type == PROCESS_FORK || node->process->type == PROCESS_BUILDIN_FORK)
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
 				node->exit_status = WEXITSTATUS(exit_status);

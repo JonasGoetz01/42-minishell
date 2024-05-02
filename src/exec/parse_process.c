@@ -7,7 +7,7 @@ t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node, t_ast_nod
 	process = malloc(sizeof(t_process));
 	if (process == NULL)
 		return (NULL);
-	process->is_buildin = false;
+	process->type = PROCESS_FORK;
 	process->cmd = ft_strdup(cmd);
 	process->args = args;
 	process->file_in = node->file_in;
@@ -91,7 +91,7 @@ bool	ft_verify_process(t_process *process, t_global *global)
 		return (false);
 	if (ft_is_buildin_cmd(process->cmd))
 	{
-		process->is_buildin = true;
+		process->type = PROCESS_BUILDIN;
 		return (true);
 	}
 	lc_cmd = ft_strdup(process->cmd);

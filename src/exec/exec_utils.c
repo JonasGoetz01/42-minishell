@@ -82,5 +82,5 @@ void	ft_handle_verify_process_error(t_process *process)
 
 bool	ft_exec_buildin_in_fork(t_process *process)
 {
-	return (process->is_buildin && process->is_buildin && process->fd_in[0] == NULL && process->fd_in[1] == NULL && process->fd_out[0] == NULL && process->fd_out[1] == NULL);
+	return (!(process->type == PROCESS_BUILDIN && process->fd_in[0] == NULL && process->fd_in[1] == NULL && process->fd_out[0] == NULL && process->fd_out[1] == NULL));
 }
