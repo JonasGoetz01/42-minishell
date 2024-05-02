@@ -51,9 +51,9 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				if (ft_strlen(current_token->value) == 1 && (current_token->value[0] == '$') && (current_token->next && (current_token->next->value[0] == '\'' || current_token->next->value[0] == '\"')))
 				{
 					// Remove the dollar sign ('$')
-					if (current_token->next->type == TOKEN_SINGLE_QUOTE)
+					if (current_token->next->type == TOKEN_SINGLE_QUOTE && ft_strlen(current_token->value) == 1)
 						in_single_quotes = !in_single_quotes;
-					if (current_token->next->type == TOKEN_DOUBLE_QUOTE)
+					if (current_token->next->type == TOKEN_DOUBLE_QUOTE && ft_strlen(current_token->value) == 1)
 						in_double_quotes = !in_double_quotes;
 					tmp = current_token;
 					current_token = current_token->next;
@@ -65,7 +65,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						prev->next = current_token;
 					break;
 				}
-				if (ft_strchr(current_token->value, '$') && ft_strlen(current_token->value) > 1 && !ft_strchr(current_token->value, '~'))
+				if (ft_strchr(current_token->value, '$') && ft_strlen(current_token->value) > 1 && !ft_strchr(current_token->value, '~') && !in_single_quotes)
 				{
 					if (ft_strlen(current_token->value) == 1 && (!current_token->next || current_token->next->value[0] == ' ' || current_token->next->value[0] == '\0'))
 					{
@@ -91,7 +91,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						finish = 0;
 						while (current_token && current_token->next != NULL
 							&& (current_token->type != TOKEN_WORD
-								|| ft_strchr(current_token->value, '$') != NULL))
+								|| ft_strchr(current_token->value, '$') != NULL) && !in_single_quotes)
 						{
 							tmp = current_token->next->next;
 							free(current_token->next->value);
@@ -99,9 +99,13 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 							current_token->next = tmp;
 							prev = current_token;
 							current_token = current_token->next;
+							if (current_token->type == TOKEN_SINGLE_QUOTE)
+								in_single_quotes = !in_single_quotes;
+							if (current_token->type == TOKEN_DOUBLE_QUOTE)
+								in_double_quotes = !in_double_quotes;
 							finish = 1;
 						}
-						if (finish && current_token && current_token->next && current_token->next->next)
+						if (finish && current_token && current_token->next && current_token->next->next && !in_single_quotes)
 						{
 							tmp = current_token->next->next;
 							free(current_token->next->value);
@@ -119,10 +123,10 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					free(current_token->value);
 					current_token->value = ft_strdup(temp);
 					if (current_token->value[0] == '\0')
-						current_token->type = TOKEN_AMPERSAND;
+						current_token->type = TOKEN_WORD;
 					free(temp);
 				}
-				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$'))
+				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$') && !in_single_quotes)
 				{
 					start = ft_strchr(current_token->value, '~')
 						- current_token->value;
@@ -132,7 +136,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					free(current_token->value);
 					current_token->value = ft_strdup(temp);
 					if (current_token->value[0] == '\0')
-						current_token->type = TOKEN_AMPERSAND;
+						current_token->type = TOKEN_WORD;
 					free(temp);
 				}
 				if (ft_strlen(current_token->value) <= 1)
@@ -161,7 +165,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			free(current_token->next->value);
 			current_token->next->value = ft_strdup(temp);
 			if (current_token->next->value[0] == '\0')
-						current_token->type = TOKEN_AMPERSAND;
+						current_token->type = TOKEN_WORD;
 			// free(temp);
 			tmp = current_token->next->next->next;
 			free(current_token->next->next->value);
