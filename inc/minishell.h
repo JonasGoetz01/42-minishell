@@ -207,6 +207,7 @@ t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node, t_ast_node *ast);
 bool					ft_verify_process(t_process *process, t_global *global);
 bool					ft_exec_buildin_in_fork(t_process *process);
+void					ft_execute_child_process(t_process *process, t_global *global);
 
 //----
 t_stack					*create_stack(void);
