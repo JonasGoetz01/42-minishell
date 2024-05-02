@@ -61,7 +61,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
-		if (node->process->type == PROCESS_FORK || node->process->type == PROCESS_BUILDIN_FORK)
+		if ((node->process->type == PROCESS_FORK || node->process->type == PROCESS_BUILDIN_FORK) && node->exit_status == -1)
 		{
 			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
 				node->exit_status = WEXITSTATUS(exit_status);
