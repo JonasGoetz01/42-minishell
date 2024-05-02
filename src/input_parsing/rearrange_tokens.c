@@ -17,19 +17,19 @@
 void	rearrange_tokens(t_token **tokens)
 {
 	t_token	*current;
-	t_token	*redirect;
-	t_token	*file;
-	t_token	*after_file;
-	t_token	*prev;
+	// t_token	*redirect;
+	// t_token	*file;
+	// t_token	*after_file;
+	// t_token	*prev;
 
 	current = *tokens;
-	prev = NULL;
+	// prev = NULL;
 	while (current != NULL && !(current->type == TOKEN_LESS
 			|| current->type == TOKEN_DOUBLE_LESS
 			|| current->type == TOKEN_GREATER
 			|| current->type == TOKEN_DOUBLE_GREATER))
 	{
-		prev = current;
+		// prev = current;
 		current = current->next;
 	}
 	// If < is the first token
