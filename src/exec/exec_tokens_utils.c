@@ -69,7 +69,7 @@ static bool	ft_handle_redirects(t_ast_node *node, t_global *global,
 	else if (type == TOKEN_DOUBLE_GREATER)
 		ft_open_out_append_file(node, global);
 	else if (type == TOKEN_DOUBLE_LESS)
-		ft_exec_here_doc(node, global);
+		ft_exec_here_doc(node, exec_flags->ast, global);
 	else if (type == TOKEN_DOUBLE_PIPE)
 		exec_flags->wait = false;
 	else if (type == TOKEN_DOUBLE_AMPERSAND)

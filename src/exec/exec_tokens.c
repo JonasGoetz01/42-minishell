@@ -4,7 +4,7 @@ void	ft_execute_nodes(t_ast_node *node, t_ast_node *ast, bool wait, t_global *gl
 {
 	t_exec_flags	exec_flags;
 
-	if (!node || global->should_exit)
+	if (!node || global->should_exit || global->exit_status > 128)
 		return ;
 	exec_flags.wait = wait;
 	exec_flags.next_wait = wait;

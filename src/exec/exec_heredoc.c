@@ -12,17 +12,14 @@ static void	ft_error_heredoc(char *limiter)
 	if (msg == NULL)
 		return (free(tmp));
 	ft_print_error(msg, "warning");
+	free(msg);
 }
 
 static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
 {
 	char	*line;
-	char	*limiter_nl;
 
-	limiter_nl = ft_strjoin(limiter, "\n");
-	if (limiter_nl == NULL)
-		return ;
-	while (g_signal != SIGNAL_INT)
+	while (true)
 	{
 		line = readline("> ");
 		if (line == NULL)
@@ -30,32 +27,46 @@ static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
 			ft_error_heredoc(limiter);
 			break ;
 		}
-		if (ft_strncmp(line, limiter_nl, ft_strlen(limiter_nl)) == 0)
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
 		{
 			free(line);
 			break ;
 		}
 		ft_putstr_fd(line, fd_pipe[PIPE_WRITE]);
+		ft_putchar_fd('\n', fd_pipe[PIPE_WRITE]);
 		free(line);
 	}
-	get_next_line(-1);
-	free(limiter_nl);
 }
 
-static void ft_init_here_doc(char *limiter, int fd_pipe[2])
+static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_global *global)
 {
-	struct sigaction	sa_heredoc;
-	struct sigaction	sa_old;
+	pid_t	pid;
+	int		exit_code;
 
-	sa_heredoc.sa_handler = handle_sigint_heredoc;
-	sigemptyset(&sa_heredoc.sa_mask);
-	sa_heredoc.sa_flags = 0;
-	sigaction(SIGINT, &sa_heredoc, &sa_old);
-	ft_read_here_doc(limiter, fd_pipe);
-	sigaction(SIGINT, &sa_old, NULL);
+	pid = fork();
+	if (pid == -1)
+		return ;
+	else if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		ft_read_here_doc(limiter, fd_pipe);
+		close(fd_pipe[PIPE_WRITE]);
+		close(fd_pipe[PIPE_READ]);
+		ft_close_all_fds(global);
+		ft_free_nodes(ast);
+		ft_free_global(global);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		exit_code = ft_wait_pid(pid);
+		if (exit_code > 128)
+			global->exit_status = exit_code;
+	}
 }
 
-void	ft_exec_here_doc(t_ast_node *node, t_global *global)
+void	ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global)
 {
 	char	*limiter;
 	int		fd_pipe[2];
@@ -64,13 +75,13 @@ void	ft_exec_here_doc(t_ast_node *node, t_global *global)
 	limiter = ft_get_file_name(node);
 	if (pipe(fd_pipe) != 0)
 		return (ft_print_error(strerror(errno), NULL));
-	ft_init_here_doc(limiter, fd_pipe);
+	ft_init_here_doc(limiter, fd_pipe, ast, global);
 	close(fd_pipe[PIPE_WRITE]);
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
 	fd->fd_pipe[PIPE_READ] = fd_pipe[PIPE_READ];
-	if (node->left)
+	if (node->left && global->exit_status != 130)
 	{
 		if (!node->left->fd_in[PIPE_READ])
 		{

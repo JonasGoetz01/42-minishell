@@ -175,6 +175,7 @@ char					**ft_fill_args(t_token *token, char *cmd);
 void					ft_handle_verify_process_error(t_process *process);
 bool					ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 							t_exec_flags *exec_flags, t_global *global);
+int						ft_wait_pid(pid_t pid);
 
 t_token					*tokenize(const char *input);
 
@@ -194,7 +195,7 @@ void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
 void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
-void					ft_exec_here_doc(t_ast_node *node, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,
