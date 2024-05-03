@@ -31,6 +31,14 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
+typedef enum e_g_signal
+{
+	SIGNAL_NONE,
+	SIGNAL_INT
+}				t_g_signal;
+
+extern t_g_signal	g_signal;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -130,7 +138,7 @@ int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
 
 void					handle_sigint(int sig);
-void					handle_sigquit(int sig);
+void					handle_sigint_heredoc(int sig);
 
 void					ft_env_buildin(char **envv);
 void					ft_pwd_buildin(t_process *process);
