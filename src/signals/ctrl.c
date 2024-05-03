@@ -13,6 +13,13 @@ void	handle_sigint(int sig)
 void	handle_sigint_heredoc(int sig)
 {
 	(void)sig;
-	ft_putchar_fd('\n', STDOUT_FILENO);
+	ft_putstr_fd("^C\n", STDOUT_FILENO);
+	g_signal = SIGNAL_INT;
+}
+
+void	handle_exec(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	g_signal = SIGNAL_INT;
 }

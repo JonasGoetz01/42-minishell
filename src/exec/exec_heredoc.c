@@ -43,6 +43,7 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 	pid_t	pid;
 	int		exit_code;
 
+	signal(SIGINT, handle_sigint_heredoc);
 	pid = fork();
 	if (pid == -1)
 		return ;

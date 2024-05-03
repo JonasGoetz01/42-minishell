@@ -138,6 +138,7 @@ int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
 
 void					handle_sigint(int sig);
+void					handle_exec(int sig);
 void					handle_sigint_heredoc(int sig);
 
 void					ft_env_buildin(char **envv);
