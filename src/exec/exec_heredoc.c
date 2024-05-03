@@ -44,13 +44,14 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 	int		exit_code;
 
 	signal(SIGINT, handle_sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		return ;
 	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		ft_read_here_doc(limiter, fd_pipe);
 		close(fd_pipe[PIPE_WRITE]);
 		close(fd_pipe[PIPE_READ]);
@@ -65,6 +66,8 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 		if (exit_code > 128)
 			global->exit_status = exit_code;
 	}
+	signal(SIGINT, handle_exec);
+	signal(SIGQUIT, handle_exec);
 }
 
 void	ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global)

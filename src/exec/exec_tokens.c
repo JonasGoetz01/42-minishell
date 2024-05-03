@@ -29,6 +29,7 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 {
 	global->exit_status = -1;
 	signal(SIGINT, handle_exec);
+	signal(SIGQUIT, handle_exec);
 	print_ast(&node, 0);
 	ft_org_tokens(node);
 	if (DEBUG)
@@ -37,4 +38,5 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	ft_execute_nodes(node, node, true, global);
 	ft_close_all_fds(global);
 	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }
