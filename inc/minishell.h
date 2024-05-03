@@ -31,6 +31,14 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
+typedef enum e_g_signal
+{
+	SIGNAL_NONE,
+	SIGNAL_INT
+}				t_g_signal;
+
+extern t_g_signal	g_signal;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -130,7 +138,8 @@ int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
 
 void					handle_sigint(int sig);
-void					handle_sigquit(int sig);
+void					handle_exec(int sig);
+void					handle_sigint_heredoc(int sig);
 
 void					ft_env_buildin(char **envv);
 void					ft_pwd_buildin(t_process *process);
@@ -167,6 +176,7 @@ char					**ft_fill_args(t_token *token, char *cmd);
 void					ft_handle_verify_process_error(t_process *process);
 bool					ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 							t_exec_flags *exec_flags, t_global *global);
+int						ft_wait_pid(pid_t pid);
 
 t_token					*tokenize(const char *input);
 
@@ -186,7 +196,7 @@ void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
 void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
-void					ft_exec_here_doc(t_ast_node *node, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,

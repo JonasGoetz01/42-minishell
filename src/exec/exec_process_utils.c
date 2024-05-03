@@ -28,3 +28,16 @@ void	ft_execute_child_process(t_process *process, t_global *global)
 		exit(1);
 	}
 }
+
+int	ft_wait_pid(pid_t pid)
+{
+	int	status;
+
+	if (waitpid(pid, &status, 0 | WUNTRACED) == -1)
+		return (-1);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (WTERMSIG(status) + 128);
+	return (-1);
+}

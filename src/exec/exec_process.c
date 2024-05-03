@@ -47,13 +47,15 @@ void	ft_execute_process(t_process *process, t_global *global)
 		return ;
 	}
 	if (process->pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		ft_execute_child_process(process, global);
+	}
 }
 
 void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 {
-	int	exit_status;
-
 	if (!node)
 		return ;
 	ft_wait_for_processes(node->right, global);
@@ -62,10 +64,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
 		if ((node->process->type == PROCESS_FORK || node->process->type == PROCESS_BUILDIN_FORK) && node->exit_status == -1)
-		{
-			if (waitpid(node->process->pid, &exit_status, 0 | WUNTRACED) != -1)
-				node->exit_status = WEXITSTATUS(exit_status);
-		}
+			node->exit_status = ft_wait_pid(node->process->pid);
 	}
 	if (node->exit_status != -1)
 		global->exit_status = node->exit_status;
