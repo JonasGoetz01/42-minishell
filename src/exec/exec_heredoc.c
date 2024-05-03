@@ -11,7 +11,6 @@ static void	ft_error_heredoc(char *limiter)
 	msg = ft_strjoin(tmp, "')");
 	if (msg == NULL)
 		return (free(tmp));
-	ft_putchar_fd('\n', 2);
 	ft_print_error(msg, "warning");
 }
 
@@ -25,8 +24,7 @@ static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
 		return ;
 	while (g_signal != SIGNAL_INT)
 	{
-		ft_putstr_fd("> ", STDOUT_FILENO);
-		line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (line == NULL)
 		{
 			ft_error_heredoc(limiter);
