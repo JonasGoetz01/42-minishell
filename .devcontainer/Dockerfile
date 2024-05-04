@@ -34,3 +34,6 @@ RUN apt-get update -y
 RUN apt-get install -y bear libclang-rt-17-dev-dbgsym clang-tools-17 libllvm17 llvm-17 llvm-17-dev llvm-17-runtime \
 		libclang-common-17-dev libclang-17-dev libclang1-17 libfuzzer-17-dev libclang-rt-17-dev
 RUN ln -s /usr/bin/llvm-symbolizer-17 /usr/local/bin/llvm-symbolizer
+
+RUN python3 -m pip install --upgrade pip setuptools
+RUN python3 -m pip install norminette
