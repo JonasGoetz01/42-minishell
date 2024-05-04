@@ -30,8 +30,16 @@ t_token	*tokenize(const char *input)
 			{
 				if (input[i + 1] == '\"')
 				{
+					type = TOKEN_DOUBLE_QUOTE;
+					value = ft_strdup("\"");
+					new_token = create_token(type, value);
+					append_token(&tokens, new_token);
 					type = TOKEN_WORD;
 					value = ft_strdup("");
+					new_token = create_token(type, value);
+					append_token(&tokens, new_token);
+					type = TOKEN_DOUBLE_QUOTE;
+					value = ft_strdup("\"");
 					new_token = create_token(type, value);
 					append_token(&tokens, new_token);
 					i += 2;
@@ -55,8 +63,16 @@ t_token	*tokenize(const char *input)
 			{
 				if (input[i + 1] == '\'')
 				{
+					type = TOKEN_SINGLE_QUOTE;
+					value = ft_strdup("\"");
+					new_token = create_token(type, value);
+					append_token(&tokens, new_token);
 					type = TOKEN_WORD;
 					value = ft_strdup("");
+					new_token = create_token(type, value);
+					append_token(&tokens, new_token);
+					type = TOKEN_SINGLE_QUOTE;
+					value = ft_strdup("\"");
 					new_token = create_token(type, value);
 					append_token(&tokens, new_token);
 					i += 2;
