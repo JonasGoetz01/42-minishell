@@ -65,6 +65,11 @@ char	**ft_fill_args(t_token *token, char *cmd)
 
 void	ft_handle_verify_process_error(t_process *process)
 {
+	if (process->cmd && process->cmd[0] == '\0')
+	{
+		process->exit_status = 0;
+		return ;
+	}
 	if (errno != 0)
 	{
 		ft_print_error(strerror(errno), process->cmd);
