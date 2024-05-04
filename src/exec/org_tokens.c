@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static void ft_combine_tokens(t_token *token1, t_token *token2)
+static void	ft_combine_tokens(t_token *token1, t_token *token2)
 {
 	char	*new_value;
 
@@ -14,7 +14,7 @@ static void ft_combine_tokens(t_token *token1, t_token *token2)
 	token1->type = TOKEN_IGNORE;
 }
 
-static void ft_combine_words(t_token *token)
+static void	ft_combine_words(t_token *token)
 {
 	t_token	*next;
 
@@ -88,7 +88,8 @@ void	ft_org_tokens(t_ast_node *node)
 	ft_combine_words(token);
 	while (token)
 	{
-		if (token->type == TOKEN_WORD)
+		if (token->type == TOKEN_WORD && token->value
+			&& token->value[0] != '\0')
 			break ;
 		token = token->next;
 	}
