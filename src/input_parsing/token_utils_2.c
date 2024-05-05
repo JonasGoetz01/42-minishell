@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils_2.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 17:50:43 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/05 17:51:00 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 // Print the tokens
@@ -15,7 +27,7 @@ void	print_tokens(t_token *tokens)
 }
 
 // Check if the token is an operator
-int	isOperator(t_token token)
+int	is_operator(t_token token)
 {
 	return (token.type == TOKEN_AMPERSAND || token.type == TOKEN_BRACKET_L
 		|| token.type == TOKEN_BRACKET_R || token.type == TOKEN_DOUBLE_AMPERSAND

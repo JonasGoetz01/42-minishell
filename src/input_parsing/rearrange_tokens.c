@@ -59,7 +59,7 @@ void	rearrange_tokens(t_token **tokens)
 			file = redirect;
 			while (file->next && file->next->type == TOKEN_SPACE)
 				file = file->next;
-			if (!file->next || isOperator(*file->next))
+			if (!file->next || is_operator(*file->next))
 				return ;
 			if (file->next && (file->next->type == TOKEN_SINGLE_QUOTE || file->next->type == TOKEN_DOUBLE_QUOTE))
 			{
@@ -83,12 +83,12 @@ void	rearrange_tokens(t_token **tokens)
 			after_file = file;
 			while (after_file->next && after_file->next->type == TOKEN_SPACE)
 				after_file = after_file->next;
-			if (!after_file->next || isOperator(*after_file->next))
+			if (!after_file->next || is_operator(*after_file->next))
 				return ;
 			if (after_file->next)
 				after_file = after_file->next;
 			end = after_file;
-			while (end->next && !isOperator(*end->next))
+			while (end->next && !is_operator(*end->next))
 				end = end->next;
 			if (end->next)
 				before_end = end->prev;

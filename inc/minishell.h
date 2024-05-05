@@ -14,7 +14,6 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <sys/types.h>
 # include <unistd.h>
 
 # ifndef DEBUG
@@ -35,9 +34,9 @@ typedef enum e_g_signal
 {
 	SIGNAL_NONE,
 	SIGNAL_INT
-}				t_g_signal;
+}						t_g_signal;
 
-extern t_g_signal	g_signal;
+extern t_g_signal		g_signal;
 
 typedef enum e_token_type
 {
@@ -70,10 +69,10 @@ typedef struct s_token
 
 typedef struct s_fd
 {
-	int			fd_file;
-	int			fd_pipe[2];
-	struct s_fd	*next;
-}				t_fd;
+	int					fd_file;
+	int					fd_pipe[2];
+	struct s_fd			*next;
+}						t_fd;
 
 typedef enum e_process_type
 {
@@ -102,8 +101,8 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					*file_in;
-	int					*(fd_out[2]);
-	int					*(fd_in[2]);
+	int *(fd_out[2]);
+	int *(fd_in[2]);
 	int					*file_out;
 	int					exit_status;
 	t_process			*process;
@@ -127,7 +126,6 @@ typedef struct s_exec_flags
 	t_token_type		tok_typ;
 	t_ast_node			*ast;
 }						t_exec_flags;
-
 
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
@@ -191,7 +189,8 @@ void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
 void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
-void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast,
+							t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,
@@ -214,7 +213,8 @@ t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node, t_ast_node *ast);
 bool					ft_verify_process(t_process *process, t_global *global);
 bool					ft_exec_buildin_in_fork(t_process *process);
-void					ft_execute_child_process(t_process *process, t_global *global);
+void					ft_execute_child_process(t_process *process,
+							t_global *global);
 
 void					*ft_recalloc(void *ptr, size_t old_size,
 							size_t new_size);
@@ -233,7 +233,7 @@ void					ft_print_error(const char *msg, const char *arg);
 void					free_token(t_token **tokens);
 
 bool					ft_is_directory(const char *path);
-int						isOperator(t_token token);
+int						is_operator(t_token token);
 
 bool					next_is_operator(t_token *token);
 bool					next_is_word(t_token *token);

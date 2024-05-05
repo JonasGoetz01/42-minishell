@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 17:51:44 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/05 17:51:45 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 size_t	token_count(t_token *tokens)
@@ -24,7 +36,6 @@ t_token	*create_token(t_token_type type, char *value)
 		token->value = value;
 		token->next = NULL;
 	}
-	// garbage_collector(token, 0);
 	return (token);
 }
 

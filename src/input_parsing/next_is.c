@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:45:24 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 17:45:25 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/05 17:51:24 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	next_is_operator(t_token *token)
 	current = token;
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
-	if (current && isOperator(*current))
+	if (current && is_operator(*current))
 		return (true);
 	return (false);
 }
