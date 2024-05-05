@@ -42,6 +42,7 @@ SOURCES	:=	main.c \
 			fd_utils.c \
 			exec_process.c \
 			org_tokens.c \
+			org_tokens_utils.c \
 			exec_tokens.c \
 			exec_tokens_utils.c \
 			exec_process_utils.c \
