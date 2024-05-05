@@ -34,7 +34,8 @@ static void	ft_check_file(size_t *ind_str, size_t *ind_file, char *str, char **f
 	{
 		if (str[*ind_str] == '*')
 		{
-			(*ind_str)++;
+			while (str[*ind_str] == '*')
+				(*ind_str)++;
 			while ((*files)[*ind_file])
 			{
 				if ((*files)[*ind_file] == str[*ind_str])
