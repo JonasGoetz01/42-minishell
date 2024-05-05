@@ -39,6 +39,7 @@ void	rearrange_tokens(t_token **tokens)
 	t_token	*after_file;
 	t_token	*end;
 	t_token *before_end;
+	t_token *tmp;
 
 	current = *tokens;
 	prev_link_list(tokens);
@@ -60,7 +61,21 @@ void	rearrange_tokens(t_token **tokens)
 				file = file->next;
 			if (!file->next || isOperator(*file->next))
 				return ;
-			file = file->next;
+			if (file->next && (file->next->type == TOKEN_SINGLE_QUOTE || file->next->type == TOKEN_DOUBLE_QUOTE))
+			{
+				tmp = file->next;
+				file->next = tmp->next;
+				free(tmp->value);
+				free(tmp);
+				file = file->next;
+				tmp = file->next;
+				if (tmp->next)
+					file->next = tmp->next;
+				else
+					file->next = NULL;
+				free(tmp->value);
+				free(tmp);
+			}
 			after_file = file;
 			while (after_file->next && after_file->next->type == TOKEN_SPACE)
 				after_file = after_file->next;
