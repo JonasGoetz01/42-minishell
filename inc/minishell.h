@@ -127,6 +127,16 @@ typedef struct s_exec_flags
 	t_ast_node			*ast;
 }						t_exec_flags;
 
+typedef struct s_rearrange_helper
+{
+	t_token				*current;
+	t_token				*redirect;
+	t_token				*file;
+	t_token				*after_file;
+	t_token				*end;
+	t_token				*before_end;
+}						t_rearrange_helper;
+
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rearrange_tokens.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/05 18:40:36 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 bool	before_comes_word(t_token **token)
@@ -5,7 +17,6 @@ bool	before_comes_word(t_token **token)
 	t_token	*current;
 
 	current = *token;
-	// prev_link_list(token);
 	if (current->prev == NULL)
 		return (false);
 	while (current->prev != NULL)
@@ -71,7 +82,6 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file)
 			(*file)->next = NULL;
 		free(tmp->value);
 		free(tmp);
-		tmp = NULL;
 	}
 	else if ((*file)->next && (*file)->next->type == TOKEN_WORD)
 		(*file) = (*file)->next;
@@ -120,29 +130,26 @@ void	get_end(t_token **end, t_token **before_end, t_token **after_file)
 // < test.txt echo 1
 void	rearrange_tokens(t_token **tokens)
 {
-	t_token	*current;
-	t_token	*redirect;
-	t_token	*file;
-	t_token	*after_file;
-	t_token	*end;
-	t_token	*before_end;
+	t_rearrange_helper	helper;
+	t_rearrange_helper	*h;
 
-	current = *tokens;
-	skip_to_first_redirect(tokens, &current);
-	if (current && (current->type == TOKEN_GREATER
-			|| current->type == TOKEN_DOUBLE_GREATER))
+	h = &helper;
+	h->current = *tokens;
+	skip_to_first_redirect(tokens, &(h->current));
+	if (h->current && (h->current->type == TOKEN_GREATER
+			|| h->current->type == TOKEN_DOUBLE_GREATER))
 	{
 		prev_link_list(tokens);
-		if (!before_comes_word(&current))
+		if (!before_comes_word(&(h->current)))
 		{
-			if (get_file(&current, &redirect, &file)
-				|| get_after_file(&after_file, &file))
+			if (get_file(&(h->current), &(h->redirect), &(h->file))
+				|| get_after_file(&(h->after_file), &(h->file)))
 				return ;
-			get_end(&end, &before_end, &after_file);
-			move_on(tokens, &current, &after_file);
-			before_end->next = redirect;
-			redirect->next = file;
-			file->next = end;
+			get_end(&(h->end), &(h->before_end), &(h->after_file));
+			move_on(tokens, &(h->current), &(h->after_file));
+			h->before_end->next = h->redirect;
+			h->redirect->next = h->file;
+			h->file->next = h->end;
 		}
 	}
 }
