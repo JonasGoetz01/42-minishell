@@ -27,7 +27,7 @@ void	process_input(char *input, t_global *global)
 	if (input_validation(&tokens))
 	{
 		global->exit_status = 2;
-		return (free(input));
+		return ;
 	}
 	else if (DEBUG)
 		printf("Input is valid\n");
@@ -36,7 +36,6 @@ void	process_input(char *input, t_global *global)
 	gen_ast(&ast, tokens);
 	ft_exec_all(ast, global);
 	ft_free_nodes(ast);
-	free(input);
 }
 
 char	*build_prompt(void)
@@ -68,6 +67,28 @@ char	*build_prompt(void)
 	return (temp);
 }
 
+static void	ft_execute_input(char *input, t_global *global)
+{
+	char	**lines;
+	size_t	ind;
+
+	lines = ft_split(input, '\n');
+	ind = 0;
+	while (lines[ind] && global->should_exit == false)
+	{
+		add_history(lines[ind]);
+		if (validator(lines[ind]))
+		{
+			ft_print_error("syntax error", NULL);
+			global->exit_status = 2;
+		}
+		else
+			process_input(lines[ind], global);
+		ind++;
+	}
+	ft_arr_free((void **) lines);
+}
+
 int	show_prompt(t_global *global)
 {
 	char	*input;
@@ -91,13 +112,7 @@ int	show_prompt(t_global *global)
 		free(input);
 		return (0);
 	}
-	add_history(input);
-	if (validator(input))
-	{
-		ft_print_error("syntax error", NULL);
-		free(input);
-		return (0);
-	}
-	process_input(input, global);
+	ft_execute_input(input, global);
+	free(input);
 	return (0);
 }
