@@ -2,7 +2,7 @@
 
 bool	before_comes_word(t_token **token)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = *token;
 	// prev_link_list(token);
@@ -15,6 +15,93 @@ bool	before_comes_word(t_token **token)
 		current = current->prev;
 	}
 	return (false);
+}
+
+void	move_on(t_token **tokens, t_token **current, t_token **after_file)
+{
+	prev_link_list(tokens);
+	if ((*current)->prev)
+	{
+		(*current) = (*current)->prev;
+		(*current)->next = (*after_file);
+	}
+	else
+	{
+		(*current) = *tokens;
+		*tokens = (*after_file);
+	}
+	prev_link_list(tokens);
+}
+
+void	skip_to_first_redirect(t_token **tokens, t_token **current)
+{
+	prev_link_list(tokens);
+	while ((*current) != NULL && !((*current)->type == TOKEN_LESS
+			|| (*current)->type == TOKEN_DOUBLE_LESS
+			|| (*current)->type == TOKEN_GREATER
+			|| (*current)->type == TOKEN_DOUBLE_GREATER))
+	{
+		(*current) = (*current)->next;
+	}
+}
+
+bool	get_file(t_token **current, t_token **redirect, t_token **file)
+{
+	t_token	*tmp;
+
+	*redirect = *current;
+	*file = *redirect;
+	while ((*file)->next && (*file)->next->type == TOKEN_SPACE)
+		(*file) = (*file)->next;
+	if (!(*file)->next || is_operator(*(*file)->next))
+		return (true);
+	if ((*file)->next && ((*file)->next->type == TOKEN_SINGLE_QUOTE
+			|| (*file)->next->type == TOKEN_DOUBLE_QUOTE))
+	{
+		tmp = (*file)->next;
+		(*file)->next = tmp->next;
+		free(tmp->value);
+		free(tmp);
+		(*file)->next = NULL;
+		(*file) = (*file)->next;
+		tmp = (*file)->next;
+		if (tmp->next)
+			(*file)->next = tmp->next;
+		else
+			(*file)->next = NULL;
+		free(tmp->value);
+		free(tmp);
+		tmp = NULL;
+	}
+	else if ((*file)->next && (*file)->next->type == TOKEN_WORD)
+		(*file) = (*file)->next;
+	return (false);
+}
+
+bool	get_after_file(t_token **after_file, t_token **file)
+{
+	*after_file = *file;
+	while ((*after_file)->next && (*after_file)->next->type == TOKEN_SPACE)
+		(*after_file) = (*after_file)->next;
+	if (!(*after_file)->next || is_operator(*(*after_file)->next))
+		return (true);
+	if ((*after_file)->next)
+		(*after_file) = (*after_file)->next;
+	return (false);
+}
+
+void	get_end(t_token **end, t_token **before_end, t_token **after_file)
+{
+	*end = *after_file;
+	while ((*end)->next && !is_operator(*(*end)->next))
+		(*end) = (*end)->next;
+	if ((*end)->next)
+		(*before_end) = (*end)->prev;
+	else
+	{
+		(*before_end) = (*end);
+		(*end) = NULL;
+	}
 }
 
 // sometimes the tokens need to be rearranged
@@ -38,82 +125,24 @@ void	rearrange_tokens(t_token **tokens)
 	t_token	*file;
 	t_token	*after_file;
 	t_token	*end;
-	t_token *before_end;
-	t_token *tmp;
+	t_token	*before_end;
 
 	current = *tokens;
-	prev_link_list(tokens);
-	while (current != NULL && !(current->type == TOKEN_LESS
-			|| current->type == TOKEN_DOUBLE_LESS
-			|| current->type == TOKEN_GREATER
+	skip_to_first_redirect(tokens, &current);
+	if (current && (current->type == TOKEN_GREATER
 			|| current->type == TOKEN_DOUBLE_GREATER))
-	{
-		current = current->next;
-	}
-	if (current && (current->type == TOKEN_GREATER || current->type == TOKEN_DOUBLE_GREATER))
 	{
 		prev_link_list(tokens);
 		if (!before_comes_word(&current))
-		{			
-			redirect = current;
-			file = redirect;
-			while (file->next && file->next->type == TOKEN_SPACE)
-				file = file->next;
-			if (!file->next || is_operator(*file->next))
+		{
+			if (get_file(&current, &redirect, &file)
+				|| get_after_file(&after_file, &file))
 				return ;
-			if (file->next && (file->next->type == TOKEN_SINGLE_QUOTE || file->next->type == TOKEN_DOUBLE_QUOTE))
-			{
-				tmp = file->next;
-				file->next = tmp->next;
-				free(tmp->value);
-				free(tmp);
-				file->next = NULL;
-				file = file->next;
-				tmp = file->next;
-				if (tmp->next)
-					file->next = tmp->next;
-				else
-					file->next = NULL;
-				free(tmp->value);
-				free(tmp);
-				tmp = NULL;
-			}
-			else if (file->next && file->next->type == TOKEN_WORD)
-				file = file->next;
-			after_file = file;
-			while (after_file->next && after_file->next->type == TOKEN_SPACE)
-				after_file = after_file->next;
-			if (!after_file->next || is_operator(*after_file->next))
-				return ;
-			if (after_file->next)
-				after_file = after_file->next;
-			end = after_file;
-			while (end->next && !is_operator(*end->next))
-				end = end->next;
-			if (end->next)
-				before_end = end->prev;
-			else
-			{
-				before_end = end;
-				end = NULL;
-			}
-			prev_link_list(tokens);
-			if (current->prev)
-			{
-				current = current->prev;
-				current->next = after_file;
-			}
-			else
-			{
-				current = *tokens;
-				*tokens = after_file;
-			}
-			prev_link_list(tokens);
+			get_end(&end, &before_end, &after_file);
+			move_on(tokens, &current, &after_file);
 			before_end->next = redirect;
 			redirect->next = file;
 			file->next = end;
 		}
 	}
 }
-
-//cmd > out after_file arg1 | cmd2
