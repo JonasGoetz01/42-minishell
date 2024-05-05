@@ -27,7 +27,7 @@ static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
 			ft_error_heredoc(limiter);
 			break ;
 		}
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 		{
 			free(line);
 			break ;
