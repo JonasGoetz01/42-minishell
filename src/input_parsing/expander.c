@@ -65,7 +65,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						prev->next = current_token;
 					break;
 				}
-				if (ft_strchr(current_token->value, '$') && ft_strlen(current_token->value) > 1 && !ft_strchr(current_token->value, '~') && !in_single_quotes)
+				else if (ft_strchr(current_token->value, '$') && ft_strlen(current_token->value) > 1 && !ft_strchr(current_token->value, '~') && !in_single_quotes)
 				{
 					if (ft_strlen(current_token->value) == 1 && (!current_token->next || current_token->next->value[0] == ' ' || current_token->next->value[0] == '\0'))
 					{
@@ -139,7 +139,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						current_token->type = TOKEN_WORD;
 					free(temp);
 				}
-				if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$') && !in_single_quotes)
+				else if (ft_strchr(current_token->value, '~') && !ft_strchr(current_token->value, '$') && !in_single_quotes)
 				{
 					if (ft_strlen(current_token->value) == 1)
 					{
@@ -160,7 +160,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 						current_token = current_token->next;
 					}
 				}
-				if (current_token && ft_strlen(current_token->value) <= 1)
+				else if (current_token)
 				{
 					prev = current_token;
 					current_token = current_token->next;
