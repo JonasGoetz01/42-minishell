@@ -35,6 +35,7 @@ SOURCES	:=	main.c \
 			prompt.c \
 			tokenize.c \
 			input_validator.c \
+			input_validator_utils.c \
 			expander.c \
 			token_utils.c \
 			ctrl.c \
@@ -56,7 +57,7 @@ SOURCES	:=	main.c \
 			ast.c \
 			precedence.c \
 			rearrange_tokens.c \
-			remove_unused_spaces.c \
+			next_is.c \
 			retokenize.c \
 			token_utils_2.c \
 			cleanup.c \
