@@ -78,8 +78,8 @@ int	input_validation(t_token **tokens)
 		// 		return (ft_print_error("syntax error 2", NULL), 1);
 		// }
 		// if the first token is a pipe
-		if (current->type == TOKEN_DOUBLE_LESS && get_next_type(current->next) != TOKEN_WORD)
-			return (ft_print_error("syntax error", NULL), 1);
+		// if (current->type == TOKEN_DOUBLE_LESS && get_next_type(current->next) != TOKEN_WORD)
+		// 	return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_PIPE && get_next_type(current->next) == TOKEN_PIPE)
 			return (ft_print_error("syntax error", NULL), 1);
 		if ((current == *tokens) && (get_next_type(current) == TOKEN_PIPE))
