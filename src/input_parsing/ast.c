@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 16:57:14 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/05 17:00:20 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	skip_tokens(t_ast_node **ast, t_token **tokens,
 			t_token **current_token);
 bool	handle_highest_token(t_ast_node **ast, t_token **highest_token,
 			t_token **tokens, t_token **current_token);
-void	create_arms(t_token **left_arm, t_token **right_arm, t_token **tokens,
+void	create_arms(t_token **right_arm, t_token **tokens,
 			t_token **current_token, t_token **highest_token);
 
 // walk through tokens and search for the highest precedence operator
@@ -45,7 +45,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	if (handle_highest_token(&ast, &highest_token, &tokens, &current_token)
 		|| highest_token->next == NULL)
 		return ;
-	create_arms(&left_arm, &right_arm, &tokens, &current_token, &highest_token);
+	create_arms(&right_arm, &tokens, &current_token, &highest_token);
+	left_arm = tokens;
 	ast->token->next = NULL;
 	if (left_arm == highest_token)
 		left_arm = NULL;

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:58:13 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 16:58:21 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/05 16:59:49 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,9 @@ bool	handle_highest_token(t_ast_node **ast, t_token **highest_token,
 	return (false);
 }
 
-void	create_arms(t_token **left_arm, t_token **right_arm, t_token **tokens,
+void	create_arms(t_token **right_arm, t_token **tokens,
 		t_token **current_token, t_token **highest_token)
 {
-	(*left_arm) = (*tokens);
 	(*current_token) = (*tokens);
 	while ((*current_token)->next && (*current_token)->next != (*highest_token))
 		(*current_token) = (*current_token)->next;
