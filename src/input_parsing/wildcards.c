@@ -16,7 +16,7 @@ static char	**ft_get_files(void)
 	{
 		if (dir_struct->d_type == DT_REG || dir_struct->d_type == DT_DIR)
 		{
-			if (ft_strncmp(dir_struct->d_name, ".", 2) != 0 && ft_strncmp(dir_struct->d_name, "..", 3) != 0)
+			if (ft_strncmp(dir_struct->d_name, ".", 1) != 0 && ft_strncmp(dir_struct->d_name, "..", 3) != 0)
 			{
 				if (!ft_arr_add(ft_strdup(dir_struct->d_name), &arr))
 					return (closedir(dir), ft_arr_free((void **) arr), NULL);
@@ -92,5 +92,6 @@ char	**ft_expand_wildcard(char *str)
 	ft_arr_free((void **) files);
 	if (!result)
 		return (ft_arr_free((void **) arr), NULL);
+	ft_arr_sort(arr);
 	return (arr);
 }
