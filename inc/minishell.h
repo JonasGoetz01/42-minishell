@@ -211,6 +211,7 @@ t_fd					*ft_add_t_fd(t_global *global);
 int						ft_get_fd(int *fd);
 
 void					ft_org_tokens(t_ast_node *token);
+t_token					*ft_first_valid_token(t_token *token);
 void					ft_execute_process(t_process *process,
 							t_global *global);
 void					ft_exec_all(t_ast_node *token, t_global *global);

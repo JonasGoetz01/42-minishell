@@ -63,7 +63,9 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	{
 		if (DEBUG)
 			printf("waiting for %s...\n", node->process->cmd);
-		if ((node->process->type == PROCESS_FORK || node->process->type == PROCESS_BUILDIN_FORK) && node->exit_status == -1)
+		if ((node->process->type == PROCESS_FORK
+				|| node->process->type == PROCESS_BUILDIN_FORK)
+			&& node->exit_status == -1)
 			node->exit_status = ft_wait_pid(node->process->pid);
 	}
 	if (node->exit_status != -1)

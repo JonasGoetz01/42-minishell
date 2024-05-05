@@ -54,6 +54,8 @@ void	ft_cd_buildin(t_process *process, t_global *global)
 
 	if (!process->args[1])
 		temp = ft_cd_env("HOME", process, global);
+	else if (ft_strncmp(process->args[1], "--", 3) == 0)
+		temp = ft_cd_env("HOME", process, global);
 	else if (process->args[2] != NULL)
 		return (ft_error_buildin("too many arguments", NULL, process, 1));
 	else if (ft_strncmp(process->args[1], "-", 2) == 0)
