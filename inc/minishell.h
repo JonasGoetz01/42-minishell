@@ -31,6 +31,14 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
+typedef enum e_g_signal
+{
+	SIGNAL_NONE,
+	SIGNAL_INT
+}				t_g_signal;
+
+extern t_g_signal	g_signal;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -57,6 +65,7 @@ typedef struct s_token
 	t_token_type		type;
 	char				*value;
 	struct s_token		*next;
+	struct s_token		*prev;
 }						t_token;
 
 typedef struct s_fd
@@ -66,9 +75,16 @@ typedef struct s_fd
 	struct s_fd	*next;
 }				t_fd;
 
+typedef enum e_process_type
+{
+	PROCESS_BUILDIN,
+	PROCESS_BUILDIN_FORK,
+	PROCESS_FORK
+}						t_process_type;
+
 typedef struct s_process
 {
-	bool				is_buildin;
+	t_process_type		type;
 	int					*file_in;
 	int					*fd_out[2];
 	int					*fd_in[2];
@@ -122,7 +138,8 @@ int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
 
 void					handle_sigint(int sig);
-void					handle_sigquit(int sig);
+void					handle_exec(int sig);
+void					handle_sigint_heredoc(int sig);
 
 void					ft_env_buildin(char **envv);
 void					ft_pwd_buildin(t_process *process);
@@ -159,6 +176,7 @@ char					**ft_fill_args(t_token *token, char *cmd);
 void					ft_handle_verify_process_error(t_process *process);
 bool					ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 							t_exec_flags *exec_flags, t_global *global);
+int						ft_wait_pid(pid_t pid);
 
 t_token					*tokenize(const char *input);
 
@@ -178,7 +196,7 @@ void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
 void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
-void					ft_exec_here_doc(t_ast_node *node, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,
@@ -193,6 +211,7 @@ t_fd					*ft_add_t_fd(t_global *global);
 int						ft_get_fd(int *fd);
 
 void					ft_org_tokens(t_ast_node *token);
+t_token					*ft_first_valid_token(t_token *token);
 void					ft_execute_process(t_process *process,
 							t_global *global);
 void					ft_exec_all(t_ast_node *token, t_global *global);
@@ -200,6 +219,7 @@ t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node, t_ast_node *ast);
 bool					ft_verify_process(t_process *process, t_global *global);
 bool					ft_exec_buildin_in_fork(t_process *process);
+void					ft_execute_child_process(t_process *process, t_global *global);
 
 //----
 t_stack					*create_stack(void);
@@ -238,5 +258,6 @@ bool					next_is_brackets(t_token *token);
 
 void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
+void					prev_link_list(t_token **tokens);
 
 #endif

@@ -40,3 +40,18 @@ void	free_token(t_token **tokens)
 	free(*tokens);
 	*tokens = NULL;
 }
+
+void	prev_link_list(t_token **tokens)
+{
+	t_token	*current;
+	t_token	*prev;
+
+	current = *tokens;
+	prev = NULL;
+	while (current)
+	{
+		current->prev = prev;
+		prev = current;
+		current = current->next;
+	}
+}

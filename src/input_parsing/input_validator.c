@@ -60,6 +60,7 @@ int	input_validation(t_token **tokens)
 	parenthesis = 0;
 	while (current)
 	{
+		// if pipe comes after pipe
 		if ((!prev && (current->type == TOKEN_PIPE)) 
 			|| (current == *tokens && next_is_operator(current)))
 		{
@@ -68,20 +69,28 @@ int	input_validation(t_token **tokens)
 			if (current->type == TOKEN_PIPE)
 				return (ft_print_error("syntax error", NULL), 1);
 		}
-		// if pipe comes after a operator
-		if (next_is_operator(current))
-		{
-			while (current->type == TOKEN_SPACE)
-				current = current->next;
-			if (next_is_operator(current->next))
-				return (ft_print_error("syntax error", NULL), 1);
-		}
+		// // if pipe comes after a operator
+		// if (next_is_operator(current))
+		// {
+		// 	while (current->type == TOKEN_SPACE)
+		// 		current = current->next;
+		// 	if (!(current->type == TOKEN_PIPE) && next_is_operator(current->next))
+		// 		return (ft_print_error("syntax error 2", NULL), 1);
+		// }
 		// if the first token is a pipe
+		// if (current->type == TOKEN_DOUBLE_LESS && get_next_type(current->next) != TOKEN_WORD)
+		// 	return (ft_print_error("syntax error", NULL), 1);
+		if (current->type == TOKEN_PIPE && get_next_type(current->next) == TOKEN_PIPE)
+			return (ft_print_error("syntax error", NULL), 1);
 		if ((current == *tokens) && (get_next_type(current) == TOKEN_PIPE))
 			return (ft_print_error("syntax error", NULL), 1);
 		// > needs word after it
-		if (current->type == TOKEN_GREATER && current->next &&
-			next_is_operator(current->next))
+		if ((current->type == TOKEN_GREATER || current->type == TOKEN_DOUBLE_GREATER) && ((current->next &&
+				next_is_operator(current->next)) || next_is_newline(current->next)))
+			return (ft_print_error("syntax error", NULL), 1);
+		// < needs word after it
+		if (current->type == TOKEN_LESS && ((current->next &&
+				next_is_operator(current->next)) || next_is_newline(current->next)))
 			return (ft_print_error("syntax error", NULL), 1);
 		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
 			quote = !quote;

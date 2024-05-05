@@ -4,7 +4,7 @@ void	ft_execute_nodes(t_ast_node *node, t_ast_node *ast, bool wait, t_global *gl
 {
 	t_exec_flags	exec_flags;
 
-	if (!node || global->should_exit)
+	if (!node || global->should_exit || global->exit_status > 128)
 		return ;
 	exec_flags.wait = wait;
 	exec_flags.next_wait = wait;
@@ -27,6 +27,9 @@ void	ft_execute_nodes(t_ast_node *node, t_ast_node *ast, bool wait, t_global *gl
 
 void	ft_exec_all(t_ast_node *node, t_global *global)
 {
+	global->exit_status = -1;
+	signal(SIGINT, handle_exec);
+	signal(SIGQUIT, handle_exec);
 	print_ast(&node, 0);
 	ft_org_tokens(node);
 	if (DEBUG)
@@ -34,4 +37,6 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	print_ast(&node, 0);
 	ft_execute_nodes(node, node, true, global);
 	ft_close_all_fds(global);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }

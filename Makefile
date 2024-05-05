@@ -42,8 +42,10 @@ SOURCES	:=	main.c \
 			fd_utils.c \
 			exec_process.c \
 			org_tokens.c \
+			org_tokens_utils.c \
 			exec_tokens.c \
 			exec_tokens_utils.c \
+			exec_process_utils.c \
 			exec_utils.c \
 			exec_files.c \
 			parse_process.c \
@@ -109,5 +111,8 @@ $(TESTDIR)/%.o: %.c $(INC)
 $(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+no-debug:
+	make CFLAGS="-Wextra -Wall -Werror -DDEBUG=0" re
 
 .PHONY: all clean fclean re
