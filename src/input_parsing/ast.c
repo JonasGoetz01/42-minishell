@@ -42,6 +42,57 @@ void create_ast(t_ast_node **ast, t_ast_node **root, t_token **highest_token)
     }
 }
 
+void	skip_tokens(t_ast_node **ast, t_token **tokens, 
+	t_token **current_token)
+{
+	(*ast)->token = (*tokens);
+		while ((*ast)->token->type == TOKEN_BRACKET_L
+			|| (*ast)->token->type == TOKEN_BRACKET_R)
+			(*ast)->token = (*ast)->token->next;
+		(*current_token) = (*ast)->token;
+		while ((*current_token)->next != NULL)
+			(*current_token) = (*current_token)->next;
+}
+
+bool	handle_highest_token(t_ast_node **ast, t_token **highest_token, 
+	t_token **tokens, t_token **current_token)
+{
+	t_token *prev_token;
+
+	prev_token = NULL;
+	if ((*highest_token)->type == TOKEN_WORD)
+	{
+		skip_tokens(ast, tokens, current_token);
+		while ((*current_token)->type == TOKEN_BRACKET_L
+			|| (*current_token)->type == TOKEN_BRACKET_R)
+		{
+			prev_token = (*ast)->token;
+			while (prev_token->next != (*current_token))
+				prev_token = prev_token->next;
+			prev_token->next = NULL;
+			free((*current_token)->value);
+			free((*current_token));
+			(*current_token) = NULL;
+			(*current_token) = prev_token;
+		}
+		return true;
+	}
+	return false;
+}
+
+void	create_arms(t_token	**left_arm, t_token	**right_arm, 
+	t_token	**tokens, t_token	**current_token, 
+	t_token	**highest_token, t_ast_node	**ast)
+{
+	(*left_arm) = (*tokens);
+	(*current_token) = (*tokens);
+	while ((*current_token)->next && (*current_token)->next != (*highest_token))
+		(*current_token) = (*current_token)->next;
+	(*current_token)->next = NULL;
+	(*right_arm) = (*highest_token)->next;
+	(*ast)->token->next = NULL;
+}
+
 // walk through tokens and search for the highest precedence operator
 // -> use precedence_node for that
 // set the root of the ast to that operator
@@ -55,7 +106,6 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	t_token		*right_arm;
 	int			highest_token_brackets_level;
 	int			brackets_level;
-	t_token		*prev_token;
 
 	if (!tokens)
 		return ;
@@ -66,37 +116,9 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	ast = *root;
 	get_highest_token(&highest_token, &current_token, &highest_token_brackets_level, &brackets_level);
 	create_ast(&ast, root, &highest_token);
-	if (highest_token->type == TOKEN_WORD)
-	{
-		ast->token = tokens;
-		while (ast->token->type == TOKEN_BRACKET_L
-			|| ast->token->type == TOKEN_BRACKET_R)
-			ast->token = ast->token->next;
-		current_token = ast->token;
-		while (current_token->next != NULL)
-			current_token = current_token->next;
-		while (current_token->type == TOKEN_BRACKET_L
-			|| current_token->type == TOKEN_BRACKET_R)
-		{
-			prev_token = ast->token;
-			while (prev_token->next != current_token)
-				prev_token = prev_token->next;
-			prev_token->next = NULL;
-			free(current_token);
-			current_token = NULL;
-			current_token = prev_token;
-		}
+	if (handle_highest_token(&ast, &highest_token, &tokens, &current_token) || highest_token->next == NULL)
 		return ;
-	}
-	if (highest_token->next == NULL)
-		return ;
-	left_arm = tokens;
-	current_token = tokens;
-	while (current_token->next && current_token->next != highest_token)
-		current_token = current_token->next;
-	current_token->next = NULL;
-	right_arm = highest_token->next;
-	ast->token->next = NULL;
+	create_arms(&left_arm, &right_arm, &tokens, &current_token, &highest_token, &ast);
 	if (left_arm == highest_token)
 		left_arm = NULL;
 	gen_ast(&(ast->left), left_arm);
