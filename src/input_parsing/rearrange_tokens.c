@@ -1,15 +1,18 @@
 #include "../../inc/minishell.h"
 
-bool	before_comes_word(t_token *token)
+bool	before_comes_word(t_token **token)
 {
-	prev_link_list(&token);
-	if (token->prev == NULL)
+	t_token *current;
+
+	current = *token;
+	// prev_link_list(token);
+	if (current->prev == NULL)
 		return (false);
-	while (token->prev != NULL)
+	while (current->prev != NULL)
 	{
-		if (token->prev->type == TOKEN_WORD)
+		if (current->prev->type == TOKEN_WORD)
 			return (true);
-		token = token->prev;
+		current = current->prev;
 	}
 	return (false);
 }
@@ -48,7 +51,8 @@ void	rearrange_tokens(t_token **tokens)
 	}
 	if (current && (current->type == TOKEN_GREATER || current->type == TOKEN_DOUBLE_GREATER))
 	{
-		if (!before_comes_word(current))
+		prev_link_list(tokens);
+		if (!before_comes_word(&current))
 		{			
 			redirect = current;
 			file = redirect;
