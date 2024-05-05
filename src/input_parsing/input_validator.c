@@ -1,8 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_validator.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 17:40:35 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/05 17:43:17 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-t_token_type get_next_type(t_token *token)
+bool			first_is_pipe_second_operator(t_token **prev, t_token **current,
+					t_token **tokens);
+bool			pipe_after_pipe(t_token **current);
+bool			redirect_has_no_file(t_token **current);
+bool			no_file_for_indirect(t_token **current);
+
+t_token_type	get_next_type(t_token *token)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = token;
 	while (current && current->type == TOKEN_SPACE)
@@ -45,6 +63,22 @@ int	validator(char *input)
 	return (0);
 }
 
+void	handle_parenthesis_and_brackets(t_token **current, int *parenthesis,
+		int *quote, int *dquote)
+{
+	*quote = 0;
+	*dquote = 0;
+	*parenthesis = 0;
+	if ((*current)->type == TOKEN_SINGLE_QUOTE && !dquote)
+		*quote = !*quote;
+	else if ((*current)->type == TOKEN_DOUBLE_QUOTE && !quote)
+		*dquote = !*dquote;
+	else if ((*current)->type == TOKEN_BRACKET_L)
+		(*parenthesis)++;
+	else if ((*current)->type == TOKEN_BRACKET_R)
+		(*parenthesis)--;
+}
+
 int	input_validation(t_token **tokens)
 {
 	t_token	*current;
@@ -55,51 +89,15 @@ int	input_validation(t_token **tokens)
 
 	current = *tokens;
 	prev = NULL;
-	quote = 0;
-	dquote = 0;
-	parenthesis = 0;
 	while (current)
 	{
-		// if pipe comes after pipe
-		if ((!prev && (current->type == TOKEN_PIPE)) 
-			|| (current == *tokens && next_is_operator(current)))
-		{
-			while (current->type == TOKEN_SPACE)
-				current = current->next;
-			if (current->type == TOKEN_PIPE)
-				return (ft_print_error("syntax error", NULL), 1);
-		}
-		// // if pipe comes after a operator
-		// if (next_is_operator(current))
-		// {
-		// 	while (current->type == TOKEN_SPACE)
-		// 		current = current->next;
-		// 	if (!(current->type == TOKEN_PIPE) && next_is_operator(current->next))
-		// 		return (ft_print_error("syntax error 2", NULL), 1);
-		// }
-		// if the first token is a pipe
-		// if (current->type == TOKEN_DOUBLE_LESS && get_next_type(current->next) != TOKEN_WORD)
-		// 	return (ft_print_error("syntax error", NULL), 1);
-		if (current->type == TOKEN_PIPE && get_next_type(current->next) == TOKEN_PIPE)
+		if (first_is_pipe_second_operator(&prev, &current, tokens)
+			|| pipe_after_pipe(&current) || ((current == *tokens)
+				&& (get_next_type(current) == TOKEN_PIPE))
+			|| redirect_has_no_file(&current) || no_file_for_indirect(&current))
 			return (ft_print_error("syntax error", NULL), 1);
-		if ((current == *tokens) && (get_next_type(current) == TOKEN_PIPE))
-			return (ft_print_error("syntax error", NULL), 1);
-		// > needs word after it
-		if ((current->type == TOKEN_GREATER || current->type == TOKEN_DOUBLE_GREATER) && ((current->next &&
-				next_is_operator(current->next)) || next_is_newline(current->next)))
-			return (ft_print_error("syntax error", NULL), 1);
-		// < needs word after it
-		if (current->type == TOKEN_LESS && ((current->next &&
-				next_is_operator(current->next)) || next_is_newline(current->next)))
-			return (ft_print_error("syntax error", NULL), 1);
-		if (current->type == TOKEN_SINGLE_QUOTE && !dquote)
-			quote = !quote;
-		else if (current->type == TOKEN_DOUBLE_QUOTE && !quote)
-			dquote = !dquote;
-		else if (current->type == TOKEN_BRACKET_L)
-			parenthesis++;
-		else if (current->type == TOKEN_BRACKET_R)
-			parenthesis--;
+		handle_parenthesis_and_brackets(&current, &parenthesis, &quote,
+			&dquote);
 		prev = current;
 		current = current->next;
 	}
