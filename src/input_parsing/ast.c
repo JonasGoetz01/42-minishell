@@ -1,5 +1,47 @@
 #include "../../inc/minishell.h"
 
+void	get_highest_token(t_token **highest_token, t_token **current_token,
+	int *highest_token_brackets_level, int *brackets_level)
+{
+	while ((*current_token) != NULL)
+	{
+		if ((*current_token)->type == TOKEN_BRACKET_L)
+			brackets_level++;
+		else if ((*current_token)->type == TOKEN_BRACKET_R)
+			brackets_level--;
+		if ((*highest_token) == NULL
+			|| precedence(*(*current_token)) > precedence(*(*highest_token))
+			|| (precedence(*(*current_token)) == precedence(*(*highest_token))
+				&& brackets_level <= highest_token_brackets_level))
+		{
+			(*highest_token) = (*current_token);
+			highest_token_brackets_level = brackets_level;
+		}
+		(*current_token) = (*current_token)->next;
+	}
+}
+
+void create_ast(t_ast_node **ast, t_ast_node **root, t_token **highest_token)
+{
+    if ((*ast) == NULL)
+    {
+        (*ast) = malloc(sizeof(t_ast_node));
+        //@TODO: Check if malloc failed
+        (*ast)->token = *highest_token;
+        (*ast)->process = NULL;
+        (*ast)->left = NULL;
+        (*ast)->right = NULL;
+        (*ast)->file_in = NULL;
+        (*ast)->fd_in[0] = NULL;
+        (*ast)->fd_in[1] = NULL;
+        (*ast)->fd_out[0] = NULL;
+        (*ast)->fd_out[1] = NULL;
+        (*ast)->file_out = NULL;
+        (*ast)->exit_status = -1;
+        *root = *ast;
+    }
+}
+
 // walk through tokens and search for the highest precedence operator
 // -> use precedence_node for that
 // set the root of the ast to that operator
@@ -22,42 +64,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	highest_token_brackets_level = 0;
 	current_token = tokens;
 	ast = *root;
-	while (current_token != NULL)
-	{
-		if (current_token->type == TOKEN_BRACKET_L)
-			brackets_level++;
-		else if (current_token->type == TOKEN_BRACKET_R)
-			brackets_level--;
-		if (highest_token == NULL
-			|| precedence(*current_token) > precedence(*highest_token)
-			|| (precedence(*current_token) == precedence(*highest_token)
-				&& brackets_level <= highest_token_brackets_level))
-		{
-			highest_token = current_token;
-			highest_token_brackets_level = brackets_level;
-		}
-		current_token = current_token->next;
-	}
-	if (DEBUG)
-		printf("Highest token: %s\nHighest Bracket Level: %d\n",
-			highest_token->value, highest_token_brackets_level);
-	if (ast == NULL)
-	{
-		ast = malloc(sizeof(t_ast_node));
-		//@TODO: Check if malloc failed
-		ast->token = highest_token;
-		ast->process = NULL;
-		ast->left = NULL;
-		ast->right = NULL;
-		ast->file_in = NULL;
-		ast->fd_in[0] = NULL;
-		ast->fd_in[1] = NULL;
-		ast->fd_out[0] = NULL;
-		ast->fd_out[1] = NULL;
-		ast->file_out = NULL;
-		ast->exit_status = -1;
-		*root = ast;
-	}
+	get_highest_token(&highest_token, &current_token, &highest_token_brackets_level, &brackets_level);
+	create_ast(&ast, root, &highest_token);
 	if (highest_token->type == TOKEN_WORD)
 	{
 		ast->token = tokens;
