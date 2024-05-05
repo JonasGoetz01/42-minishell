@@ -24,6 +24,7 @@ t_token	*create_token(t_token_type type, char *value)
 		token->value = value;
 		token->next = NULL;
 	}
+	// garbage_collector(token, 0);
 	return (token);
 }
 
@@ -37,6 +38,7 @@ void	free_tokens(t_token *tokens)
 		if (tokens->value)
 			free(tokens->value);
 		free(tokens);
+		tokens = NULL;
 		tokens = next;
 	}
 }
@@ -46,16 +48,12 @@ void	append_token(t_token **head, t_token *new_token)
 	t_token	*current;
 
 	if (*head == NULL)
-	{
 		*head = new_token;
-	}
 	else
 	{
 		current = *head;
 		while (current->next != NULL)
-		{
 			current = current->next;
-		}
 		current->next = new_token;
 	}
 }

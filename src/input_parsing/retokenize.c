@@ -28,6 +28,7 @@ void	retokenize(t_token **tokens)
 			current->next = temp->next;
 			free(temp->value);
 			free(temp);
+			temp = NULL;
 		}
 		// split words with spaces
 		else if (current->type == TOKEN_WORD && ft_strchr(current->value, ' '))

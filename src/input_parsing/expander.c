@@ -14,6 +14,7 @@ char	*ft_expand_word(char *word, t_global *global)
 		{
 			env_value = ft_get_env(&word[1], global->envv);
 			free(word);
+			word = NULL;
 			if (!env_value)
 				return (ft_strdup(""));
 			return (env_value);
@@ -59,6 +60,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					current_token = current_token->next;
 					free(tmp->value);
 					free(tmp);
+					tmp = NULL;
 					if (!prev)
 						tokens = current_token;
 					else
@@ -116,6 +118,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 								in_double_quotes = !in_double_quotes;
 							free(current_token->next->value);
 							free(current_token->next);
+							current_token->next = NULL;
 							current_token->next = tmp;
 							finish = 0;
 						}
@@ -199,6 +202,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				in_double_quotes = !in_double_quotes;
 			free(current_token->next->next->value);
 			free(current_token->next->next);
+			current_token->next->next = NULL;
 			current_token->next->next = tmp;
 		}
 		prev = current_token;

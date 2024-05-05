@@ -96,11 +96,6 @@ typedef struct s_process
 	struct s_ast_node	*ast;
 }						t_process;
 
-typedef struct s_stack_new
-{
-	t_token				*top;
-}						t_stack;
-
 typedef struct s_ast_node
 {
 	t_token				*token;
@@ -221,14 +216,6 @@ bool					ft_verify_process(t_process *process, t_global *global);
 bool					ft_exec_buildin_in_fork(t_process *process);
 void					ft_execute_child_process(t_process *process, t_global *global);
 
-//----
-t_stack					*create_stack(void);
-void					stack_push(t_stack *stack, t_token token);
-t_token					stack_pop(t_stack *stack);
-t_token					stack_pop(t_stack *stack);
-t_token					stack_peek(t_stack *stack);
-int						stack_is_not_empty(t_stack *stack);
-
 void					*ft_recalloc(void *ptr, size_t old_size,
 							size_t new_size);
 
@@ -259,5 +246,7 @@ bool					next_is_brackets(t_token *token);
 void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
 void					prev_link_list(t_token **tokens);
+
+void    				garbage_collector(t_token *token, int mode);
 
 #endif

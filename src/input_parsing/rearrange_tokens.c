@@ -67,6 +67,7 @@ void	rearrange_tokens(t_token **tokens)
 				file->next = tmp->next;
 				free(tmp->value);
 				free(tmp);
+				file->next = NULL;
 				file = file->next;
 				tmp = file->next;
 				if (tmp->next)
@@ -75,7 +76,10 @@ void	rearrange_tokens(t_token **tokens)
 					file->next = NULL;
 				free(tmp->value);
 				free(tmp);
+				tmp = NULL;
 			}
+			else if (file->next && file->next->type == TOKEN_WORD)
+				file = file->next;
 			after_file = file;
 			while (after_file->next && after_file->next->type == TOKEN_SPACE)
 				after_file = after_file->next;

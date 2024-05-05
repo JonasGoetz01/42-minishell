@@ -75,6 +75,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 				prev_token = prev_token->next;
 			prev_token->next = NULL;
 			free(current_token);
+			current_token = NULL;
 			current_token = prev_token;
 		}
 		return ;

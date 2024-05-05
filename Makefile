@@ -15,7 +15,8 @@ VPATH	:=	src \
 			src/utils \
 			src/exec \
 			inc \
-			tests/unit
+			tests/unit \
+			src/garbage_collector
 
 INC		:=	colors.h \
 			minishell.h
@@ -34,7 +35,6 @@ SOURCES	:=	main.c \
 			exec_heredoc.c \
 			prompt.c \
 			tokenize.c \
-			stack_utils.c \
 			input_validator.c \
 			expander.c \
 			token_utils.c \
@@ -61,7 +61,8 @@ SOURCES	:=	main.c \
 			remove_unused_spaces.c \
 			retokenize.c \
 			token_utils_2.c \
-			cleanup.c
+			cleanup.c \
+			garbage_collector.c
 
 
 OBJDIR	:=	obj

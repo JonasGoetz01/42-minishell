@@ -85,6 +85,7 @@ void	remove_spaces_before_arguments(t_token **tokens)
 				prev->next = current->next;
 				free(temp->value);
 				free(temp);
+				temp = NULL;
 				current = prev->next;
 			}
 		}
@@ -110,6 +111,7 @@ void	remove_spaces_after_arguments(t_token **tokens)
 				current->next = current->next->next;
 				free(temp->value);
 				free(temp);
+				temp = NULL;
 			}
 		}
 		if (current)
@@ -140,6 +142,7 @@ void	remove_spaces_at_beginning_end(t_token **tokens)
 				current = current->next;
 				free(temp->value);
 				free(temp);
+				temp = NULL;
 				continue ;
 			}
 		}
