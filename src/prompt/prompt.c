@@ -18,21 +18,12 @@ void	process_input(char *input, t_global *global)
 	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
-	// remove_unused_spaces(&tokens);
-	// print_tokens(tokens);
 	retokenize(&tokens);
 	print_tokens(tokens);
 	rearrange_tokens(&tokens);
 	print_tokens(tokens);
 	if (input_validation(&tokens))
-	{
-		global->exit_status = 2;
-		return ;
-	}
-	else if (DEBUG)
-		printf("Input is valid\n");
-	//combine_words_in_quotes(&tokens);
-	//print_tokens(tokens);
+		return (global->exit_status = 2, (void)0);
 	gen_ast(&ast, tokens);
 	ft_exec_all(ast, global);
 	ft_free_nodes(ast);

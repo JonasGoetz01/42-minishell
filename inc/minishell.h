@@ -224,8 +224,6 @@ void					print_ast(t_ast_node **root, int level);
 
 void					rearrange_tokens(t_token **tokens);
 
-void					combine_words_in_quotes(t_token **tokens);
-
 int						input_validation(t_token **tokens);
 
 void					retokenize(t_token **tokens);
@@ -246,7 +244,5 @@ bool					next_is_brackets(t_token *token);
 void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
 void					prev_link_list(t_token **tokens);
-
-void    				garbage_collector(t_token *token, int mode);
 
 #endif

@@ -15,8 +15,7 @@ VPATH	:=	src \
 			src/utils \
 			src/exec \
 			inc \
-			tests/unit \
-			src/garbage_collector
+			tests/unit
 
 INC		:=	colors.h \
 			minishell.h
@@ -55,14 +54,12 @@ SOURCES	:=	main.c \
 			error_msg.c \
 			file_utils.c \
 			ast.c \
-			combine_words.c \
 			precedence.c \
 			rearrange_tokens.c \
 			remove_unused_spaces.c \
 			retokenize.c \
 			token_utils_2.c \
-			cleanup.c \
-			garbage_collector.c
+			cleanup.c
 
 
 OBJDIR	:=	obj
