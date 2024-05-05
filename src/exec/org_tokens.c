@@ -86,23 +86,7 @@ void	ft_org_tokens(t_ast_node *node)
 		return ;
 	ft_set_token_type_redirs(node, token);
 	ft_combine_words(token);
-	while (token)
-	{
-		if (token->type == TOKEN_WORD)
-		{
-			if (token->value && token->value[0] == '\0')
-			{
-				if (token->next)
-				{
-					if (token->next->type == TOKEN_DOUBLE_QUOTE || token->next->type == TOKEN_SINGLE_QUOTE)
-						break ;
-				}
-			}
-			else
-				break ;
-		}
-		token = token->next;
-	}
+	token = ft_first_valid_token(token);
 	ft_set_token_type_args(token);
 	ft_org_tokens(node->left);
 	ft_org_tokens(node->right);
