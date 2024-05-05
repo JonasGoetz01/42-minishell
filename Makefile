@@ -59,7 +59,8 @@ SOURCES	:=	main.c \
 			remove_unused_spaces.c \
 			retokenize.c \
 			token_utils_2.c \
-			cleanup.c
+			cleanup.c \
+			ast_utils.c
 
 
 OBJDIR	:=	obj
