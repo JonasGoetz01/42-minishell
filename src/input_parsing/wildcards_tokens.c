@@ -37,11 +37,22 @@ static void	ft_expand_wildcard_token(t_token *token)
 
 void	ft_expand_wildcards(t_token *token)
 {
+	bool	in_single_quotes;
+	bool	in_double_quotes;
+
+	in_single_quotes = false;
+	in_double_quotes = false;
 	while (token)
 	{
-		if (token->type == TOKEN_WORD)
+		if (token->type == TOKEN_SINGLE_QUOTE)
+			in_single_quotes = !in_single_quotes;
+		if (token->type == TOKEN_DOUBLE_QUOTE)
+			in_double_quotes = !in_double_quotes;
+		if (token->type == TOKEN_WORD || token->type == TOKEN_ARG)
 		{
-			if (ft_strnstr(token->value, "*", ft_strlen(token->value)) != 0)
+			if (ft_strnstr(token->value, "*", ft_strlen(token->value)) != 0
+				&& in_single_quotes == false
+				&& in_double_quotes == false)
 				ft_expand_wildcard_token(token);
 		}
 		token = token->next;

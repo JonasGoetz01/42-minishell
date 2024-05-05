@@ -31,7 +31,6 @@ void	process_input(char *input, t_global *global)
 	}
 	else if (DEBUG)
 		printf("Input is valid\n");
-	ft_expand_wildcards(tokens);
 	//combine_words_in_quotes(&tokens);
 	//print_tokens(tokens);
 	gen_ast(&ast, tokens);
