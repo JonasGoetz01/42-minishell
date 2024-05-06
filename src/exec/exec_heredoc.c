@@ -39,6 +39,19 @@ static void	ft_read_here_doc(char *limiter, int fd_pipe[2], t_global *global)
 	}
 }
 
+static void	ft_child_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_global *global)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
+	ft_read_here_doc(limiter, fd_pipe, global);
+	close(fd_pipe[PIPE_WRITE]);
+	close(fd_pipe[PIPE_READ]);
+	ft_close_all_fds(global);
+	ft_free_nodes(ast);
+	ft_free_global(global);
+	exit(EXIT_SUCCESS);
+}
+
 static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_global *global)
 {
 	pid_t	pid;
@@ -50,17 +63,7 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 	if (pid == -1)
 		return ;
 	else if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_IGN);
-		ft_read_here_doc(limiter, fd_pipe, global);
-		close(fd_pipe[PIPE_WRITE]);
-		close(fd_pipe[PIPE_READ]);
-		ft_close_all_fds(global);
-		ft_free_nodes(ast);
-		ft_free_global(global);
-		exit(EXIT_SUCCESS);
-	}
+		ft_child_here_doc(limiter, fd_pipe, ast, global);
 	else
 	{
 		exit_code = ft_wait_pid(pid);
