@@ -76,6 +76,7 @@ static void	ft_execute_input(char *input, t_global *global)
 	ind = 0;
 	while (lines[ind] && global->should_exit == false)
 	{
+		global->old_exit_status = global->exit_status;
 		add_history(lines[ind]);
 		if (validator(lines[ind]))
 		{

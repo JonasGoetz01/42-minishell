@@ -9,7 +9,7 @@ char	*ft_expand_word(char *word, t_global *global)
 		if (word[1] == '\0')
 			return (word);
 		if (word[1] == '?')
-			return (ft_itoa(global->exit_status));
+			return (ft_itoa(global->old_exit_status));
 		else
 		{
 			env_value = ft_get_env(&word[1], global->envv);
@@ -86,8 +86,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 					start++;
 					end = start;
 					while (current_token->value[end]
-						&& (ft_isalnum(current_token->value[end]) 
-						|| current_token->value[end] == '?' 
+						&& (ft_isalnum(current_token->value[end])
+						|| current_token->value[end] == '?'
 						|| current_token->value[end] == '_'))
 						end++;
 					if (end - start == 0)
@@ -154,7 +154,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 							current_token->type = TOKEN_WORD;
 						free(temp);
 					}
-					else 
+					else
 					{
 						prev = current_token;
 						current_token = current_token->next;
@@ -180,8 +180,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 	current_token = tokens;
 	while (current_token != NULL)
 	{
-		if (current_token->next && current_token->next->type == TOKEN_WORD 
-			&& ft_strlen(current_token->next->value) == 1 
+		if (current_token->next && current_token->next->type == TOKEN_WORD
+			&& ft_strlen(current_token->next->value) == 1
 			&& current_token->next->value[0] == '$' && ft_strlen(current_token->next->value) > 1)
 		{
 			if (!current_token->next->next)

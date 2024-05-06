@@ -118,6 +118,7 @@ typedef struct s_global
 {
 	bool				should_exit;
 	int					exit_status;
+	int					old_exit_status;
 	char				**envv;
 	char				**env_export;
 	t_fd				*fds;
