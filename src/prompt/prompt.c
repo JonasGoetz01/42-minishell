@@ -15,7 +15,7 @@ void	process_input(char *input, t_global *global)
 		ft_set_env_export("PWD", cwd, &global->env_export);
 		free(cwd);
 	}
-	tokens = tokenize(input, &tokens);
+	tokenize(input, &tokens);
 	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
