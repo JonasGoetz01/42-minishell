@@ -33,7 +33,7 @@ static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
 	stop = false;
 	while (stop == false)
 	{
-		line = readline("> ");
+		line = ft_test_compatible_readline(global);
 		if (line == NULL)
 			return (ft_error_heredoc(heredoc->limiter));
 		lines = ft_split(line, '\n');

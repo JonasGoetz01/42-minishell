@@ -203,10 +203,12 @@ void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
 void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
-void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node,
+							t_ast_node *ast, t_global *global);
 char					*ft_expand_heredoc(char *str, t_global *global);
 bool					ft_should_expand_heredoc(t_ast_node *node);
 void					ft_error_heredoc(char *limiter);
+char					*ft_test_compatible_readline(t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,
