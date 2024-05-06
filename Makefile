@@ -75,7 +75,8 @@ SOURCES	:=	main.c \
 			exec_heredoc_utils.c \
 			wildcards.c \
 			wildcards_tokens.c \
-			wildcards_files.c
+			wildcards_files.c \
+			build_prompt.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
@@ -106,10 +107,10 @@ fclean: clean
 
 re: fclean all
 
-test:
+test: no-debug
 	valgrind --leak-check=full ./$(NAME)
 
-tester:
+tester: no-debug
 	cd 42_minishell_tester-master && bash tester.sh m
 
 unit: $(TESTS) $(TESTOBJECTS) $(INC)

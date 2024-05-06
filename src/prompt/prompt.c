@@ -8,13 +8,12 @@ void	process_input(char *input, t_global *global)
 
 	ast = NULL;
 	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+		return ;
 	tokens = NULL;
-	if (cwd)
-	{
-		ft_set_env_env("PWD", cwd, &global->envv);
-		ft_set_env_export("PWD", cwd, &global->env_export);
-		free(cwd);
-	}
+	ft_set_env_env("PWD", cwd, &global->envv);
+	ft_set_env_export("PWD", cwd, &global->env_export);
+	free(cwd);
 	tokenize(input, &tokens, 0);
 	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
@@ -29,41 +28,14 @@ void	process_input(char *input, t_global *global)
 	ft_free_nodes(ast);
 }
 
-char	*build_prompt(void)
-{
-	char	*prompt;
-	char	*temp;
-	char	*reset_color;
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	prompt = ft_strdup("");
-	reset_color = ft_strdup(KNRM);
-	temp = ft_strjoin(prompt, KBLU);
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, pwd);
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, KGRN);
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, " ❯ ");
-	free(prompt);
-	prompt = temp;
-	temp = ft_strjoin(prompt, reset_color);
-	free(prompt);
-	free(reset_color);
-	free(pwd);
-	return (temp);
-}
-
 static void	ft_execute_input(char *input, t_global *global)
 {
 	char	**lines;
 	size_t	ind;
 
 	lines = ft_split(input, '\n');
+	if (lines == NULL)
+		return ;
 	ind = 0;
 	while (lines[ind] && global->should_exit == false)
 	{
@@ -81,32 +53,39 @@ static void	ft_execute_input(char *input, t_global *global)
 	ft_arr_free((void **)lines);
 }
 
-int	show_prompt(t_global *global)
+static char	*ft_read_input(t_global *global)
 {
 	char	*input;
 	char	*prompt;
+	char	*tmp;
 
 	if (global->isatty)
 	{
-		prompt = build_prompt();
+		prompt = ft_build_prompt();
+		if (prompt == NULL)
+			return (NULL);
 		input = readline(prompt);
 		free(prompt);
 	}
 	else
 	{
-		input = get_next_line(STDIN_FILENO);
-		input = ft_strtrim(input, "\n");
+		tmp = get_next_line(STDIN_FILENO);
+		input = ft_strtrim(tmp, "\n");
+		free(tmp);
 	}
-	if (!input)
+	return (input);
+}
+
+int	show_prompt(t_global *global)
+{
+	char	*input;
+
+	input = ft_read_input(global);
+	if (input == NULL)
 	{
 		if (global->isatty)
 			ft_putstr_fd("exit\n", 1);
 		return (1);
-	}
-	if (input[0] == '\0')
-	{
-		free(input);
-		return (0);
 	}
 	ft_execute_input(input, global);
 	free(input);
