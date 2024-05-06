@@ -181,7 +181,7 @@ bool					ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 							t_exec_flags *exec_flags, t_global *global);
 int						ft_wait_pid(pid_t pid);
 
-t_token					*tokenize(const char *input);
+t_token					*tokenize(const char *input, t_token **tokens);
 
 t_token					*postfixFromTokens(t_token *tokens);
 int						precedence_node(t_ast_node *node);

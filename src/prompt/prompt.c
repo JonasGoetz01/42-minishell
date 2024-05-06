@@ -14,7 +14,7 @@ void	process_input(char *input, t_global *global)
 		ft_set_env_export("PWD", cwd, &global->env_export);
 		free(cwd);
 	}
-	tokens = tokenize(input);
+	tokens = tokenize(input, &tokens);
 	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
@@ -77,7 +77,7 @@ static void	ft_execute_input(char *input, t_global *global)
 			process_input(lines[ind], global);
 		ind++;
 	}
-	ft_arr_free((void **) lines);
+	ft_arr_free((void **)lines);
 }
 
 int	show_prompt(t_global *global)

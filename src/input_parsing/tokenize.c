@@ -235,37 +235,35 @@ bool	tokenize_util(const char *input, int *i, t_token **tokens, char **value,
 	return (false);
 }
 
-t_token	*tokenize(const char *input)
+t_token	*tokenize(const char *input, t_token **tokens)
 {
-	t_token			*tokens;
-	const char		*delimiters = "()<>|&\"' ";
 	char			*value;
 	t_token_type	type;
 	t_token			*new_token;
 	int				return_value;
 	int				i;
 
-	tokens = NULL;
+	*tokens = NULL;
 	i = 0;
 	while (i < (int)ft_strlen(input) && input[i] != '\0')
 	{
-		if (ft_strchr(delimiters, input[i]))
+		if (ft_strchr("()<>|&\"' ", input[i]))
 		{
-			return_value = handle_double_quotes(input, &i, &tokens, &value,
+			return_value = handle_double_quotes(input, &i, tokens, &value,
 					&type);
 			if (return_value != 0)
 			{
 				if (return_value == 1)
 					continue ;
 			}
-			else if (tokenize_util(input, &i, &tokens, &value, &type))
+			else if (tokenize_util(input, &i, tokens, &value, &type))
 				continue ;
 			new_token = create_token(type, value);
-			append_token(&tokens, new_token);
+			append_token(tokens, new_token);
 			i++;
 		}
 		else
-			handle_word(&i, input, delimiters, &tokens, &new_token);
+			handle_word(&i, input, "()<>|&\"' ", tokens, &new_token);
 	}
-	return (tokens);
+	return (*tokens);
 }
