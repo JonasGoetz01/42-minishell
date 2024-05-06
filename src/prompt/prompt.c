@@ -107,7 +107,11 @@ int	show_prompt(t_global *global)
 		input = ft_strtrim(input, "\n");
 	}
 	if (!input)
+	{
+		if (global->isatty)
+			ft_putstr_fd("exit\n", 1);
 		return (1);
+	}
 	if (input[0] == '\0')
 	{
 		free(input);
