@@ -1,7 +1,5 @@
 #include "../inc/minishell.h"
 
-t_g_signal	g_signal;
-
 void	print_welcome_message(t_global *global)
 {
 	char	*pgrossma;

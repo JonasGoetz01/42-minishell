@@ -31,14 +31,6 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
-typedef enum e_g_signal
-{
-	SIGNAL_NONE,
-	SIGNAL_INT
-}				t_g_signal;
-
-extern t_g_signal	g_signal;
-
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -139,7 +131,6 @@ typedef struct s_heredoc
 	char				*limiter;
 	int					fd_pipe[2];
 }						t_heredoc;
-
 
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
