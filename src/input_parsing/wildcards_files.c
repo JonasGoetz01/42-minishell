@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcards_files.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 19:07:07 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/06 19:07:08 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 #include <dirent.h>
 
@@ -16,10 +28,11 @@ char	**ft_get_files(bool with_hidden)
 	{
 		if (dir_struct->d_type == DT_REG || dir_struct->d_type == DT_DIR)
 		{
-			if (with_hidden || (ft_strncmp(dir_struct->d_name, ".", 1) != 0 && ft_strncmp(dir_struct->d_name, "..", 3) != 0))
+			if (with_hidden || (ft_strncmp(dir_struct->d_name, ".", 1) != 0
+					&& ft_strncmp(dir_struct->d_name, "..", 3) != 0))
 			{
 				if (!ft_arr_add(ft_strdup(dir_struct->d_name), &arr))
-					return (closedir(dir), ft_arr_free((void **) arr), NULL);
+					return (closedir(dir), ft_arr_free((void **)arr), NULL);
 			}
 		}
 		dir_struct = readdir(dir);

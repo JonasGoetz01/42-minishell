@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcards_tokens.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 19:07:16 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/06 19:07:16 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static void	ft_fill_tokens(t_token *token, t_token *last_token, char **files, char *tmp)
+static void	ft_fill_tokens(t_token *token, t_token *last_token, char **files,
+		char *tmp)
 {
 	size_t	ind;
 
@@ -9,7 +22,7 @@ static void	ft_fill_tokens(t_token *token, t_token *last_token, char **files, ch
 	{
 		tmp = ft_strdup(files[ind]);
 		if (tmp == NULL)
-			return (ft_arr_free((void **) files));
+			return (ft_arr_free((void **)files));
 		free(token->value);
 		token->value = tmp;
 		ind++;
@@ -18,7 +31,7 @@ static void	ft_fill_tokens(t_token *token, t_token *last_token, char **files, ch
 	{
 		tmp = ft_strdup(files[ind]);
 		if (tmp == NULL)
-			return (ft_arr_free((void **) files));
+			return (ft_arr_free((void **)files));
 		last_token = token->next;
 		token->next = create_token(TOKEN_SPACE, NULL);
 		token = token->next;
@@ -55,8 +68,7 @@ void	ft_expand_wildcards(t_token *token)
 		if (token->type == TOKEN_WORD)
 		{
 			if (ft_strnstr(token->value, "*", ft_strlen(token->value)) != 0
-				&& in_single_quotes == false
-				&& in_double_quotes == false)
+				&& in_single_quotes == false && in_double_quotes == false)
 				ft_expand_wildcard_token(token);
 		}
 		token = token->next;
