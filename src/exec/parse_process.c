@@ -23,9 +23,11 @@ static char	*ft_loop_check_path(char *cmd, char *path)
 {
 	char	**dirs;
 	char	*cmd_path;
-	int		ind;
+	size_t	ind;
 
 	dirs = ft_split(path, ':');
+	if (dirs == NULL)
+		return (NULL);
 	ind = 0;
 	while (dirs[ind])
 	{
