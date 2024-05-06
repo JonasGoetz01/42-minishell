@@ -1,7 +1,5 @@
 #include "../inc/minishell.h"
 
-t_g_signal	g_signal;
-
 void	print_welcome_message(t_global *global)
 {
 	char	*pgrossma;
@@ -48,6 +46,7 @@ int	main(int argc, char **argv, char **envv)
 	ft_init_t_global(&global, envv);
 	if (global.isatty)
 		print_welcome_message(&global);
+	ft_increase_shlvl(&global);
 	while (true)
 	{
 		if (show_prompt(&global) || global.should_exit)

@@ -76,7 +76,7 @@ bool	ft_add_env_env(char *name, char *value, char ***envv)
 	char	*str;
 
 	if (!value)
-		return false;
+		return (false);
 	temp = ft_strdup(name);
 	if (!temp)
 		return (false);
@@ -214,7 +214,7 @@ bool	ft_set_env_env(char *name, char *value, char ***envv)
 
 void	ft_unset_env(char *name, t_global *global)
 {
-	ssize_t ind;
+	ssize_t	ind;
 
 	if (ft_env_contains(name, global->env_export))
 	{
