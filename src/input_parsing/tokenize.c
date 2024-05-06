@@ -40,8 +40,8 @@ void	handle_empty_single_quotes(t_token **tokens)
 	append_token(tokens, new_token);
 }
 
-int	handle_double_quotes(const char *input, int *i, t_token **tokens,
-		char **value, t_token_type *type)
+int	handle_dq(const char *input, int *i, t_token **tokens, char **value,
+		t_token_type *type)
 {
 	t_token	*new_token;
 	int		token_len;
@@ -202,24 +202,25 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 }
 
 void	handle_word(int *i, const char *input, const char *delimiters,
-		t_token **tokens, t_token **new_token)
+		t_token **tokens)
 {
 	int		token_len;
 	char	*value;
+	t_token	*new_token;
 
 	token_len = token_length(input + *i, delimiters);
 	value = ft_substr(input, *i, token_len);
-	*new_token = create_token(TOKEN_WORD, value);
-	append_token(tokens, *new_token);
+	new_token = create_token(TOKEN_WORD, value);
+	append_token(tokens, new_token);
 	(*i) += token_len;
 }
 
-bool	tokenize_util(const char *input, int *i, t_token **tokens, char **value,
-		t_token_type *type)
+bool	tokenize_util(const char *input, t_token **tokens, t_tokenize_helper *h)
 {
 	int	return_value;
 
-	return_value = handle_single_quotes(input, i, tokens, value, type);
+	return_value = handle_single_quotes(input, &(h->i), tokens, &(h->value),
+			&(h->type));
 	if (return_value != 0)
 	{
 		if (return_value == 1)
@@ -227,43 +228,37 @@ bool	tokenize_util(const char *input, int *i, t_token **tokens, char **value,
 	}
 	else
 	{
-		if (handle_spaces(input, i, tokens))
+		if (handle_spaces(input, &(h->i), tokens))
 			return (true);
 		else
-			handle_other_delimiters(value, input, i, type);
+			handle_other_delimiters(&(h->value), input, &(h->i), &(h->type));
 	}
 	return (false);
 }
 
 t_token	*tokenize(const char *input, t_token **tokens)
 {
-	char			*value;
-	t_token_type	type;
-	t_token			*new_token;
-	int				return_value;
-	int				i;
+	t_tokenize_helper	h;
+	t_token				*new_token;
+	int					rv;
 
 	*tokens = NULL;
-	i = 0;
-	while (i < (int)ft_strlen(input) && input[i] != '\0')
+	h.i = 0;
+	while (h.i < (int)ft_strlen(input) && input[h.i] != '\0')
 	{
-		if (ft_strchr("()<>|&\"' ", input[i]))
+		if (ft_strchr("()<>|&\"' ", input[h.i]))
 		{
-			return_value = handle_double_quotes(input, &i, tokens, &value,
-					&type);
-			if (return_value != 0)
-			{
-				if (return_value == 1)
-					continue ;
-			}
-			else if (tokenize_util(input, &i, tokens, &value, &type))
+			rv = handle_dq(input, &(h.i), tokens, &(h.value), &(h.type));
+			if (rv != 0 || tokenize_util(input, tokens, &h))
 				continue ;
-			new_token = create_token(type, value);
+			else if (tokenize_util(input, tokens, &h))
+				continue ;
+			new_token = create_token(h.type, h.value);
 			append_token(tokens, new_token);
-			i++;
+			h.i++;
 		}
 		else
-			handle_word(&i, input, "()<>|&\"' ", tokens, &new_token);
+			handle_word(&(h.i), input, "()<>|&\"' ", tokens);
 	}
 	return (*tokens);
 }

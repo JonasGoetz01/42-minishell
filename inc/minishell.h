@@ -137,6 +137,13 @@ typedef struct s_rearrange_helper
 	t_token				*before_end;
 }						t_rearrange_helper;
 
+typedef struct s_tokenize_helper
+{
+	char				*value;
+	t_token_type		type;
+	int					i;
+}						t_tokenize_helper;
+
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
 
