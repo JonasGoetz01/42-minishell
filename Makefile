@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	?=  -Wextra -Wall -Werror -g #-fsanitize=address -O1
+CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
 DEBUG ?=  1
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
@@ -107,10 +107,10 @@ fclean: clean
 
 re: fclean all
 
-test:
+test: no-debug
 	valgrind --leak-check=full ./$(NAME)
 
-tester:
+tester: no-debug
 	cd 42_minishell_tester-master && bash tester.sh m
 
 unit: $(TESTS) $(TESTOBJECTS) $(INC)
