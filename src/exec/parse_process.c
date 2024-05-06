@@ -1,28 +1,5 @@
 #include "../../inc/minishell.h"
 
-t_process	*ft_create_process(char *cmd, char **args,
-			t_ast_node *node, t_ast_node *ast)
-{
-	t_process	*process;
-
-	process = malloc(sizeof(t_process));
-	if (process == NULL)
-		return (NULL);
-	process->type = PROCESS_FORK;
-	process->cmd = ft_strdup(cmd);
-	process->args = args;
-	process->file_in = node->file_in;
-	process->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-	process->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-	process->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
-	process->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
-	process->file_out = node->file_out;
-	process->pid = -1;
-	process->exit_status = -1;
-	process->ast = ast;
-	return (process);
-}
-
 char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 {
 	char	*cmd_path;
@@ -42,20 +19,12 @@ char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
 	return (NULL);
 }
 
-char	*ft_get_cmd_path(char *cmd, char *path)
+static char	*ft_loop_check_path(char *cmd, char *path)
 {
 	char	**dirs;
 	char	*cmd_path;
 	int		ind;
 
-	if (ft_is_directory(cmd) && ft_strncmp(cmd, ".", 2) != 0 && ft_strncmp(cmd, "..", 3) != 0)
-		return (errno = 21, NULL);
-	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, ".", 2) != 0 && ft_strncmp(cmd, "..", 3) != 0)
-		return (ft_strdup(cmd));
-	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0
-		|| ft_strncmp(cmd, "../", 3) == 0
-		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
-		return (NULL);
 	dirs = ft_split(path, ':');
 	ind = 0;
 	while (dirs[ind])
@@ -68,8 +37,25 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 		}
 	}
 	ft_arr_free((void **)dirs);
-	errno = 0;
 	return (NULL);
+}
+
+char	*ft_get_cmd_path(char *cmd, char *path)
+{
+	if (ft_is_directory(cmd)
+		&& ft_strncmp(cmd, ".", 2) != 0
+		&& ft_strncmp(cmd, "..", 3) != 0)
+		return (errno = 21, NULL);
+	if (access(cmd, F_OK | X_OK) == 0
+		&& ft_strncmp(cmd, ".", 2) != 0
+		&& ft_strncmp(cmd, "..", 3) != 0)
+		return (ft_strdup(cmd));
+	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0
+		|| ft_strncmp(cmd, "../", 3) == 0
+		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
+		return (NULL);
+	errno = 0;
+	return (ft_loop_check_path(cmd, path));
 }
 
 bool	ft_is_buildin_cmd(char *cmd)
