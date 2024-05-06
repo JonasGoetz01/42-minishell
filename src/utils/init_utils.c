@@ -39,6 +39,7 @@ void	ft_init_t_global(t_global *global, char **envv)
 	if (!global->env_export)
 		exit(1);
 	ft_env_cpy(global->envv, &global->env_export);
+	ft_unset_env("_", global);
 	global->exit_status = 0;
 	global->old_exit_status = 0;
 	global->fds = NULL;
