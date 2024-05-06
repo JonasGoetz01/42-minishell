@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-void	ft_open_in_file(t_ast_node *node, t_global *global)
+bool	ft_open_in_file(t_ast_node *node, t_global *global)
 {
 	char	*file_name;
 	t_fd	*fd;
@@ -8,7 +8,7 @@ void	ft_open_in_file(t_ast_node *node, t_global *global)
 	file_name = ft_get_file_name(node);
 	fd = ft_add_t_fd(global);
 	if (!fd)
-		return ;
+		return (false);
 	if (file_name == NULL)
 	{
 		fd->fd_file = -1;
@@ -24,16 +24,12 @@ void	ft_open_in_file(t_ast_node *node, t_global *global)
 	if (node->left)
 	{
 		if (!node->left->file_in)
-		{
-			node->left->file_in = &fd->fd_file;
-			return ;
-		}
+			return (node->left->file_in = &fd->fd_file, true);
 	}
-	ft_close_fd(&fd->fd_file);
-	global->exit_status = 1;
+	return (ft_close_fd(&fd->fd_file), global->exit_status = 1, false);
 }
 
-void	ft_open_out_file(t_ast_node *node, t_global *global)
+bool	ft_open_out_file(t_ast_node *node, t_global *global)
 {
 	char	*file_name;
 	t_fd	*fd;
@@ -41,7 +37,7 @@ void	ft_open_out_file(t_ast_node *node, t_global *global)
 	file_name = ft_get_file_name(node);
 	fd = ft_add_t_fd(global);
 	if (!fd)
-		return ;
+		return (false);
 	if (file_name == NULL)
 	{
 		fd->fd_file = -1;
@@ -57,16 +53,12 @@ void	ft_open_out_file(t_ast_node *node, t_global *global)
 	if (node->left)
 	{
 		if (!node->left->file_out)
-		{
-			node->left->file_out = &fd->fd_file;
-			return ;
-		}
+			return (node->left->file_out = &fd->fd_file, true);
 	}
-	ft_close_fd(&fd->fd_file);
-	global->exit_status = 1;
+	return (ft_close_fd(&fd->fd_file), global->exit_status = 1, false);
 }
 
-void	ft_open_out_append_file(t_ast_node *node, t_global *global)
+bool	ft_open_out_append_file(t_ast_node *node, t_global *global)
 {
 	char	*file_name;
 	t_fd	*fd;
@@ -74,7 +66,7 @@ void	ft_open_out_append_file(t_ast_node *node, t_global *global)
 	file_name = ft_get_file_name(node);
 	fd = ft_add_t_fd(global);
 	if (!fd)
-		return ;
+		return (false);
 	if (file_name == NULL)
 	{
 		fd->fd_file = -1;
@@ -90,11 +82,7 @@ void	ft_open_out_append_file(t_ast_node *node, t_global *global)
 	if (node->left)
 	{
 		if (!node->left->file_out)
-		{
-			node->left->file_out = &fd->fd_file;
-			return ;
-		}
+			return (node->left->file_out = &fd->fd_file, true);
 	}
-	ft_close_fd(&fd->fd_file);
-	global->exit_status = 1;
+	return (ft_close_fd(&fd->fd_file), global->exit_status = 1, false);
 }
