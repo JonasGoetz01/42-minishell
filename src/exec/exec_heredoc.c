@@ -1,25 +1,12 @@
 #include "../../inc/minishell.h"
 
-static void	ft_error_heredoc(char *limiter)
-{
-	char	*msg;
-	char	*tmp;
-
-	tmp = ft_strjoin("here-document at line 1 delimited by end-of-file (wanted `", limiter);
-	if (tmp == NULL)
-		return ;
-	msg = ft_strjoin(tmp, "')");
-	if (msg == NULL)
-		return (free(tmp));
-	ft_print_error(msg, "warning");
-	free(msg);
-}
-
-static bool	ft_process_line(char *line, bool should_expand, t_heredoc *heredoc, t_global *global)
+static bool	ft_process_line(char *line, bool should_expand,
+							t_heredoc *heredoc, t_global *global)
 {
 	char	*expanded;
 
-	if (ft_strncmp(line, heredoc->limiter, ft_strlen(heredoc->limiter) + 1) == 0)
+	if (ft_strncmp(line, heredoc->limiter,
+			ft_strlen(heredoc->limiter) + 1) == 0)
 		return (false);
 	expanded = NULL;
 	if (should_expand)
@@ -35,7 +22,8 @@ static bool	ft_process_line(char *line, bool should_expand, t_heredoc *heredoc, 
 	return (true);
 }
 
-static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand, t_global *global)
+static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
+								t_global *global)
 {
 	char	*line;
 	char	**lines;
@@ -64,7 +52,8 @@ static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand, t_global *g
 	}
 }
 
-static void	ft_child_here_doc(t_heredoc *heredoc, bool should_expand, t_ast_node *ast, t_global *global)
+static void	ft_child_here_doc(t_heredoc *heredoc, bool should_expand,
+	t_ast_node *ast, t_global *global)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
@@ -77,7 +66,8 @@ static void	ft_child_here_doc(t_heredoc *heredoc, bool should_expand, t_ast_node
 	exit(EXIT_SUCCESS);
 }
 
-static void ft_init_here_doc(t_heredoc *heredoc, bool should_expand, t_ast_node *ast, t_global *global)
+static void	ft_init_here_doc(t_heredoc *heredoc, bool should_expand,
+	t_ast_node *ast, t_global *global)
 {
 	pid_t	pid;
 	int		exit_code;

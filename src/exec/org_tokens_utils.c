@@ -10,7 +10,8 @@ t_token	*ft_first_valid_token(t_token *token)
 			{
 				if (token->next)
 				{
-					if (token->next->type == TOKEN_DOUBLE_QUOTE || token->next->type == TOKEN_SINGLE_QUOTE)
+					if (token->next->type == TOKEN_DOUBLE_QUOTE
+						|| token->next->type == TOKEN_SINGLE_QUOTE)
 						break ;
 				}
 			}

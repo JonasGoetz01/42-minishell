@@ -62,7 +62,8 @@ SOURCES	:=	main.c \
 			retokenize.c \
 			token_utils_2.c \
 			cleanup.c \
-			expand_heredoc.c
+			expand_heredoc.c \
+			exec_heredoc_utils.c
 
 
 OBJDIR	:=	obj
