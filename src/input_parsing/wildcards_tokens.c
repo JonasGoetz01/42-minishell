@@ -1,15 +1,9 @@
 #include "../../inc/minishell.h"
 
-static void	ft_expand_wildcard_token(t_token *token)
+static void	ft_fill_tokens(t_token *token, t_token *last_token, char **files, char *tmp)
 {
-	char	**files;
 	size_t	ind;
-	char	*tmp;
-	t_token	*last_token;
 
-	files = ft_expand_wildcard(token->value);
-	if (files == NULL)
-		return ;
 	ind = 0;
 	if (files[ind])
 	{
@@ -33,6 +27,16 @@ static void	ft_expand_wildcard_token(t_token *token)
 		token->next = last_token;
 		ind++;
 	}
+}
+
+static void	ft_expand_wildcard_token(t_token *token)
+{
+	char	**files;
+
+	files = ft_expand_wildcard(token->value);
+	if (files == NULL)
+		return ;
+	ft_fill_tokens(token, NULL, files, NULL);
 }
 
 void	ft_expand_wildcards(t_token *token)
