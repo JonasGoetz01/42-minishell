@@ -50,7 +50,7 @@ int	handle_dq(const char *input, t_token **tokens, t_tokenize_helper *h)
 		if (input[(h->i) + 1] == '\"')
 			return (handle_empty_double_quote(tokens), (h->i) += 2, 1);
 		h->type = TOKEN_DOUBLE_QUOTE;
-		h->value = ft_substr(input, h->i, 1);
+		h->value = ft_strdup("\"");
 		new_token = create_token(h->type, h->value);
 		append_token(tokens, new_token);
 		(h->i)++;
@@ -59,7 +59,7 @@ int	handle_dq(const char *input, t_token **tokens, t_tokenize_helper *h)
 		new_token = create_token(TOKEN_WORD, h->value);
 		append_token(tokens, new_token);
 		(h->i) += token_len;
-		h->value = ft_substr(input, h->i, 1);
+		h->value = ft_strdup("\"");
 		h->type = TOKEN_DOUBLE_QUOTE;
 		return (2);
 	}
