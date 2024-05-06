@@ -177,18 +177,6 @@ void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process, t_global *global);
 void					ft_export_buildin(t_process *process, t_global *global);
 void					ft_unset_buildin(t_process *process, t_global *global);
-bool					ft_env_contains(char *name, char **env);
-bool					ft_set_env_export(char *name, char *value,
-							char ***envv);
-bool					ft_set_env_env(char *name, char *value, char ***envv);
-bool					ft_add_env_export(char *name, char *value,
-							char ***envv);
-bool					ft_add_env_env(char *name, char *value, char ***envv);
-void					ft_unset_env(char *name, t_global *global);
-char					*ft_get_env(char *name, char **envv);
-char					*ft_trim_to_equal(char *str);
-char					*ft_trim_from_equal(char *str);
-bool					ft_is_valid_identifier(char *str);
 char					*ft_get_file_name(t_ast_node *node);
 char					**ft_fill_args(t_token *token, char *cmd);
 void					ft_handle_verify_process_error(t_process *process);
@@ -210,9 +198,9 @@ void					append_token(t_token **head, t_token *new_token);
 size_t					token_count(t_token *tokens);
 int						token_length(const char *input, const char *delimiters);
 void					ft_expand_tokens(t_token *tokens, t_global *global);
-void					ft_open_in_file(t_ast_node *node, t_global *global);
-void					ft_open_out_file(t_ast_node *node, t_global *global);
-void					ft_open_out_append_file(t_ast_node *node,
+bool					ft_open_in_file(t_ast_node *node, t_global *global);
+bool					ft_open_out_file(t_ast_node *node, t_global *global);
+bool					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
 void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast,
 							t_global *global);
@@ -277,5 +265,26 @@ bool					next_is_brackets(t_token *token);
 void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
 void					prev_link_list(t_token **tokens);
+
+//env
+bool					ft_env_contains(char *name, char **env);
+bool					ft_set_env_export(char *name, char *value,
+							char ***envv);
+bool					ft_set_env_env(char *name, char *value, char ***envv);
+bool					ft_add_env_export(char *name, char *value,
+							char ***envv);
+bool					ft_add_env_env(char *name, char *value, char ***envv);
+void					ft_unset_env(char *name, t_global *global);
+char					*ft_get_env(char *name, char **envv);
+char					*ft_trim_to_equal(char *str);
+char					*ft_trim_from_equal(char *str);
+bool					ft_is_valid_identifier(char *str);
+char					**ft_find_env(char *name, char **envv);
+ssize_t					ft_find_env_ind(char *name, char **envv);
+bool					ft_replace_env_export(char *name, char *value,
+							char **envv);
+bool					ft_replace_env_env(char *name, char *value,
+							char **envv);
+char					**ft_find_env(char *name, char **envv);
 
 #endif

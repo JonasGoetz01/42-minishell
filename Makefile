@@ -14,6 +14,7 @@ VPATH	:=	src \
 			src/signals \
 			src/utils \
 			src/exec \
+			src/env \
 			inc \
 			tests/unit
 
@@ -51,8 +52,12 @@ SOURCES	:=	main.c \
 			exec_utils.c \
 			exec_files.c \
 			parse_process.c \
-			alloc_utils.c \
+			parse_process_utils.c \
 			init_utils.c \
+			env_add.c \
+			env_check.c \
+			env_manage.c \
+			env_replace.c \
 			env_utils.c \
 			error_msg.c \
 			file_utils.c \

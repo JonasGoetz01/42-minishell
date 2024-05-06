@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   colors.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 17:49:42 by pgrossma          #+#    #+#             */
+/*   Updated: 2024/05/06 17:49:50 by pgrossma         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef COLORS_H
 # define COLORS_H
 
@@ -9,12 +21,12 @@
 # define KMAG "\x1B[35m"
 # define KCYN "\x1B[36m"
 # define KWHT "\x1B[37m"
-#define KUSER "\[\033[38;2;0;0;0m\]"
-#define KSIGNS "\[\033[38;2;238;51;238m\]"
-#define KBRANCH "\[\033[38;2;255;255;170m\]"
-#define KHOST "\[\033[0;32m\]"
-#define KCONTI "\[\033[0;96m\]"
-#define KPATH "\[\033[38;2;170;255;170m\]"
+# define KUSER "\[\033[38;2;0;0;0m\]"
+# define KSIGNS "\[\033[38;2;238;51;238m\]"
+# define KBRANCH "\[\033[38;2;255;255;170m\]"
+# define KHOST "\[\033[0;32m\]"
+# define KCONTI "\[\033[0;96m\]"
+# define KPATH "\[\033[38;2;170;255;170m\]"
 
 // ######       Functions       ######
 // bottomCharset="\342\224\224\342\224\200\342\224\200\342\225\274"
