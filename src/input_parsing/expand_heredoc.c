@@ -60,7 +60,7 @@ char	*ft_expand_heredoc(char *str, t_global *global)
 	t_token	*tokens;
 	char	*expanded;
 
-	tokens = tokenize(str);
+	tokens = tokenize(str, &tokens);
 	ft_expand_tokens(tokens, global);
 	expanded = ft_combine_str(tokens);
 	free_tokens(tokens);
