@@ -60,6 +60,7 @@ SOURCES	:=	main.c \
 			rearrange_tokens_utils.c \
 			next_is.c \
 			retokenize.c \
+			retokenize_utils.c \
 			token_utils_2.c \
 			cleanup.c \
 			ast_utils.c
