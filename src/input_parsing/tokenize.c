@@ -27,7 +27,7 @@ void	handle_empty_single_quotes(t_token **tokens)
 	t_token			*new_token;
 
 	type = TOKEN_SINGLE_QUOTE;
-	value = ft_strdup("\"");
+	value = ft_strdup("\'");
 	new_token = create_token(type, value);
 	append_token(tokens, new_token);
 	type = TOKEN_WORD;
@@ -35,60 +35,59 @@ void	handle_empty_single_quotes(t_token **tokens)
 	new_token = create_token(type, value);
 	append_token(tokens, new_token);
 	type = TOKEN_SINGLE_QUOTE;
-	value = ft_strdup("\"");
+	value = ft_strdup("\'");
 	new_token = create_token(type, value);
 	append_token(tokens, new_token);
 }
 
-int	handle_dq(const char *input, int *i, t_token **tokens, char **value,
-		t_token_type *type)
+int	handle_dq(const char *input, t_token **tokens, t_tokenize_helper *h)
 {
 	t_token	*new_token;
 	int		token_len;
 
-	if (input[*i] == '\"')
+	if (input[h->i] == '\"')
 	{
-		if (input[(*i) + 1] == '\"')
-			return (handle_empty_double_quote(tokens), (*i) += 2, 1);
-		*type = TOKEN_DOUBLE_QUOTE;
-		*value = ft_substr(input, *i, 1);
-		new_token = create_token(*type, *value);
+		if (input[(h->i) + 1] == '\"')
+			return (handle_empty_double_quote(tokens), (h->i) += 2, 1);
+		h->type = TOKEN_DOUBLE_QUOTE;
+		h->value = ft_substr(input, h->i, 1);
+		new_token = create_token(h->type, h->value);
 		append_token(tokens, new_token);
-		(*i)++;
-		token_len = token_length(input + (*i), "\"");
-		*value = ft_substr(input, *i, token_len);
-		new_token = create_token(TOKEN_WORD, *value);
+		(h->i)++;
+		token_len = token_length(input + (h->i), "\"");
+		h->value = ft_substr(input, h->i, token_len);
+		new_token = create_token(TOKEN_WORD, h->value);
 		append_token(tokens, new_token);
-		(*i) += token_len;
-		*value = ft_substr(input, *i, 1);
-		*type = TOKEN_DOUBLE_QUOTE;
+		(h->i) += token_len;
+		h->value = ft_substr(input, h->i, 1);
+		h->type = TOKEN_DOUBLE_QUOTE;
 		return (2);
 	}
 	return (0);
 }
 
-int	handle_single_quotes(const char *input, int *i, t_token **tokens,
-		char **value, t_token_type *type)
+int	handle_single_quotes(const char *input, t_token **tokens,
+		t_tokenize_helper *h)
 {
 	t_token	*new_token;
 	int		token_len;
 
-	if (input[*i] == '\'')
+	if (input[h->i] == '\'')
 	{
-		if (input[*i + 1] == '\'')
-			return (handle_empty_single_quotes(tokens), (*i) += 2, 1);
-		*type = TOKEN_SINGLE_QUOTE;
-		*value = ft_substr(input, *i, 1);
-		new_token = create_token(*type, *value);
+		if (input[h->i + 1] == '\'')
+			return (handle_empty_single_quotes(tokens), (h->i) += 2, 1);
+		h->type = TOKEN_SINGLE_QUOTE;
+		h->value = ft_substr(input, h->i, 1);
+		new_token = create_token(h->type, h->value);
 		append_token(tokens, new_token);
-		(*i)++;
-		token_len = token_length(input + *i, "\'");
-		*value = ft_substr(input, *i, token_len);
-		new_token = create_token(TOKEN_WORD, *value);
+		(h->i)++;
+		token_len = token_length(input + h->i, "\'");
+		h->value = ft_substr(input, h->i, token_len);
+		new_token = create_token(TOKEN_WORD, h->value);
 		append_token(tokens, new_token);
-		*i += token_len;
-		*value = ft_substr(input, *i, 1);
-		*type = TOKEN_SINGLE_QUOTE;
+		h->i += token_len;
+		h->value = ft_substr(input, h->i, 1);
+		h->type = TOKEN_SINGLE_QUOTE;
 		return (2);
 	}
 	return (0);
@@ -219,8 +218,7 @@ bool	tokenize_util(const char *input, t_token **tokens, t_tokenize_helper *h)
 {
 	int	return_value;
 
-	return_value = handle_single_quotes(input, &(h->i), tokens, &(h->value),
-			&(h->type));
+	return_value = handle_single_quotes(input, tokens, h);
 	if (return_value != 0)
 	{
 		if (return_value == 1)
@@ -248,7 +246,7 @@ t_token	*tokenize(const char *input, t_token **tokens)
 	{
 		if (ft_strchr("()<>|&\"' ", input[h.i]))
 		{
-			rv = handle_dq(input, &(h.i), tokens, &(h.value), &(h.type));
+			rv = handle_dq(input, tokens, &h);
 			if (rv != 0 || tokenize_util(input, tokens, &h))
 				continue ;
 			else if (tokenize_util(input, tokens, &h))
