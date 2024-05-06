@@ -182,7 +182,6 @@ t_token	*tokenize(const char *input)
 	t_token			*new_token;
 	int				return_value;
 	int				i;
-	int				tokenLen;
 
 	tokens = NULL;
 	i = 0;
