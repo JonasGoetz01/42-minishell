@@ -214,6 +214,27 @@ void	handle_word(int *i, const char *input, const char *delimiters,
 	(*i) += token_len;
 }
 
+bool	tokenize_util(const char *input, int *i, t_token **tokens, char **value,
+		t_token_type *type)
+{
+	int	return_value;
+
+	return_value = handle_single_quotes(input, i, tokens, value, type);
+	if (return_value != 0)
+	{
+		if (return_value == 1)
+			return (true);
+	}
+	else
+	{
+		if (handle_spaces(input, i, tokens))
+			return (true);
+		else
+			handle_other_delimiters(value, input, i, type);
+	}
+	return (false);
+}
+
 t_token	*tokenize(const char *input)
 {
 	t_token			*tokens;
@@ -237,23 +258,8 @@ t_token	*tokenize(const char *input)
 				if (return_value == 1)
 					continue ;
 			}
-			else
-			{
-				return_value = handle_single_quotes(input, &i, &tokens, &value,
-						&type);
-				if (return_value != 0)
-				{
-					if (return_value == 1)
-						continue ;
-				}
-				else
-				{
-					if (handle_spaces(input, &i, &tokens))
-						continue ;
-					else
-						handle_other_delimiters(&value, input, &i, &type);
-				}
-			}
+			else if (tokenize_util(input, &i, &tokens, &value, &type))
+				continue ;
 			new_token = create_token(type, value);
 			append_token(&tokens, new_token);
 			i++;
