@@ -52,7 +52,7 @@ void	ft_expand_wildcards(t_token *token)
 			in_single_quotes = !in_single_quotes;
 		if (token->type == TOKEN_DOUBLE_QUOTE)
 			in_double_quotes = !in_double_quotes;
-		if (token->type == TOKEN_WORD || token->type == TOKEN_ARG)
+		if (token->type == TOKEN_WORD)
 		{
 			if (ft_strnstr(token->value, "*", ft_strlen(token->value)) != 0
 				&& in_single_quotes == false

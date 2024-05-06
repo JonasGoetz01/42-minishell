@@ -84,9 +84,9 @@ void	ft_org_tokens(t_ast_node *node)
 	token = node->token;
 	if (!token)
 		return ;
+	ft_expand_wildcards(token);
 	ft_set_token_type_redirs(node, token);
 	ft_combine_words(token);
-	ft_expand_wildcards(token);
 	token = ft_first_valid_token(token);
 	ft_set_token_type_args(token);
 	ft_org_tokens(node->left);
