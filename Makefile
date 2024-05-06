@@ -57,6 +57,7 @@ SOURCES	:=	main.c \
 			ast.c \
 			precedence.c \
 			rearrange_tokens.c \
+			rearrange_tokens_utils.c \
 			next_is.c \
 			retokenize.c \
 			token_utils_2.c \
