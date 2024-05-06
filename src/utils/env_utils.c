@@ -76,7 +76,7 @@ bool	ft_add_env_env(char *name, char *value, char ***envv)
 	char	*str;
 
 	if (!value)
-		return false;
+		return (false);
 	temp = ft_strdup(name);
 	if (!temp)
 		return (false);

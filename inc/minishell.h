@@ -134,6 +134,7 @@ typedef struct s_heredoc
 
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
+void					ft_increase_shlvl(t_global *global);
 
 void					handle_sigint(int sig);
 void					handle_exec(int sig);
