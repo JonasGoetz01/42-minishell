@@ -52,7 +52,6 @@ SOURCES	:=	main.c \
 			exec_utils.c \
 			exec_files.c \
 			parse_process.c \
-			alloc_utils.c \
 			init_utils.c \
 			env_add.c \
 			env_check.c \
