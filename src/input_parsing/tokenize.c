@@ -104,6 +104,62 @@ bool	handle_spaces(const char *input, int *i, t_token **tokens)
 	return (false);
 }
 
+void	handle_other_delimiters(char **value, const char *input, int *i,
+		t_token_type *type)
+{
+	*value = ft_substr(input, *i, 1);
+	if (input[*i] == '(')
+		*type = TOKEN_BRACKET_L;
+	else if (input[*i] == ')')
+		*type = TOKEN_BRACKET_R;
+	else if (input[*i] == '<')
+	{
+		if (input[*i + 1] == '<')
+		{
+			*type = TOKEN_DOUBLE_LESS;
+			*value = ft_substr(input, *i, 2);
+			(*i)++;
+		}
+		else
+			*type = TOKEN_LESS;
+	}
+	else if (input[*i] == '>')
+	{
+		if (input[*i + 1] == '>')
+		{
+			*type = TOKEN_DOUBLE_GREATER;
+			*value = ft_substr(input, *i, 2);
+			(*i)++;
+		}
+		else
+			*type = TOKEN_GREATER;
+	}
+	else if (input[*i] == '|')
+	{
+		if (input[*i + 1] == '|')
+		{
+			*type = TOKEN_DOUBLE_PIPE;
+			*value = ft_substr(input, *i, 2);
+			i++;
+		}
+		else
+			*type = TOKEN_PIPE;
+	}
+	else if (input[*i] == '&')
+	{
+		if (input[*i + 1] == '&')
+		{
+			*type = TOKEN_DOUBLE_AMPERSAND;
+			*value = ft_substr(input, *i, 2);
+			(*i)++;
+		}
+		else
+			*type = TOKEN_AMPERSAND;
+	}
+	else
+		*type = TOKEN_WORD;
+}
+
 t_token	*tokenize(const char *input)
 {
 	t_token			*tokens;
@@ -127,61 +183,7 @@ t_token	*tokenize(const char *input)
 			else if (handle_spaces(input, &i, &tokens))
 				continue ;
 			else
-			{
-				// Handle other delimiters
-				value = ft_substr(input, i, 1);
-				if (input[i] == '(')
-					type = TOKEN_BRACKET_L;
-				else if (input[i] == ')')
-					type = TOKEN_BRACKET_R;
-				else if (input[i] == '<')
-				{
-					if (input[i + 1] == '<')
-					{
-						type = TOKEN_DOUBLE_LESS;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_LESS;
-				}
-				else if (input[i] == '>')
-				{
-					if (input[i + 1] == '>')
-					{
-						type = TOKEN_DOUBLE_GREATER;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_GREATER;
-				}
-				else if (input[i] == '|')
-				{
-					if (input[i + 1] == '|')
-					{
-						type = TOKEN_DOUBLE_PIPE;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_PIPE;
-				}
-				else if (input[i] == '&')
-				{
-					if (input[i + 1] == '&')
-					{
-						type = TOKEN_DOUBLE_AMPERSAND;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_AMPERSAND;
-				}
-				else
-					type = TOKEN_WORD;
-			}
-			// Create and append token
+				handle_other_delimiters(&value, input, &i, &type);
 			new_token = create_token(type, value);
 			append_token(&tokens, new_token);
 			i++;
