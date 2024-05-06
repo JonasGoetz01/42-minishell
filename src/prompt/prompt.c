@@ -8,6 +8,7 @@ void	process_input(char *input, t_global *global)
 
 	ast = NULL;
 	cwd = getcwd(NULL, 0);
+	tokens = NULL;
 	if (cwd)
 	{
 		ft_set_env_env("PWD", cwd, &global->envv);
@@ -21,7 +22,6 @@ void	process_input(char *input, t_global *global)
 	retokenize(&tokens);
 	print_tokens(tokens);
 	rearrange_tokens(&tokens);
-	print_tokens(tokens);
 	if (input_validation(&tokens))
 		return (global->exit_status = 2, (void)0);
 	gen_ast(&ast, tokens);
