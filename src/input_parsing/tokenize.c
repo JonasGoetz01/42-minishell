@@ -140,7 +140,7 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 		{
 			*type = TOKEN_DOUBLE_PIPE;
 			*value = ft_substr(input, *i, 2);
-			i++;
+			(*i)++;
 		}
 		else
 			*type = TOKEN_PIPE;
@@ -170,7 +170,7 @@ void	handle_word(int *i, const char *input, const char *delimiters,
 	value = ft_substr(input, *i, token_len);
 	*new_token = create_token(TOKEN_WORD, value);
 	append_token(tokens, *new_token);
-	i += token_len;
+	(*i) += token_len;
 }
 
 t_token	*tokenize(const char *input)
@@ -206,7 +206,7 @@ t_token	*tokenize(const char *input)
 				else
 				{
 					if (handle_spaces(input, &i, &tokens))
-						;
+						continue ;
 					else
 						handle_other_delimiters(&value, input, &i, &type);
 				}
