@@ -234,11 +234,10 @@ bool	tokenize_util(const char *input, t_token **tokens, t_tokenize_helper *h)
 	return (false);
 }
 
-t_token	*tokenize(const char *input, t_token **tokens)
+t_token	*tokenize(const char *input, t_token **tokens, int rv)
 {
 	t_tokenize_helper	h;
 	t_token				*new_token;
-	int					rv;
 
 	h.i = 0;
 	*tokens = NULL;
