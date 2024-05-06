@@ -1,8 +1,8 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
-DEBUG ?=  1
+CFLAGS	?=  -Wextra -Wall -Werror #-g -fsanitize=address -O1
+DEBUG ?=  0
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
@@ -63,8 +63,10 @@ SOURCES	:=	main.c \
 			token_utils_2.c \
 			cleanup.c \
 			expand_heredoc.c \
-			exec_heredoc_utils.c
-
+			exec_heredoc_utils.c \
+			wildcards.c \
+			wildcards_tokens.c \
+			wildcards_files.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
