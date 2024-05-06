@@ -133,6 +133,12 @@ typedef struct s_exec_flags
 	t_ast_node			*ast;
 }						t_exec_flags;
 
+typedef struct s_heredoc
+{
+	char				*limiter;
+	int					fd_pipe[2];
+}						t_heredoc;
+
 
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
@@ -198,6 +204,7 @@ void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
 void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global);
 char					*ft_expand_heredoc(char *str, t_global *global);
+bool					ft_should_expand_heredoc(t_ast_node *node);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,

@@ -15,7 +15,7 @@ static void	ft_error_heredoc(char *limiter)
 	free(msg);
 }
 
-static void	ft_read_here_doc(char *limiter, int fd_pipe[2], t_global *global)
+static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand, t_global *global)
 {
 	char	*line;
 	char	*expanded;
@@ -24,35 +24,38 @@ static void	ft_read_here_doc(char *limiter, int fd_pipe[2], t_global *global)
 	{
 		line = readline("> ");
 		if (line == NULL)
-			return (ft_error_heredoc(limiter));
-		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+			return (ft_error_heredoc(heredoc->limiter));
+		if (ft_strncmp(line, heredoc->limiter, ft_strlen(heredoc->limiter) + 1) == 0)
 			return (free(line));
-		expanded = ft_expand_heredoc(line, global);
-		if (expanded)
+		if (should_expand)
 		{
-			free(line);
-			line = expanded;
+			expanded = ft_expand_heredoc(line, global);
+			if (expanded)
+			{
+				free(line);
+				line = expanded;
+			}
 		}
-		ft_putstr_fd(line, fd_pipe[PIPE_WRITE]);
-		ft_putchar_fd('\n', fd_pipe[PIPE_WRITE]);
+		ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
+		ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
 		free(line);
 	}
 }
 
-static void	ft_child_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_global *global)
+static void	ft_child_here_doc(t_heredoc *heredoc, bool should_expand, t_ast_node *ast, t_global *global)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
-	ft_read_here_doc(limiter, fd_pipe, global);
-	close(fd_pipe[PIPE_WRITE]);
-	close(fd_pipe[PIPE_READ]);
+	ft_read_here_doc(heredoc, should_expand, global);
+	close(heredoc->fd_pipe[PIPE_WRITE]);
+	close(heredoc->fd_pipe[PIPE_READ]);
 	ft_close_all_fds(global);
 	ft_free_nodes(ast);
 	ft_free_global(global);
 	exit(EXIT_SUCCESS);
 }
 
-static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_global *global)
+static void ft_init_here_doc(t_heredoc *heredoc, bool should_expand, t_ast_node *ast, t_global *global)
 {
 	pid_t	pid;
 	int		exit_code;
@@ -63,7 +66,7 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 	if (pid == -1)
 		return ;
 	else if (pid == 0)
-		ft_child_here_doc(limiter, fd_pipe, ast, global);
+		ft_child_here_doc(heredoc, should_expand, ast, global);
 	else
 	{
 		exit_code = ft_wait_pid(pid);
@@ -76,19 +79,18 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 
 void	ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global)
 {
-	char	*limiter;
-	int		fd_pipe[2];
-	t_fd	*fd;
+	t_fd		*fd;
+	t_heredoc	heredoc;
 
-	limiter = ft_get_file_name(node);
-	if (pipe(fd_pipe) != 0)
+	heredoc.limiter = ft_get_file_name(node);
+	if (pipe(heredoc.fd_pipe) != 0)
 		return (ft_print_error(strerror(errno), NULL));
-	ft_init_here_doc(limiter, fd_pipe, ast, global);
-	close(fd_pipe[PIPE_WRITE]);
+	ft_init_here_doc(&heredoc, ft_should_expand_heredoc(node), ast, global);
+	close(heredoc.fd_pipe[PIPE_WRITE]);
 	fd = ft_add_t_fd(global);
 	if (!fd)
 		return ;
-	fd->fd_pipe[PIPE_READ] = fd_pipe[PIPE_READ];
+	fd->fd_pipe[PIPE_READ] = heredoc.fd_pipe[PIPE_READ];
 	if (node->left && global->exit_status != 130)
 	{
 		if (!node->left->fd_in[PIPE_READ])

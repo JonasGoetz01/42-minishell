@@ -27,6 +27,34 @@ static char	*ft_combine_str(t_token *token)
 	return (str);
 }
 
+bool	ft_should_expand_heredoc(t_ast_node *node)
+{
+	t_token	*token;
+	bool	is_in_single_quotes;
+	bool	is_in_double_quotes;
+
+	is_in_single_quotes = false;
+	is_in_double_quotes = false;
+	if (node->right)
+	{
+		if (node->right->token)
+		{
+			token = node->right->token;
+			while (token)
+			{
+				if (token->type == TOKEN_ARG)
+					return (!(is_in_double_quotes || is_in_single_quotes));
+				else if (token->type == TOKEN_SINGLE_QUOTE)
+					is_in_single_quotes = !is_in_single_quotes;
+				else if (token->type == TOKEN_DOUBLE_QUOTE)
+					is_in_double_quotes = !is_in_double_quotes;
+				token = token->next;
+			}
+		}
+	}
+	return (true);
+}
+
 char	*ft_expand_heredoc(char *str, t_global *global)
 {
 	t_token	*tokens;
