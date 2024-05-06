@@ -114,15 +114,19 @@ bool	handle_spaces(const char *input, int *i, t_token **tokens)
 	return (false);
 }
 
-void	handle_other_delimiters(char **value, const char *input, int *i,
-		t_token_type *type)
+bool	handle_brackets(const char *input, int *i, t_token_type *type)
 {
-	*value = ft_substr(input, *i, 1);
 	if (input[*i] == '(')
-		*type = TOKEN_BRACKET_L;
+		return (*type = TOKEN_BRACKET_L, true);
 	else if (input[*i] == ')')
-		*type = TOKEN_BRACKET_R;
-	else if (input[*i] == '<')
+		return (*type = TOKEN_BRACKET_R, true);
+	return (false);
+}
+
+bool	handle_greater_less(const char *input, int *i, t_token_type *type,
+		char **value)
+{
+	if (input[*i] == '<')
 	{
 		if (input[*i + 1] == '<')
 		{
@@ -132,6 +136,7 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 		}
 		else
 			*type = TOKEN_LESS;
+		return (true);
 	}
 	else if (input[*i] == '>')
 	{
@@ -143,8 +148,14 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 		}
 		else
 			*type = TOKEN_GREATER;
+		return (true);
 	}
-	else if (input[*i] == '|')
+	return (false);
+}
+
+bool	handle_pipe(const char *input, int *i, t_token_type *type, char **value)
+{
+	if (input[*i] == '|')
 	{
 		if (input[*i + 1] == '|')
 		{
@@ -154,8 +165,14 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 		}
 		else
 			*type = TOKEN_PIPE;
+		return (true);
 	}
-	else if (input[*i] == '&')
+	return (false);
+}
+
+bool	handle_and(const char *input, int *i, t_token_type *type, char **value)
+{
+	if (input[*i] == '&')
 	{
 		if (input[*i + 1] == '&')
 		{
@@ -165,7 +182,23 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 		}
 		else
 			*type = TOKEN_AMPERSAND;
+		return (true);
 	}
+	return (false);
+}
+
+void	handle_other_delimiters(char **value, const char *input, int *i,
+		t_token_type *type)
+{
+	*value = ft_substr(input, *i, 1);
+	if (handle_brackets(input, i, type))
+		;
+	else if (handle_greater_less(input, i, type, value))
+		;
+	else if (handle_pipe(input, i, type, value))
+		;
+	else if (handle_and(input, i, type, value))
+		;
 	else
 		*type = TOKEN_WORD;
 }
