@@ -54,5 +54,6 @@ size_t	ft_arr_len(char **arr);
 bool	ft_arr_cpy(char **src, char **dst);
 char	*ft_strtok(char *str, const char *delim);
 char	*get_next_line(int fd);
+void	ft_arr_sort(char **arr);
 
 #endif

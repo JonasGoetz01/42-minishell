@@ -243,6 +243,10 @@ int						input_validation(t_token **tokens);
 
 void					retokenize(t_token **tokens);
 
+char					**ft_expand_wildcard(char *str);
+void					ft_expand_wildcards(t_token *token);
+char					**ft_get_files(bool with_hidden);
+
 void					ft_print_error(const char *msg, const char *arg);
 
 void					free_token(t_token **tokens);
