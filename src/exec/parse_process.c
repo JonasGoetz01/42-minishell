@@ -37,6 +37,7 @@ static char	*ft_loop_check_path(char *cmd, char *path)
 		}
 	}
 	ft_arr_free((void **)dirs);
+	errno = 0;
 	return (NULL);
 }
 
@@ -54,7 +55,6 @@ char	*ft_get_cmd_path(char *cmd, char *path)
 		|| ft_strncmp(cmd, "../", 3) == 0
 		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
 		return (NULL);
-	errno = 0;
 	return (ft_loop_check_path(cmd, path));
 }
 
