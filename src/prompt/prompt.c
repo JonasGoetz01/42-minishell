@@ -8,13 +8,12 @@ void	process_input(char *input, t_global *global)
 
 	ast = NULL;
 	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+		return ;
 	tokens = NULL;
-	if (cwd)
-	{
-		ft_set_env_env("PWD", cwd, &global->envv);
-		ft_set_env_export("PWD", cwd, &global->env_export);
-		free(cwd);
-	}
+	ft_set_env_env("PWD", cwd, &global->envv);
+	ft_set_env_export("PWD", cwd, &global->env_export);
+	free(cwd);
 	tokenize(input, &tokens, 0);
 	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
@@ -35,6 +34,8 @@ static void	ft_execute_input(char *input, t_global *global)
 	size_t	ind;
 
 	lines = ft_split(input, '\n');
+	if (lines == NULL)
+		return ;
 	ind = 0;
 	while (lines[ind] && global->should_exit == false)
 	{
