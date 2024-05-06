@@ -240,15 +240,17 @@ t_token	*tokenize(const char *input, t_token **tokens)
 	t_token				*new_token;
 	int					rv;
 
-	*tokens = NULL;
 	h.i = 0;
 	while (h.i < (int)ft_strlen(input) && input[h.i] != '\0')
 	{
 		if (ft_strchr("()<>|&\"' ", input[h.i]))
 		{
 			rv = handle_dq(input, tokens, &h);
-			if (rv != 0 || tokenize_util(input, tokens, &h))
-				continue ;
+			if (rv != 0)
+			{
+				if (rv == 1)
+					continue ;
+			}
 			else if (tokenize_util(input, tokens, &h))
 				continue ;
 			new_token = create_token(h.type, h.value);
