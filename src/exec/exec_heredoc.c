@@ -15,30 +15,52 @@ static void	ft_error_heredoc(char *limiter)
 	free(msg);
 }
 
+static bool	ft_process_line(char *line, bool should_expand, t_heredoc *heredoc, t_global *global)
+{
+	char	*expanded;
+
+	if (ft_strncmp(line, heredoc->limiter, ft_strlen(heredoc->limiter) + 1) == 0)
+		return (false);
+	expanded = NULL;
+	if (should_expand)
+	{
+		expanded = ft_expand_heredoc(line, global);
+		if (expanded)
+			line = expanded;
+	}
+	ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
+	ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
+	if (expanded)
+		free(expanded);
+	return (true);
+}
+
 static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand, t_global *global)
 {
 	char	*line;
-	char	*expanded;
+	char	**lines;
+	size_t	ind;
+	bool	stop;
 
-	while (true)
+	stop = false;
+	while (stop == false)
 	{
 		line = readline("> ");
 		if (line == NULL)
 			return (ft_error_heredoc(heredoc->limiter));
-		if (ft_strncmp(line, heredoc->limiter, ft_strlen(heredoc->limiter) + 1) == 0)
+		lines = ft_split(line, '\n');
+		if (lines == NULL)
 			return (free(line));
-		if (should_expand)
+		ind = 0;
+		while (lines[ind])
 		{
-			expanded = ft_expand_heredoc(line, global);
-			if (expanded)
-			{
-				free(line);
-				line = expanded;
-			}
+			stop = !ft_process_line(lines[ind], should_expand, heredoc, global);
+			if (stop)
+				break ;
+			ind++;
 		}
-		ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
-		ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
 		free(line);
+		ft_arr_free((void **) lines);
 	}
 }
 
