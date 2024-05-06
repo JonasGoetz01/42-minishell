@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-bool	handle_double_quotes(const char *input, int *i, t_token **tokens)
+int	handle_double_quotes(const char *input, int *i, t_token **tokens)
 {
 	t_token			*new_token;
 	t_token_type	type;
@@ -24,7 +24,7 @@ bool	handle_double_quotes(const char *input, int *i, t_token **tokens)
 			new_token = create_token(type, value);
 			append_token(tokens, new_token);
 			(*i) += 2;
-			return (true);
+			return (1);
 		}
 		type = TOKEN_DOUBLE_QUOTE;
 		value = ft_substr(input, *i, 1);
@@ -38,12 +38,12 @@ bool	handle_double_quotes(const char *input, int *i, t_token **tokens)
 		(*i) += token_len;
 		value = ft_substr(input, *i, 1);
 		type = TOKEN_DOUBLE_QUOTE;
-		return (true);
+		return (2);
 	}
-	return (false);
+	return (0);
 }
 
-bool	handle_single_quotes(const char *input, int *i, t_token **tokens)
+int	handle_single_quotes(const char *input, int *i, t_token **tokens)
 {
 	t_token			*new_token;
 	t_token_type	type;
@@ -67,7 +67,7 @@ bool	handle_single_quotes(const char *input, int *i, t_token **tokens)
 			new_token = create_token(type, value);
 			append_token(tokens, new_token);
 			(*i) += 2;
-			return (true);
+			return (1);
 		}
 		type = TOKEN_SINGLE_QUOTE;
 		value = ft_substr(input, *i, 1);
@@ -81,9 +81,9 @@ bool	handle_single_quotes(const char *input, int *i, t_token **tokens)
 		*i += token_len;
 		value = ft_substr(input, *i, 1);
 		type = TOKEN_SINGLE_QUOTE;
-		return (true);
+		return (2);
 	}
-	return (false);
+	return (0);
 }
 
 bool	handle_spaces(const char *input, int *i, t_token **tokens)
@@ -160,6 +160,19 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 		*type = TOKEN_WORD;
 }
 
+void	handle_word(int *i, const char *input, const char *delimiters,
+		t_token **tokens, t_token **new_token)
+{
+	int		token_len;
+	char	*value;
+
+	token_len = token_length(input + *i, delimiters);
+	value = ft_substr(input, *i, token_len);
+	*new_token = create_token(TOKEN_WORD, value);
+	append_token(tokens, *new_token);
+	i += token_len;
+}
+
 t_token	*tokenize(const char *input)
 {
 	t_token			*tokens;
@@ -167,6 +180,7 @@ t_token	*tokenize(const char *input)
 	char			*value;
 	t_token_type	type;
 	t_token			*new_token;
+	int				return_value;
 	int				i;
 	int				tokenLen;
 
@@ -176,27 +190,34 @@ t_token	*tokenize(const char *input)
 	{
 		if (ft_strchr(delimiters, input[i]))
 		{
-			if (handle_double_quotes(input, &i, &tokens))
-				continue ;
-			else if (handle_single_quotes(input, &i, &tokens))
-				continue ;
-			else if (handle_spaces(input, &i, &tokens))
-				continue ;
+			return_value = handle_double_quotes(input, &i, &tokens);
+			if (return_value != 0)
+			{
+				if (return_value == 1)
+					continue ;
+			}
 			else
-				handle_other_delimiters(&value, input, &i, &type);
+			{
+				return_value = handle_single_quotes(input, &i, &tokens);
+				if (return_value != 0)
+				{
+					if (return_value == 1)
+						continue ;
+				}
+				else
+				{
+					if (handle_spaces(input, &i, &tokens))
+						;
+					else
+						handle_other_delimiters(&value, input, &i, &type);
+				}
+			}
 			new_token = create_token(type, value);
 			append_token(&tokens, new_token);
 			i++;
 		}
 		else
-		{
-			// Handle words
-			tokenLen = token_length(input + i, delimiters);
-			value = ft_substr(input, i, tokenLen);
-			new_token = create_token(TOKEN_WORD, value);
-			append_token(&tokens, new_token);
-			i += tokenLen;
-		}
+			handle_word(&i, input, delimiters, &tokens, &new_token);
 	}
 	return (tokens);
 }
