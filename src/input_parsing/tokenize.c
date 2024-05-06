@@ -1,5 +1,109 @@
 #include "../../inc/minishell.h"
 
+bool	handle_double_quotes(const char *input, int *i, t_token **tokens)
+{
+	t_token			*new_token;
+	t_token_type	type;
+	char			*value;
+	int				token_len;
+
+	if (input[*i] == '\"')
+	{
+		if (input[*i + 1] == '\"')
+		{
+			type = TOKEN_DOUBLE_QUOTE;
+			value = ft_strdup("\"");
+			new_token = create_token(type, value);
+			append_token(tokens, new_token);
+			type = TOKEN_WORD;
+			value = ft_strdup("");
+			new_token = create_token(type, value);
+			append_token(tokens, new_token);
+			type = TOKEN_DOUBLE_QUOTE;
+			value = ft_strdup("\"");
+			new_token = create_token(type, value);
+			append_token(tokens, new_token);
+			(*i) += 2;
+			return (true);
+		}
+		type = TOKEN_DOUBLE_QUOTE;
+		value = ft_substr(input, *i, 1);
+		new_token = create_token(type, value);
+		append_token(tokens, new_token);
+		(*i)++;
+		token_len = token_length(input + *i, "\"");
+		value = ft_substr(input, *i, token_len);
+		new_token = create_token(TOKEN_WORD, value);
+		append_token(tokens, new_token);
+		(*i) += token_len;
+		value = ft_substr(input, *i, 1);
+		type = TOKEN_DOUBLE_QUOTE;
+		return (true);
+	}
+	return (false);
+}
+
+bool	handle_single_quotes(const char *input, int *i, t_token **tokens)
+{
+	t_token			*new_token;
+	t_token_type	type;
+	char			*value;
+	int				token_len;
+
+	if (input[*i] == '\'')
+	{
+		if (input[*i + 1] == '\'')
+		{
+			type = TOKEN_SINGLE_QUOTE;
+			value = ft_strdup("\"");
+			new_token = create_token(type, value);
+			append_token(tokens, new_token);
+			type = TOKEN_WORD;
+			value = ft_strdup("");
+			new_token = create_token(type, value);
+			append_token(tokens, new_token);
+			type = TOKEN_SINGLE_QUOTE;
+			value = ft_strdup("\"");
+			new_token = create_token(type, value);
+			append_token(tokens, new_token);
+			(*i) += 2;
+			return (true);
+		}
+		type = TOKEN_SINGLE_QUOTE;
+		value = ft_substr(input, *i, 1);
+		new_token = create_token(type, value);
+		append_token(tokens, new_token);
+		(*i)++;
+		token_len = token_length(input + *i, "\'");
+		value = ft_substr(input, *i, token_len);
+		new_token = create_token(TOKEN_WORD, value);
+		append_token(tokens, new_token);
+		*i += token_len;
+		value = ft_substr(input, *i, 1);
+		type = TOKEN_SINGLE_QUOTE;
+		return (true);
+	}
+	return (false);
+}
+
+bool	handle_spaces(const char *input, int *i, t_token **tokens)
+{
+	t_token			*new_token;
+	t_token_type	type;
+	char			*value;
+
+	if (input[*i] == ' ')
+	{
+		type = TOKEN_SPACE;
+		value = ft_substr(input, *i, 1);
+		new_token = create_token(type, value);
+		append_token(tokens, new_token);
+		(*i)++;
+		return (true);
+	}
+	return (false);
+}
+
 t_token	*tokenize(const char *input)
 {
 	t_token			*tokens;
@@ -16,83 +120,12 @@ t_token	*tokenize(const char *input)
 	{
 		if (ft_strchr(delimiters, input[i]))
 		{
-			if (input[i] == '\"')
-			{
-				if (input[i + 1] == '\"')
-				{
-					type = TOKEN_DOUBLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_WORD;
-					value = ft_strdup("");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_DOUBLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					i += 2;
-					continue ;
-				}
-				// Handle double quotes
-				type = TOKEN_DOUBLE_QUOTE;
-				value = ft_substr(input, i, 1);
-				new_token = create_token(type, value);
-				append_token(&tokens, new_token);
-				i++;
-				tokenLen = token_length(input + i, "\"");
-				value = ft_substr(input, i, tokenLen);
-				new_token = create_token(TOKEN_WORD, value);
-				append_token(&tokens, new_token);
-				i += tokenLen;
-				value = ft_substr(input, i, 1);
-				type = TOKEN_DOUBLE_QUOTE;
-			}
-			else if (input[i] == '\'')
-			{
-				if (input[i + 1] == '\'')
-				{
-					type = TOKEN_SINGLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_WORD;
-					value = ft_strdup("");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_SINGLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					i += 2;
-					continue ;
-				}
-				// Handle single quotes
-				type = TOKEN_SINGLE_QUOTE;
-				value = ft_substr(input, i, 1);
-				new_token = create_token(type, value);
-				append_token(&tokens, new_token);
-				i++;
-				tokenLen = token_length(input + i, "\'");
-				value = ft_substr(input, i, tokenLen);
-				new_token = create_token(TOKEN_WORD, value);
-				append_token(&tokens, new_token);
-				i += tokenLen;
-				value = ft_substr(input, i, 1);
-				type = TOKEN_SINGLE_QUOTE;
-			}
-			else if (input[i] == ' ')
-			{
-				// Handle spaces, excluding those inside quotes or double quotes
-				type = TOKEN_SPACE;
-				value = ft_substr(input, i, 1);
-				new_token = create_token(type, value);
-				append_token(&tokens, new_token);
-				i++;
+			if (handle_double_quotes(input, &i, &tokens))
 				continue ;
-				// Skip to next iteration to avoid processing spaces inside quotes or double quotes
-			}
+			else if (handle_single_quotes(input, &i, &tokens))
+				continue ;
+			else if (handle_spaces(input, &i, &tokens))
+				continue ;
 			else
 			{
 				// Handle other delimiters
