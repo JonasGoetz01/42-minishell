@@ -34,6 +34,8 @@ SOURCES	:=	main.c \
 			exec_heredoc.c \
 			prompt.c \
 			tokenize.c \
+			tokenize_utils.c \
+			tokenize_utils_2.c \
 			input_validator.c \
 			input_validator_utils.c \
 			expander.c \
