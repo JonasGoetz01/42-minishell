@@ -1,7 +1,7 @@
 #include "../../inc/minishell.h"
 #include <dirent.h>
 
-static char	**ft_get_files(void)
+static char	**ft_get_files(bool with_hidden)
 {
 	DIR				*dir;
 	struct dirent	*dir_struct;
@@ -16,7 +16,7 @@ static char	**ft_get_files(void)
 	{
 		if (dir_struct->d_type == DT_REG || dir_struct->d_type == DT_DIR)
 		{
-			if (ft_strncmp(dir_struct->d_name, ".", 1) != 0 && ft_strncmp(dir_struct->d_name, "..", 3) != 0)
+			if (with_hidden || (ft_strncmp(dir_struct->d_name, ".", 1) != 0 && ft_strncmp(dir_struct->d_name, "..", 3) != 0))
 			{
 				if (!ft_arr_add(ft_strdup(dir_struct->d_name), &arr))
 					return (closedir(dir), ft_arr_free((void **) arr), NULL);
@@ -112,7 +112,7 @@ char	**ft_expand_wildcard(char *str)
 			return (ft_arr_free((void **) arr), NULL);
 		return (arr);
 	}
-	files = ft_get_files();
+	files = ft_get_files(str[0] == '.');
 	result = ft_expand_wildcard_loop(&arr, files, str);
 	ft_arr_free((void **) files);
 	if (!result)
