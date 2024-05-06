@@ -20,7 +20,7 @@ bool	ft_add_env_export(char *name, char *value, char ***envv)
 		return (false);
 	str = ft_strjoin(temp, "\"");
 	free(temp);
-	if (!str)
+	if (str == NULL)
 		return (false);
 	return (ft_arr_add(str, envv));
 }

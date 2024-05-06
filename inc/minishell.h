@@ -152,6 +152,7 @@ typedef struct s_heredoc
 }						t_heredoc;
 
 int						show_prompt(t_global *global);
+char					*ft_build_prompt(void);
 void					ft_init_t_global(t_global *global, char **envv);
 void					ft_increase_shlvl(t_global *global);
 

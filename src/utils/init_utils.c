@@ -54,19 +54,23 @@ void	ft_increase_shlvl(t_global *global)
 	ft_set_env_env("SHLVL", value, &global->envv);
 	ft_set_env_export("SHLVL", value, &global->env_export);
 	free(value);
+	free(var);
 }
 
 void	ft_init_t_global(t_global *global, char **envv)
 {
 	global->should_exit = false;
 	global->envv = ft_arr_create_len(ft_arr_len(envv) + 1);
-	if (!global->envv)
+	if (global->envv == NULL)
 		exit(1);
-	ft_arr_cpy(envv, global->envv);
+	if (!ft_arr_cpy(envv, global->envv))
+		return (free(global->envv), exit(1));
 	global->env_export = ft_arr_create();
 	if (!global->env_export)
-		exit(1);
-	ft_env_cpy(global->envv, &global->env_export);
+		return (ft_arr_free((void **) global->envv), exit(1));
+	if (!ft_env_cpy(global->envv, &global->env_export))
+		return (free(global->envv),
+			ft_arr_free((void **) global->envv), exit(1));
 	ft_unset_env("_", global);
 	global->exit_status = 0;
 	global->old_exit_status = 0;

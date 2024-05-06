@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
+CFLAGS	?=  -Wextra -Wall -Werror -g #-fsanitize=address -O1
 DEBUG ?=  1
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
@@ -75,7 +75,8 @@ SOURCES	:=	main.c \
 			exec_heredoc_utils.c \
 			wildcards.c \
 			wildcards_tokens.c \
-			wildcards_files.c
+			wildcards_files.c \
+			build_prompt.c
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
