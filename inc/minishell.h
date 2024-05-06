@@ -14,7 +14,6 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <sys/types.h>
 # include <unistd.h>
 
 # ifndef DEBUG
@@ -30,6 +29,14 @@
 
 # define PIPE_READ 0
 # define PIPE_WRITE 1
+
+typedef enum e_g_signal
+{
+	SIGNAL_NONE,
+	SIGNAL_INT
+}						t_g_signal;
+
+extern t_g_signal		g_signal;
 
 typedef enum e_token_type
 {
@@ -62,10 +69,10 @@ typedef struct s_token
 
 typedef struct s_fd
 {
-	int			fd_file;
-	int			fd_pipe[2];
-	struct s_fd	*next;
-}				t_fd;
+	int					fd_file;
+	int					fd_pipe[2];
+	struct s_fd			*next;
+}						t_fd;
 
 typedef enum e_process_type
 {
@@ -88,19 +95,14 @@ typedef struct s_process
 	struct s_ast_node	*ast;
 }						t_process;
 
-typedef struct s_stack_new
-{
-	t_token				*top;
-}						t_stack;
-
 typedef struct s_ast_node
 {
 	t_token				*token;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					*file_in;
-	int					*(fd_out[2]);
-	int					*(fd_in[2]);
+	int *(fd_out[2]);
+	int *(fd_in[2]);
 	int					*file_out;
 	int					exit_status;
 	t_process			*process;
@@ -125,6 +127,23 @@ typedef struct s_exec_flags
 	t_token_type		tok_typ;
 	t_ast_node			*ast;
 }						t_exec_flags;
+
+typedef struct s_rearrange_helper
+{
+	t_token				*current;
+	t_token				*redirect;
+	t_token				*file;
+	t_token				*after_file;
+	t_token				*end;
+	t_token				*before_end;
+}						t_rearrange_helper;
+
+typedef struct s_tokenize_helper
+{
+	char				*value;
+	t_token_type		type;
+	int					i;
+}						t_tokenize_helper;
 
 typedef struct s_heredoc
 {
@@ -177,7 +196,7 @@ bool					ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 							t_exec_flags *exec_flags, t_global *global);
 int						ft_wait_pid(pid_t pid);
 
-t_token					*tokenize(const char *input);
+t_token					*tokenize(const char *input, t_token **tokens, int rv);
 
 t_token					*postfixFromTokens(t_token *tokens);
 int						precedence_node(t_ast_node *node);
@@ -195,8 +214,8 @@ void					ft_open_in_file(t_ast_node *node, t_global *global);
 void					ft_open_out_file(t_ast_node *node, t_global *global);
 void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
-void					ft_exec_here_doc(t_ast_node *node,
-							t_ast_node *ast, t_global *global);
+void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast,
+							t_global *global);
 char					*ft_expand_heredoc(char *str, t_global *global);
 bool					ft_should_expand_heredoc(t_ast_node *node);
 void					ft_error_heredoc(char *limiter);
@@ -223,15 +242,8 @@ t_process				*ft_create_process(char *cmd, char **args,
 							t_ast_node *node, t_ast_node *ast);
 bool					ft_verify_process(t_process *process, t_global *global);
 bool					ft_exec_buildin_in_fork(t_process *process);
-void					ft_execute_child_process(t_process *process, t_global *global);
-
-//----
-t_stack					*create_stack(void);
-void					stack_push(t_stack *stack, t_token token);
-t_token					stack_pop(t_stack *stack);
-t_token					stack_pop(t_stack *stack);
-t_token					stack_peek(t_stack *stack);
-int						stack_is_not_empty(t_stack *stack);
+void					ft_execute_child_process(t_process *process,
+							t_global *global);
 
 void					*ft_recalloc(void *ptr, size_t old_size,
 							size_t new_size);
@@ -240,8 +252,6 @@ void					gen_ast(t_ast_node **root, t_token *tokens);
 void					print_ast(t_ast_node **root, int level);
 
 void					rearrange_tokens(t_token **tokens);
-
-void					combine_words_in_quotes(t_token **tokens);
 
 int						input_validation(t_token **tokens);
 
@@ -256,7 +266,7 @@ void					ft_print_error(const char *msg, const char *arg);
 void					free_token(t_token **tokens);
 
 bool					ft_is_directory(const char *path);
-int						isOperator(t_token token);
+int						is_operator(t_token token);
 
 bool					next_is_operator(t_token *token);
 bool					next_is_word(t_token *token);

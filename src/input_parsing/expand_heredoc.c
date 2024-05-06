@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_heredoc.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 19:07:28 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/06 19:07:28 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static char	*ft_combine_str(t_token *token)
@@ -60,7 +72,7 @@ char	*ft_expand_heredoc(char *str, t_global *global)
 	t_token	*tokens;
 	char	*expanded;
 
-	tokens = tokenize(str);
+	tokens = tokenize(str, &tokens, 0);
 	ft_expand_tokens(tokens, global);
 	expanded = ft_combine_str(tokens);
 	free_tokens(tokens);

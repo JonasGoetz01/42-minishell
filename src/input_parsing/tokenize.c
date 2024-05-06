@@ -1,167 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 19:03:35 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/06 19:03:41 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-t_token	*tokenize(const char *input)
-{
-	t_token			*tokens;
-	const char		*delimiters = "()<>|&\"' ";
-	char			*value;
-	t_token_type	type;
-	t_token			*new_token;
-	int				i;
-	int				tokenLen;
+void	handle_empty_double_quote(t_token **tokens);
+void	handle_empty_single_quotes(t_token **tokens);
+int		handle_dq(const char *input, t_token **tokens, t_tokenize_helper *h);
+int		handle_single_quotes(const char *input, t_token **tokens,
+			t_tokenize_helper *h);
+bool	handle_spaces(const char *input, int *i, t_token **tokens);
+bool	handle_brackets(const char *input, int *i, t_token_type *type);
+bool	handle_greater_less(const char *input, int *i, t_token_type *type,
+			char **value);
+bool	handle_pipe(const char *input, int *i, t_token_type *type,
+			char **value);
+bool	handle_and(const char *input, int *i, t_token_type *type, char **value);
+void	handle_other_delimiters(char **value, const char *input, int *i,
+			t_token_type *type);
 
-	tokens = NULL;
-	i = 0;
-	while (i < (int)ft_strlen(input) && input[i] != '\0')
+void	handle_word(int *i, const char *input, const char *delimiters,
+		t_token **tokens)
+{
+	int		token_len;
+	char	*value;
+	t_token	*new_token;
+
+	token_len = token_length(input + *i, delimiters);
+	value = ft_substr(input, *i, token_len);
+	new_token = create_token(TOKEN_WORD, value);
+	append_token(tokens, new_token);
+	(*i) += token_len;
+}
+
+bool	tokenize_util(const char *input, t_token **tokens, t_tokenize_helper *h)
+{
+	int	return_value;
+
+	return_value = handle_single_quotes(input, tokens, h);
+	if (return_value != 0)
 	{
-		if (ft_strchr(delimiters, input[i]))
+		if (return_value == 1)
+			return (true);
+	}
+	else
+	{
+		if (handle_spaces(input, &(h->i), tokens))
+			return (true);
+		else
+			handle_other_delimiters(&(h->value), input, &(h->i), &(h->type));
+	}
+	return (false);
+}
+
+t_token	*tokenize(const char *input, t_token **tokens, int rv)
+{
+	t_tokenize_helper	h;
+	t_token				*new_token;
+
+	h.i = 0;
+	*tokens = NULL;
+	while (h.i < (int)ft_strlen(input) && input[h.i] != '\0')
+	{
+		if (ft_strchr("()<>|&\"' ", input[h.i]))
 		{
-			if (input[i] == '\"')
+			rv = handle_dq(input, tokens, &h);
+			if (rv != 0)
 			{
-				if (input[i + 1] == '\"')
-				{
-					type = TOKEN_DOUBLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_WORD;
-					value = ft_strdup("");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_DOUBLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					i += 2;
+				if (rv == 1)
 					continue ;
-				}
-				// Handle double quotes
-				type = TOKEN_DOUBLE_QUOTE;
-				value = ft_substr(input, i, 1);
-				new_token = create_token(type, value);
-				append_token(&tokens, new_token);
-				i++;
-				tokenLen = token_length(input + i, "\"");
-				value = ft_substr(input, i, tokenLen);
-				new_token = create_token(TOKEN_WORD, value);
-				append_token(&tokens, new_token);
-				i += tokenLen;
-				value = ft_substr(input, i, 1);
-				type = TOKEN_DOUBLE_QUOTE;
 			}
-			else if (input[i] == '\'')
-			{
-				if (input[i + 1] == '\'')
-				{
-					type = TOKEN_SINGLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_WORD;
-					value = ft_strdup("");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					type = TOKEN_SINGLE_QUOTE;
-					value = ft_strdup("\"");
-					new_token = create_token(type, value);
-					append_token(&tokens, new_token);
-					i += 2;
-					continue ;
-				}
-				// Handle single quotes
-				type = TOKEN_SINGLE_QUOTE;
-				value = ft_substr(input, i, 1);
-				new_token = create_token(type, value);
-				append_token(&tokens, new_token);
-				i++;
-				tokenLen = token_length(input + i, "\'");
-				value = ft_substr(input, i, tokenLen);
-				new_token = create_token(TOKEN_WORD, value);
-				append_token(&tokens, new_token);
-				i += tokenLen;
-				value = ft_substr(input, i, 1);
-				type = TOKEN_SINGLE_QUOTE;
-			}
-			else if (input[i] == ' ')
-			{
-				// Handle spaces, excluding those inside quotes or double quotes
-				type = TOKEN_SPACE;
-				value = ft_substr(input, i, 1);
-				new_token = create_token(type, value);
-				append_token(&tokens, new_token);
-				i++;
+			else if (tokenize_util(input, tokens, &h))
 				continue ;
-				// Skip to next iteration to avoid processing spaces inside quotes or double quotes
-			}
-			else
-			{
-				// Handle other delimiters
-				value = ft_substr(input, i, 1);
-				if (input[i] == '(')
-					type = TOKEN_BRACKET_L;
-				else if (input[i] == ')')
-					type = TOKEN_BRACKET_R;
-				else if (input[i] == '<')
-				{
-					if (input[i + 1] == '<')
-					{
-						type = TOKEN_DOUBLE_LESS;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_LESS;
-				}
-				else if (input[i] == '>')
-				{
-					if (input[i + 1] == '>')
-					{
-						type = TOKEN_DOUBLE_GREATER;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_GREATER;
-				}
-				else if (input[i] == '|')
-				{
-					if (input[i + 1] == '|')
-					{
-						type = TOKEN_DOUBLE_PIPE;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_PIPE;
-				}
-				else if (input[i] == '&')
-				{
-					if (input[i + 1] == '&')
-					{
-						type = TOKEN_DOUBLE_AMPERSAND;
-						value = ft_substr(input, i, 2);
-						i++;
-					}
-					else
-						type = TOKEN_AMPERSAND;
-				}
-				else
-					type = TOKEN_WORD;
-			}
-			// Create and append token
-			new_token = create_token(type, value);
-			append_token(&tokens, new_token);
-			i++;
+			new_token = create_token(h.type, h.value);
+			append_token(tokens, new_token);
+			h.i++;
 		}
 		else
-		{
-			// Handle words
-			tokenLen = token_length(input + i, delimiters);
-			value = ft_substr(input, i, tokenLen);
-			new_token = create_token(TOKEN_WORD, value);
-			append_token(&tokens, new_token);
-			i += tokenLen;
-		}
+			handle_word(&(h.i), input, "()<>|&\"' ", tokens);
 	}
-	return (tokens);
+	return (*tokens);
 }
