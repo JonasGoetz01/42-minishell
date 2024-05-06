@@ -241,6 +241,7 @@ t_token	*tokenize(const char *input, t_token **tokens)
 	int					rv;
 
 	h.i = 0;
+	*tokens = NULL;
 	while (h.i < (int)ft_strlen(input) && input[h.i] != '\0')
 	{
 		if (ft_strchr("()<>|&\"' ", input[h.i]))
