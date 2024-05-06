@@ -6,60 +6,19 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 18:40:36 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/06 10:00:16 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	before_comes_word(t_token **token)
+bool	before_comes_word(t_token **token);
+void	move_on(t_token **tokens, t_token **current, t_token **after_file);
+void	skip_to_first_redirect(t_token **tokens, t_token **current);
+
+bool	get_file(t_token **current, t_token **redirect, t_token **file,
+		t_token **tmp)
 {
-	t_token	*current;
-
-	current = *token;
-	if (current->prev == NULL)
-		return (false);
-	while (current->prev != NULL)
-	{
-		if (current->prev->type == TOKEN_WORD)
-			return (true);
-		current = current->prev;
-	}
-	return (false);
-}
-
-void	move_on(t_token **tokens, t_token **current, t_token **after_file)
-{
-	prev_link_list(tokens);
-	if ((*current)->prev)
-	{
-		(*current) = (*current)->prev;
-		(*current)->next = (*after_file);
-	}
-	else
-	{
-		(*current) = *tokens;
-		*tokens = (*after_file);
-	}
-	prev_link_list(tokens);
-}
-
-void	skip_to_first_redirect(t_token **tokens, t_token **current)
-{
-	prev_link_list(tokens);
-	while ((*current) != NULL && !((*current)->type == TOKEN_LESS
-			|| (*current)->type == TOKEN_DOUBLE_LESS
-			|| (*current)->type == TOKEN_GREATER
-			|| (*current)->type == TOKEN_DOUBLE_GREATER))
-	{
-		(*current) = (*current)->next;
-	}
-}
-
-bool	get_file(t_token **current, t_token **redirect, t_token **file)
-{
-	t_token	*tmp;
-
 	*redirect = *current;
 	*file = *redirect;
 	while ((*file)->next && (*file)->next->type == TOKEN_SPACE)
@@ -69,19 +28,17 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file)
 	if ((*file)->next && ((*file)->next->type == TOKEN_SINGLE_QUOTE
 			|| (*file)->next->type == TOKEN_DOUBLE_QUOTE))
 	{
-		tmp = (*file)->next;
-		(*file)->next = tmp->next;
-		free(tmp->value);
-		free(tmp);
+		(*tmp) = (*file)->next;
+		(*file)->next = (*tmp)->next;
+		free((*tmp)->value);
+		free((*tmp));
 		(*file)->next = NULL;
 		(*file) = (*file)->next;
-		tmp = (*file)->next;
-		if (tmp->next)
-			(*file)->next = tmp->next;
-		else
-			(*file)->next = NULL;
-		free(tmp->value);
-		free(tmp);
+		(*tmp) = (*file)->next;
+		if ((*tmp)->next)
+			(*file)->next = (*tmp)->next;
+		free((*tmp)->value);
+		free((*tmp));
 	}
 	else if ((*file)->next && (*file)->next->type == TOKEN_WORD)
 		(*file) = (*file)->next;
@@ -132,7 +89,9 @@ void	rearrange_tokens(t_token **tokens)
 {
 	t_rearrange_helper	helper;
 	t_rearrange_helper	*h;
+	t_token				*tmp;
 
+	tmp = NULL;
 	h = &helper;
 	h->current = *tokens;
 	skip_to_first_redirect(tokens, &(h->current));
@@ -142,7 +101,7 @@ void	rearrange_tokens(t_token **tokens)
 		prev_link_list(tokens);
 		if (!before_comes_word(&(h->current)))
 		{
-			if (get_file(&(h->current), &(h->redirect), &(h->file))
+			if (get_file(&(h->current), &(h->redirect), &(h->file), &tmp)
 				|| get_after_file(&(h->after_file), &(h->file)))
 				return ;
 			get_end(&(h->end), &(h->before_end), &(h->after_file));
