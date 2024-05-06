@@ -15,22 +15,23 @@ static void	ft_error_heredoc(char *limiter)
 	free(msg);
 }
 
-static void	ft_read_here_doc(char *limiter, int fd_pipe[2])
+static void	ft_read_here_doc(char *limiter, int fd_pipe[2], t_global *global)
 {
 	char	*line;
+	char	*expanded;
 
 	while (true)
 	{
 		line = readline("> ");
 		if (line == NULL)
-		{
-			ft_error_heredoc(limiter);
-			break ;
-		}
+			return (ft_error_heredoc(limiter));
 		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+			return (free(line));
+		expanded = ft_expand_heredoc(line, global);
+		if (expanded)
 		{
 			free(line);
-			break ;
+			line = expanded;
 		}
 		ft_putstr_fd(line, fd_pipe[PIPE_WRITE]);
 		ft_putchar_fd('\n', fd_pipe[PIPE_WRITE]);
@@ -52,7 +53,7 @@ static void ft_init_here_doc(char *limiter, int fd_pipe[2], t_ast_node *ast, t_g
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_IGN);
-		ft_read_here_doc(limiter, fd_pipe);
+		ft_read_here_doc(limiter, fd_pipe, global);
 		close(fd_pipe[PIPE_WRITE]);
 		close(fd_pipe[PIPE_READ]);
 		ft_close_all_fds(global);
