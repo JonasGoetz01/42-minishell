@@ -8,31 +8,22 @@ void	process_input(char *input, t_global *global)
 
 	ast = NULL;
 	cwd = getcwd(NULL, 0);
+	tokens = NULL;
 	if (cwd)
 	{
 		ft_set_env_env("PWD", cwd, &global->envv);
 		ft_set_env_export("PWD", cwd, &global->env_export);
 		free(cwd);
 	}
-	tokens = tokenize(input);
+	tokenize(input, &tokens, 0);
 	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
 	print_tokens(tokens);
-	// remove_unused_spaces(&tokens);
-	// print_tokens(tokens);
 	retokenize(&tokens);
 	print_tokens(tokens);
 	rearrange_tokens(&tokens);
-	print_tokens(tokens);
 	if (input_validation(&tokens))
-	{
-		global->exit_status = 2;
-		return ;
-	}
-	else if (DEBUG)
-		printf("Input is valid\n");
-	//combine_words_in_quotes(&tokens);
-	//print_tokens(tokens);
+		return (global->exit_status = 2, (void)0);
 	gen_ast(&ast, tokens);
 	ft_exec_all(ast, global);
 	ft_free_nodes(ast);
@@ -87,7 +78,7 @@ static void	ft_execute_input(char *input, t_global *global)
 			process_input(lines[ind], global);
 		ind++;
 	}
-	ft_arr_free((void **) lines);
+	ft_arr_free((void **)lines);
 }
 
 int	show_prompt(t_global *global)

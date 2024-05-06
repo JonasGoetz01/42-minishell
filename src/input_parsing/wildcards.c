@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcards.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 19:06:52 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/06 19:06:52 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static bool ft_check_reverse(char *str, char **files)
+static bool	ft_check_reverse(char *str, char **files)
 {
 	size_t	last_ind_str;
 	size_t	last_ind_file;
@@ -29,7 +41,8 @@ static void	ft_check(size_t *ind_str, size_t *ind_file, char *str, char **files)
 	}
 }
 
-static bool	ft_check_file(size_t *ind_str, size_t *ind_file, char *str, char **files)
+static bool	ft_check_file(size_t *ind_str, size_t *ind_file, char *str,
+		char **files)
 {
 	while (str[*ind_str] || (*files)[*ind_file])
 	{
@@ -37,7 +50,8 @@ static bool	ft_check_file(size_t *ind_str, size_t *ind_file, char *str, char **f
 		{
 			while (str[(*ind_str)] == '*')
 				(*ind_str)++;
-			if (str[*ind_str] && ft_strnstr(&str[*ind_str], "*", ft_strlen(&str[*ind_str])) == 0)
+			if (str[*ind_str] && ft_strnstr(&str[*ind_str], "*",
+					ft_strlen(&str[*ind_str])) == 0)
 				return (ft_check_reverse(str, files));
 			else
 				ft_check(ind_str, ind_file, str, files);
@@ -81,14 +95,14 @@ char	**ft_expand_wildcard(char *str)
 	if (ft_strnstr(str, "*", ft_strlen(str)) == NULL)
 	{
 		if (!ft_arr_add(ft_strdup(str), &arr))
-			return (ft_arr_free((void **) arr), NULL);
+			return (ft_arr_free((void **)arr), NULL);
 		return (arr);
 	}
 	files = ft_get_files(str[0] == '.');
 	result = ft_expand_wildcard_loop(&arr, files, str);
-	ft_arr_free((void **) files);
+	ft_arr_free((void **)files);
 	if (!result)
-		return (ft_arr_free((void **) arr), NULL);
+		return (ft_arr_free((void **)arr), NULL);
 	ft_arr_sort(arr);
 	return (arr);
 }

@@ -1,8 +1,8 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	?=  -Wextra -Wall -Werror #-g -fsanitize=address -O1
-DEBUG ?=  0
+CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
+DEBUG ?=  1
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft
@@ -35,8 +35,10 @@ SOURCES	:=	main.c \
 			exec_heredoc.c \
 			prompt.c \
 			tokenize.c \
-			stack_utils.c \
+			tokenize_utils.c \
+			tokenize_utils_2.c \
 			input_validator.c \
+			input_validator_utils.c \
 			expander.c \
 			token_utils.c \
 			ctrl.c \
@@ -60,13 +62,15 @@ SOURCES	:=	main.c \
 			error_msg.c \
 			file_utils.c \
 			ast.c \
-			combine_words.c \
 			precedence.c \
 			rearrange_tokens.c \
-			remove_unused_spaces.c \
+			rearrange_tokens_utils.c \
+			next_is.c \
 			retokenize.c \
+			retokenize_utils.c \
 			token_utils_2.c \
 			cleanup.c \
+			ast_utils.c \
 			expand_heredoc.c \
 			exec_heredoc_utils.c \
 			wildcards.c \

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 17:51:44 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/05 17:51:45 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 size_t	token_count(t_token *tokens)
@@ -37,6 +49,7 @@ void	free_tokens(t_token *tokens)
 		if (tokens->value)
 			free(tokens->value);
 		free(tokens);
+		tokens = NULL;
 		tokens = next;
 	}
 }
@@ -46,16 +59,12 @@ void	append_token(t_token **head, t_token *new_token)
 	t_token	*current;
 
 	if (*head == NULL)
-	{
 		*head = new_token;
-	}
 	else
 	{
 		current = *head;
 		while (current->next != NULL)
-		{
 			current = current->next;
-		}
 		current->next = new_token;
 	}
 }
