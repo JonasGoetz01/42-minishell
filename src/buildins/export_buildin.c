@@ -29,6 +29,8 @@ void	ft_export_buildin(t_process *process, t_global *global)
 	export_env = global->env_export;
 	if (!process->args[1])
 	{
+		if (LINUX)
+			ft_arr_sort(export_env);
 		while (*export_env)
 		{
 			printf("declare -x %s\n", *export_env);

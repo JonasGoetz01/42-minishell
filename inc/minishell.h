@@ -112,6 +112,7 @@ typedef struct s_global
 {
 	bool				should_exit;
 	int					exit_status;
+	int					old_exit_status;
 	char				**envv;
 	char				**env_export;
 	t_fd				*fds;
@@ -144,8 +145,15 @@ typedef struct s_tokenize_helper
 	int					i;
 }						t_tokenize_helper;
 
+typedef struct s_heredoc
+{
+	char				*limiter;
+	int					fd_pipe[2];
+}						t_heredoc;
+
 int						show_prompt(t_global *global);
 void					ft_init_t_global(t_global *global, char **envv);
+void					ft_increase_shlvl(t_global *global);
 
 void					handle_sigint(int sig);
 void					handle_exec(int sig);
@@ -208,6 +216,10 @@ void					ft_open_out_append_file(t_ast_node *node,
 							t_global *global);
 void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast,
 							t_global *global);
+char					*ft_expand_heredoc(char *str, t_global *global);
+bool					ft_should_expand_heredoc(t_ast_node *node);
+void					ft_error_heredoc(char *limiter);
+char					*ft_test_compatible_readline(t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
 void					ft_set_right_exit_code(t_ast_node *node,

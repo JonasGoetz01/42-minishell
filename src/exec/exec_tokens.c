@@ -1,6 +1,7 @@
 #include "../../inc/minishell.h"
 
-void	ft_execute_nodes(t_ast_node *node, t_ast_node *ast, bool wait, t_global *global)
+void	ft_execute_nodes(t_ast_node *node,
+	t_ast_node *ast, bool wait, t_global *global)
 {
 	t_exec_flags	exec_flags;
 

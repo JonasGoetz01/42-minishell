@@ -67,6 +67,7 @@ static void	ft_execute_input(char *input, t_global *global)
 	ind = 0;
 	while (lines[ind] && global->should_exit == false)
 	{
+		global->old_exit_status = global->exit_status;
 		add_history(lines[ind]);
 		if (validator(lines[ind]))
 		{
@@ -97,7 +98,11 @@ int	show_prompt(t_global *global)
 		input = ft_strtrim(input, "\n");
 	}
 	if (!input)
+	{
+		if (global->isatty)
+			ft_putstr_fd("exit\n", 1);
 		return (1);
+	}
 	if (input[0] == '\0')
 	{
 		free(input);

@@ -64,10 +64,11 @@ SOURCES	:=	main.c \
 			token_utils_2.c \
 			cleanup.c \
 			ast_utils.c \
+			expand_heredoc.c \
+			exec_heredoc_utils.c \
 			wildcards.c \
 			wildcards_tokens.c \
 			wildcards_files.c
-
 
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
