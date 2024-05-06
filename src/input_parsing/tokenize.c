@@ -1,5 +1,45 @@
 #include "../../inc/minishell.h"
 
+void	handle_empty_double_quote(t_token **tokens)
+{
+	t_token_type	type;
+	char			*value;
+	t_token			*new_token;
+
+	type = TOKEN_DOUBLE_QUOTE;
+	value = ft_strdup("\"");
+	new_token = create_token(type, value);
+	append_token(tokens, new_token);
+	type = TOKEN_WORD;
+	value = ft_strdup("");
+	new_token = create_token(type, value);
+	append_token(tokens, new_token);
+	type = TOKEN_DOUBLE_QUOTE;
+	value = ft_strdup("\"");
+	new_token = create_token(type, value);
+	append_token(tokens, new_token);
+}
+
+void	handle_empty_single_quotes(t_token **tokens)
+{
+	t_token_type	type;
+	char			*value;
+	t_token			*new_token;
+
+	type = TOKEN_SINGLE_QUOTE;
+	value = ft_strdup("\"");
+	new_token = create_token(type, value);
+	append_token(tokens, new_token);
+	type = TOKEN_WORD;
+	value = ft_strdup("");
+	new_token = create_token(type, value);
+	append_token(tokens, new_token);
+	type = TOKEN_SINGLE_QUOTE;
+	value = ft_strdup("\"");
+	new_token = create_token(type, value);
+	append_token(tokens, new_token);
+}
+
 int	handle_double_quotes(const char *input, int *i, t_token **tokens)
 {
 	t_token			*new_token;
@@ -10,22 +50,7 @@ int	handle_double_quotes(const char *input, int *i, t_token **tokens)
 	if (input[*i] == '\"')
 	{
 		if (input[*i + 1] == '\"')
-		{
-			type = TOKEN_DOUBLE_QUOTE;
-			value = ft_strdup("\"");
-			new_token = create_token(type, value);
-			append_token(tokens, new_token);
-			type = TOKEN_WORD;
-			value = ft_strdup("");
-			new_token = create_token(type, value);
-			append_token(tokens, new_token);
-			type = TOKEN_DOUBLE_QUOTE;
-			value = ft_strdup("\"");
-			new_token = create_token(type, value);
-			append_token(tokens, new_token);
-			(*i) += 2;
-			return (1);
-		}
+			return (handle_empty_double_quote(tokens), (*i) += 2, 1);
 		type = TOKEN_DOUBLE_QUOTE;
 		value = ft_substr(input, *i, 1);
 		new_token = create_token(type, value);
@@ -53,22 +78,7 @@ int	handle_single_quotes(const char *input, int *i, t_token **tokens)
 	if (input[*i] == '\'')
 	{
 		if (input[*i + 1] == '\'')
-		{
-			type = TOKEN_SINGLE_QUOTE;
-			value = ft_strdup("\"");
-			new_token = create_token(type, value);
-			append_token(tokens, new_token);
-			type = TOKEN_WORD;
-			value = ft_strdup("");
-			new_token = create_token(type, value);
-			append_token(tokens, new_token);
-			type = TOKEN_SINGLE_QUOTE;
-			value = ft_strdup("\"");
-			new_token = create_token(type, value);
-			append_token(tokens, new_token);
-			(*i) += 2;
-			return (1);
-		}
+			return (handle_empty_single_quotes(tokens), (*i) += 2, 1);
 		type = TOKEN_SINGLE_QUOTE;
 		value = ft_substr(input, *i, 1);
 		new_token = create_token(type, value);
