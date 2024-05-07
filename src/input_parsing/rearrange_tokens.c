@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 08:54:20 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/07 09:16:32 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,47 +71,6 @@ void	get_end(t_token **end, t_token **before_end, t_token **after_file)
 	}
 }
 
-// void	combine_words(t_token **c)
-// {
-// 	t_token	*current;
-// 	t_token	*tmp;
-
-// 	current = *c;
-// 	while (current->next && current->next->type == TOKEN_SPACE)
-// 		current = current->next;
-// 	if (current->next && (current->next->type == TOKEN_DOUBLE_QUOTE
-// 			|| current->next->type == TOKEN_SINGLE_QUOTE))
-// 	{
-// 		if (current->next->next && current->next->next->type == TOKEN_WORD
-// 			&& ft_strlen(current->next->next->value) == 0)
-// 		{
-// 			if (current->next->next->next
-// 				&& current->next->next->next->type == current->next->type)
-// 			{
-// 				tmp = current->next->next->next->next;
-// 				free(current->next->next->next->value);
-// 				free(current->next->next->next);
-// 				free(current->next->next->value);
-// 				free(current->next->next);
-// 				free(current->next->value);
-// 				free(current->next);
-// 				current->next = tmp;
-// 			}
-// 		} else if(current->prev->type == TOKEN_WORD)
-// 		{
-// 			tmp = current->next->next;
-// 			free(current->next->value);
-// 			free(current->next);
-// 			current->next = tmp;
-// 		}
-// 	}
-// 	else if (current->next && current->next->type == TOKEN_WORD)
-// 	{
-// 		while (current->next && current->next->type == TOKEN_WORD)
-// 			current = current->next;
-// 	}
-// }
-
 void	combine_words(t_token **c)
 {
 	t_token	*current;
@@ -151,6 +110,24 @@ void	combine_words(t_token **c)
 	}
 }
 
+int	count_words_after(t_token **c)
+{
+	t_token	*current;
+	int		num_words;
+
+	current = *c;
+	num_words = 0;
+	while (current->next && current->next->type == TOKEN_SPACE)
+		current = current->next;
+	while (current->next && !is_operator(*current->next))
+	{
+		if (current->next->type == TOKEN_WORD)
+			num_words++;
+		current = current->next;
+	}
+	return (num_words);
+}
+
 // sometimes the tokens need to be rearranged
 // example 1:
 // echo < file.txt hello ... => echo hello ... < file.txt
@@ -179,13 +156,13 @@ void	rearrange_tokens(t_token **tokens)
 			|| h->current->type == TOKEN_DOUBLE_GREATER))
 	{
 		prev_link_list(tokens);
-		if (!before_comes_word(&(h->current)))
-			combine_words(&(h->current));
 		printf("---\n");
 		print_tokens(*tokens);
 		printf("---\n");
-		if (!before_comes_word(&(h->current)))
+		if (!before_comes_word(&(h->current))
+			&& count_words_after(&(h->current)) > 1)
 		{
+			combine_words(&(h->current));
 			if (get_file(&(h->current), &(h->redirect), &(h->file), &tmp)
 				|| get_after_file(&(h->after_file), &(h->file)))
 				return ;
