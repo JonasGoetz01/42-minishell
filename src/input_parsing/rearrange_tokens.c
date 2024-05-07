@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 08:20:09 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/07 08:23:49 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ void	combine_words(t_token **c)
 			free(current->next);
 			current->next = tmp;
 		}
+		else if (current->type == TOKEN_SPACE)
+			current = current->next;
 		else if (current->next && current->next->type == TOKEN_WORD)
 		{
 			if (current->type == TOKEN_SPACE)
