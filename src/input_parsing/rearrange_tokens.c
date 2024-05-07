@@ -6,15 +6,17 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 10:00:16 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/07 10:13:24 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	before_comes_word(t_token **token);
+bool	bcw(t_token **token);
 void	move_on(t_token **tokens, t_token **current, t_token **after_file);
 void	skip_to_first_redirect(t_token **tokens, t_token **current);
+int		count_words_after(t_token **c);
+void	combine_words(t_token **c);
 
 bool	get_file(t_token **current, t_token **redirect, t_token **file,
 		t_token **tmp)
@@ -32,7 +34,6 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file,
 		(*file)->next = (*tmp)->next;
 		free((*tmp)->value);
 		free((*tmp));
-		(*file)->next = NULL;
 		(*file) = (*file)->next;
 		(*tmp) = (*file)->next;
 		if ((*tmp)->next)
@@ -71,6 +72,23 @@ void	get_end(t_token **end, t_token **before_end, t_token **after_file)
 	}
 }
 
+void	combine_words_util(t_token **current, t_token **tmp)
+{
+	char	*temp;
+
+	if ((*current)->type == TOKEN_SPACE)
+		temp = ft_strdup((*current)->next->value);
+	else
+		temp = ft_strjoin((*current)->value, (*current)->next->value);
+	free((*current)->value);
+	(*current)->value = temp;
+	(*current)->type = TOKEN_WORD;
+	(*tmp) = (*current)->next->next;
+	free((*current)->next->value);
+	free((*current)->next);
+	(*current)->next = (*tmp);
+}
+
 // sometimes the tokens need to be rearranged
 // example 1:
 // echo < file.txt hello ... => echo hello ... < file.txt
@@ -99,8 +117,9 @@ void	rearrange_tokens(t_token **tokens)
 			|| h->current->type == TOKEN_DOUBLE_GREATER))
 	{
 		prev_link_list(tokens);
-		if (!before_comes_word(&(h->current)))
+		if (!bcw(&(h->current)) && count_words_after(&(h->current)) > 1)
 		{
+			combine_words(&(h->current));
 			if (get_file(&(h->current), &(h->redirect), &(h->file), &tmp)
 				|| get_after_file(&(h->after_file), &(h->file)))
 				return ;

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:58:13 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 16:59:49 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/07 10:06:47 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ bool	handle_highest_token(t_ast_node **ast, t_token **highest_token,
 	t_token	*prev_token;
 
 	prev_token = NULL;
-	if ((*highest_token)->type == TOKEN_WORD)
+	if ((*highest_token)->type == TOKEN_WORD
+		|| (*highest_token)->type == TOKEN_SPACE)
 	{
 		skip_tokens(ast, tokens, current_token);
 		while ((*current_token)->type == TOKEN_BRACKET_L
