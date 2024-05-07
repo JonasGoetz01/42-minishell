@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 08:23:49 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/07 08:54:20 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,8 @@ void	rearrange_tokens(t_token **tokens)
 			|| h->current->type == TOKEN_DOUBLE_GREATER))
 	{
 		prev_link_list(tokens);
-		combine_words(&(h->current));
+		if (!before_comes_word(&(h->current)))
+			combine_words(&(h->current));
 		printf("---\n");
 		print_tokens(*tokens);
 		printf("---\n");
