@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:50:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 17:50:07 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/07 09:27:44 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 // Logical AND && and Logical OR ||
 int	precedence(t_token token)
 {
-	if (token.type == TOKEN_WORD)
+	if (token.type == TOKEN_WORD || token.type == TOKEN_SPACE)
 		return (1);
 	else if (token.type == TOKEN_BRACKET_L || token.type == TOKEN_BRACKET_R)
 		return (0);
