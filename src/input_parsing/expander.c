@@ -260,7 +260,7 @@ int	ft_strlen_til_space(char *str)
 	if (str && str[i] == '$')
 		i++;
 	while (str[i] && (str[i] != ' ' && str[i] != '\'' && str[i] != '\"'
-			&& str[i] != '$' && str[i] != '/'))
+			&& str[i] != '$'))
 		i++;
 	return (i);
 }
