@@ -20,6 +20,11 @@ char	*ft_expand_word(char *word, t_global *global)
 			return (env_value);
 		}
 	}
+	if (word[0] == '~')
+	{
+		if (word[1] == '\0' || word[1] == '/')
+			return (ft_get_env("HOME", global->envv));
+	}
 	return (word);
 }
 
@@ -315,20 +320,35 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				prev_link_list(&tokens);
 				current = temp;
 			}
+			else if (current->type == TOKEN_WORD && !in_single_quotes
+				&& !in_double_quotes && !current->next)
+			{
+				expanded_word = ft_expand_word(current->value, global);
+				if (expanded_word)
+				{
+					if (ft_strlen(expanded_word) != ft_strlen(current->value)
+						|| ft_strncmp(expanded_word, current->value,
+							ft_strlen(expanded_word)) != 0)
+					{
+						if (current->value)
+							free(current->value);
+						current->value = ft_strdup(expanded_word);
+					}
+				}
+			}
 		}
-		// else if (current->type == TOKEN_WORD && ft_strlen(current->value) > 1
-		// 	&& !in_single_quotes && current->value[0] == '$')
-		// {
-		// 	printf("else1\n");
-		// 	expanded_word = ft_expand_word(current->value, global);
-		// 	if (expanded_word)
-		// 	{
-		// 		if (ft_strlen(expanded_word) != ft_strlen(current->value)
-		// 			|| ft_strncmp(expanded_word, current->value,
-		// 				ft_strlen(expanded_word)) != 0)
-		// 			current->value = ft_strdup(expanded_word);
-		// 	}
-		// }
+		else if (current->type == TOKEN_WORD && !in_single_quotes
+			&& !in_double_quotes && current->value[0] == '~'
+			&& (current->value[1] == '\0' || current->value[1] == '/'))
+		{
+			expanded_word = ft_strjoin(ft_get_env("HOME", global->envv),
+					ft_substr(current->value, 1, ft_strlen(current->value)));
+			if (expanded_word)
+			{
+				free(current->value);
+				current->value = ft_strdup(expanded_word);
+			}
+		}
 		else if (current->type == TOKEN_WORD && ft_strlen(current->value) > 1
 			&& !in_single_quotes && ft_strchr(current->value, '$'))
 		{
