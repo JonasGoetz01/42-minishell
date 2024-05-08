@@ -252,12 +252,23 @@ char	*ft_expand_word(char *word, t_global *global)
 // 	}
 // }
 
+int	ft_strlen_til_space(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != ' ')
+		i++;
+	return (i);
+}
+
 void	ft_expand_tokens(t_token *tokens, t_global *global)
 {
 	t_token	*current;
 	t_token	*temp;
 	char	*tmp;
 	char	*remind;
+	char	*remind2;
 	char	*expanded_word;
 	bool	in_single_quotes;
 	bool	in_double_quotes;
@@ -272,7 +283,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 		if (current->type == TOKEN_WORD && ft_strlen(current->value) == 1)
 		{
 			if (current->type == TOKEN_WORD && !in_single_quotes
-				&& (current->next->type != TOKEN_SINGLE_QUOTE
+				&& current->next && (current->next->type != TOKEN_SINGLE_QUOTE
 					&& current->next->type != TOKEN_DOUBLE_QUOTE))
 			{
 				expanded_word = ft_expand_word(current->value, global);
@@ -289,7 +300,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				}
 			}
 			else if (current->type == TOKEN_WORD && !in_single_quotes
-				&& !in_double_quotes
+				&& !in_double_quotes && current->next
 				&& (current->next->type == TOKEN_SINGLE_QUOTE
 					|| current->next->type == TOKEN_DOUBLE_QUOTE))
 			{
@@ -321,14 +332,37 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			i = 0;
 			while (current->value && current->value[i] != '$')
 				i++;
-			remind = ft_substr(current->value, 0, i);
-			tmp = ft_expand_word(ft_substr(current->value, i,
-						ft_strlen(current->value)), global);
-			if (tmp)
+			if (ft_strchr(&current->value[i], '$'))
 			{
-				free(current->value);
-				current->value = ft_strjoin(remind, tmp);
-				free(tmp);
+				remind = ft_substr(current->value, 0, i);
+				remind2 = ft_substr(current->value, i
+						+ ft_strlen_til_space(&current->value[i]),
+						ft_strlen(current->value)
+						- (ft_strchr(&current->value[i], '$')
+							- &current->value[i]));
+				tmp = ft_expand_word(ft_substr(&current->value[i],
+							ft_strchr(&current->value[i], '$')
+							- &current->value[i],
+							ft_strlen_til_space(&current->value[i])), global);
+				if (tmp)
+				{
+					free(current->value);
+					current->value = ft_strjoin(remind, ft_strjoin(tmp,
+								remind2));
+					free(tmp);
+				}
+			}
+			else
+			{
+				remind = ft_substr(current->value, 0, i);
+				tmp = ft_expand_word(ft_substr(current->value, i,
+							ft_strlen(current->value)), global);
+				if (tmp)
+				{
+					free(current->value);
+					current->value = ft_strjoin(remind, tmp);
+					free(tmp);
+				}
 			}
 		}
 		else if (current->type == TOKEN_SINGLE_QUOTE)
