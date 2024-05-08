@@ -257,7 +257,10 @@ int	ft_strlen_til_space(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && (str[i] != ' ' && str[i] != '\'' && str[i] != '\"'))
+	if (str && str[i] == '$')
+		i++;
+	while (str[i] && (str[i] != ' ' && str[i] != '\'' && str[i] != '\"'
+			&& str[i] != '$' && str[i] != '/'))
 		i++;
 	return (i);
 }
@@ -313,24 +316,25 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 				current = temp;
 			}
 		}
+		// else if (current->type == TOKEN_WORD && ft_strlen(current->value) > 1
+		// 	&& !in_single_quotes && current->value[0] == '$')
+		// {
+		// 	printf("else1\n");
+		// 	expanded_word = ft_expand_word(current->value, global);
+		// 	if (expanded_word)
+		// 	{
+		// 		if (ft_strlen(expanded_word) != ft_strlen(current->value)
+		// 			|| ft_strncmp(expanded_word, current->value,
+		// 				ft_strlen(expanded_word)) != 0)
+		// 			current->value = ft_strdup(expanded_word);
+		// 	}
+		// }
 		else if (current->type == TOKEN_WORD && ft_strlen(current->value) > 1
-			&& !in_single_quotes && current->value[0] == '$')
-		{
-			expanded_word = ft_expand_word(current->value, global);
-			if (expanded_word)
-			{
-				if (ft_strlen(expanded_word) != ft_strlen(current->value)
-					|| ft_strncmp(expanded_word, current->value,
-						ft_strlen(expanded_word)) != 0)
-					current->value = ft_strdup(expanded_word);
-			}
-		}
-		else if (current->type == TOKEN_WORD && ft_strlen(current->value) > 1
-			&& !in_single_quotes && current->value[0] != '$'
-			&& ft_strchr(current->value, '$'))
+			&& !in_single_quotes && ft_strchr(current->value, '$'))
 		{
 			while (ft_strchr(current->value, '$') && *(ft_strchr(current->value,
-						'$') + 1) != '\0')
+						'$') + 1) != '\0' && *(ft_strchr(current->value, '$')
+					+ 1) != ' ')
 			{
 				i = 0;
 				while (current->value && current->value[i] != '$')
