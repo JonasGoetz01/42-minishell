@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 10:13:24 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/08 09:51:16 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,12 @@ void	rearrange_tokens(t_token **tokens)
 	h->current = *tokens;
 	skip_to_first_redirect(tokens, &(h->current));
 	if (h->current && (h->current->type == TOKEN_GREATER
-			|| h->current->type == TOKEN_DOUBLE_GREATER))
+			|| h->current->type == TOKEN_DOUBLE_GREATER
+			|| h->current->type == TOKEN_DOUBLE_LESS))
 	{
 		prev_link_list(tokens);
-		if (!bcw(&(h->current)) && count_words_after(&(h->current)) > 1)
+		// printf("%d\n", count_words_after(&(h->current)));
+		if (!bcw(&(h->current)) || count_words_after(&(h->current)) > 1)
 		{
 			combine_words(&(h->current));
 			if (get_file(&(h->current), &(h->redirect), &(h->file), &tmp)
