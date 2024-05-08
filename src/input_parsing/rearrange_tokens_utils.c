@@ -6,29 +6,13 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 09:57:31 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 10:13:35 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/08 09:06:38 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 void	combine_words_util(t_token **current, t_token **tmp);
-
-bool	bcw(t_token **token)
-{
-	t_token	*current;
-
-	current = *token;
-	if (current->prev == NULL)
-		return (false);
-	while (current->prev != NULL)
-	{
-		if (current->prev->type == TOKEN_WORD)
-			return (true);
-		current = current->prev;
-	}
-	return (false);
-}
 
 void	move_on(t_token **tokens, t_token **current, t_token **after_file)
 {

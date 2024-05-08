@@ -6,13 +6,12 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 10:13:24 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/08 09:07:29 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	bcw(t_token **token);
 void	move_on(t_token **tokens, t_token **current, t_token **after_file);
 void	skip_to_first_redirect(t_token **tokens, t_token **current);
 int		count_words_after(t_token **c);
@@ -114,10 +113,11 @@ void	rearrange_tokens(t_token **tokens)
 	h->current = *tokens;
 	skip_to_first_redirect(tokens, &(h->current));
 	if (h->current && (h->current->type == TOKEN_GREATER
-			|| h->current->type == TOKEN_DOUBLE_GREATER))
+			|| h->current->type == TOKEN_DOUBLE_GREATER
+			|| h->current->type == TOKEN_DOUBLE_LESS))
 	{
 		prev_link_list(tokens);
-		if (!bcw(&(h->current)) && count_words_after(&(h->current)) > 1)
+		if (count_words_after(&(h->current)) > 1)
 		{
 			combine_words(&(h->current));
 			if (get_file(&(h->current), &(h->redirect), &(h->file), &tmp)
