@@ -28,11 +28,12 @@
 # define KCONTI "\[\033[0;96m\]"
 # define KPATH "\[\033[38;2;170;255;170m\]"
 
-// ######       Functions       ######
-// bottomCharset="\342\224\224\342\224\200\342\224\200\342\225\274"
-// topCharset="\342\224\214\342\224\200"
-// crossCharset="\342\234\227"
-// dashCharset="\342\224\200"
-// gitStatus=""
+# define PAS1 "\x1b[38;2;255;204;204m"
+# define PAS2 "\x1b[38;2;255;229;204m"
+# define PAS3 "\x1b[38;2;255;242;204m"
+# define PAS4 "\x1b[38;2;204;255;204m"
+# define PAS5 "\x1b[38;2;204;255;255m"
+# define PAS6 "\x1b[38;2;204;204;255m"
+# define PAS7 "\x1b[38;2;255;204;255m"
 
 #endif
