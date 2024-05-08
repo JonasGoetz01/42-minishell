@@ -329,41 +329,47 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			&& !in_single_quotes && current->value[0] != '$'
 			&& ft_strchr(current->value, '$'))
 		{
-			i = 0;
-			while (current->value && current->value[i] != '$')
-				i++;
-			if (ft_strchr(&current->value[i], '$'))
+			while (ft_strchr(current->value, '$') && *(ft_strchr(current->value,
+						'$') + 1) != '\0')
 			{
-				remind = ft_substr(current->value, 0, i);
-				remind2 = ft_substr(current->value, i
-						+ ft_strlen_til_space(&current->value[i]),
-						ft_strlen(current->value));
-				// printf("remind: %s\n", remind);
-				// printf("remind2: %s\n", remind2);
-				// printf("try to expand: %s\n", ft_substr(current->value, i,
-				// 		ft_strlen_til_space(&current->value[i])));
-				tmp = ft_expand_word(ft_substr(&current->value[i],
-							ft_strchr(&current->value[i], '$')
-							- &current->value[i],
-							ft_strlen_til_space(&current->value[i])), global);
-				if (tmp)
+				i = 0;
+				while (current->value && current->value[i] != '$')
+					i++;
+				if (ft_strchr(&current->value[i], '$'))
 				{
-					free(current->value);
-					current->value = ft_strjoin(remind, ft_strjoin(tmp,
-								remind2));
-					free(tmp);
+					remind = ft_substr(current->value, 0, i);
+					remind2 = ft_substr(current->value, i
+							+ ft_strlen_til_space(&current->value[i]),
+							ft_strlen(current->value));
+					// printf("remind: %s\n", remind);
+					// printf("remind2: %s\n", remind2);
+					// printf("try to expand: %s\n", ft_substr(current->value,
+					// i,
+					// 		ft_strlen_til_space(&current->value[i])));
+					tmp = ft_expand_word(ft_substr(&current->value[i],
+								ft_strchr(&current->value[i], '$')
+								- &current->value[i],
+								ft_strlen_til_space(&current->value[i])),
+							global);
+					if (tmp)
+					{
+						free(current->value);
+						current->value = ft_strjoin(remind, ft_strjoin(tmp,
+									remind2));
+						free(tmp);
+					}
 				}
-			}
-			else
-			{
-				remind = ft_substr(current->value, 0, i);
-				tmp = ft_expand_word(ft_substr(current->value, i,
-							ft_strlen(current->value)), global);
-				if (tmp)
+				else
 				{
-					free(current->value);
-					current->value = ft_strjoin(remind, tmp);
-					free(tmp);
+					remind = ft_substr(current->value, 0, i);
+					tmp = ft_expand_word(ft_substr(current->value, i,
+								ft_strlen(current->value)), global);
+					if (tmp)
+					{
+						free(current->value);
+						current->value = ft_strjoin(remind, tmp);
+						free(tmp);
+					}
 				}
 			}
 		}
