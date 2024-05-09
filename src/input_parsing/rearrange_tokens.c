@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 10:39:03 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 13:05:07 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file,
 bool	get_after_file(t_token **after_file, t_token **file)
 {
 	*after_file = *file;
+	while ((*after_file)->next && (*after_file)->next->type != TOKEN_SPACE)
+		(*after_file) = (*after_file)->next;
 	while ((*after_file)->next && (*after_file)->next->type == TOKEN_SPACE)
 		(*after_file) = (*after_file)->next;
 	if (!(*after_file)->next || is_operator(*(*after_file)->next))
