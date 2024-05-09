@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rearrange_tokens.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 13:36:59 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 17:34:45 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	skip_to_first_redirect(t_token **tokens, t_token **current);
 int		count_words_after(t_token **c);
 void	combine_words(t_token **c);
 void	update_h(t_rearrange_helper *h);
+void	ft_set_free_get_file(t_token **file, t_token **tmp);
+void	ft_inner_loop_after_file(t_token **after_file);
 
 bool	get_file(t_token **current, t_token **redirect, t_token **file,
 		t_token **tmp)
@@ -31,16 +33,7 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file,
 	if ((*file)->next && ((*file)->next->type == TOKEN_SINGLE_QUOTE
 			|| (*file)->next->type == TOKEN_DOUBLE_QUOTE))
 	{
-		(*tmp) = (*file)->next;
-		(*file)->next = (*tmp)->next;
-		free((*tmp)->value);
-		free((*tmp));
-		(*file) = (*file)->next;
-		(*tmp) = (*file)->next;
-		if ((*tmp)->next)
-			(*file)->next = (*tmp)->next;
-		free((*tmp)->value);
-		free((*tmp));
+		ft_set_free_get_file(file, tmp);
 	}
 	else if ((*file)->next && (*file)->next->type == TOKEN_WORD)
 		(*file) = (*file)->next;
@@ -49,26 +42,13 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file,
 
 bool	get_after_file(t_token **after_file, t_token **file)
 {
-	t_token	*tmp;
 
 	*after_file = *file;
 	while ((*after_file)->next && (*after_file)->next->type != TOKEN_SPACE)
 		(*after_file) = (*after_file)->next;
 	while ((*after_file)->next && (*after_file)->next->type == TOKEN_SPACE)
 	{
-		if ((*after_file)->next->type == TOKEN_SPACE)
-		{
-			tmp = (*after_file)->next;
-			if ((*after_file)->next->next)
-			{
-				(*after_file)->next = (*after_file)->next->next;
-				(*after_file) = (*after_file)->next;
-			}
-			else
-				(*after_file)->next = NULL;
-			free(tmp->value);
-			free(tmp);
-		}
+		ft_inner_loop_after_file(after_file);
 	}
 	if (!(*after_file)->next || is_operator(*(*after_file)->next))
 		return (true);

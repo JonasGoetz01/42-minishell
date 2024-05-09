@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 17:17:43 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/09 17:23:01 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,8 @@ void	print_ast(t_ast_node **root, int level, t_global *global)
 		while (token != NULL)
 		{
 			i = 0;
-			while (i < level)
-			{
+			while (i++ < level)
 				printf("    ");
-				i++;
-			}
 			printf("Type: %d, Value: %s Prio: %d\n", token->type, token->value,
 				precedence_node(ast));
 			token = token->next;
