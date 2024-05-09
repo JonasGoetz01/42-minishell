@@ -4,8 +4,10 @@ static bool	ft_process_line(char *line, bool should_expand,
 							t_heredoc *heredoc, t_global *global)
 {
 	char	*expanded;
-	bool	stop;
 
+	if (ft_strncmp(line, heredoc->lim,
+			ft_strlen(heredoc->lim) + 1) == 0)
+		return (false);
 	expanded = NULL;
 	if (should_expand)
 	{
@@ -13,16 +15,11 @@ static bool	ft_process_line(char *line, bool should_expand,
 		if (expanded)
 			line = expanded;
 	}
-	stop = ft_strncmp(line, heredoc->limiter,
-			ft_strlen(heredoc->limiter) + 1) == 0;
-	if (stop == false)
-	{
-		ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
-		ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
-	}
+	ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
+	ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
 	if (expanded)
 		free(expanded);
-	return (!stop);
+	return (true);
 }
 
 static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
@@ -38,7 +35,7 @@ static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
 	{
 		line = ft_test_compatible_readline(global);
 		if (line == NULL)
-			return (ft_error_heredoc(heredoc->limiter));
+			return (ft_error_heredoc(heredoc->lim));
 		lines = ft_split(line, '\n');
 		if (lines == NULL)
 			return (free(line));
@@ -97,7 +94,9 @@ void	ft_exec_here_doc(t_ast_node *node, t_ast_node *ast, t_global *global)
 	t_fd		*fd;
 	t_heredoc	heredoc;
 
-	heredoc.limiter = ft_get_file_name(node);
+	heredoc.lim = ft_get_limiter(node);
+	if (heredoc.lim == NULL)
+		return ;
 	if (pipe(heredoc.fd_pipe) != 0)
 		return (ft_print_error(strerror(errno), NULL));
 	ft_init_here_doc(&heredoc, ft_should_expand_heredoc(node), ast, global);

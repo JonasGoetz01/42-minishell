@@ -1,25 +1,5 @@
 #include "../../inc/minishell.h"
 
-char	*ft_get_file_name(t_ast_node *node)
-{
-	t_token	*token;
-
-	if (node->right)
-	{
-		if (node->right->token)
-		{
-			token = node->right->token;
-			while (token)
-			{
-				if (token->type == TOKEN_ARG)
-					return (token->value);
-				token = token->next;
-			}
-		}
-	}
-	return (NULL);
-}
-
 static char	**ft_init_args_arr(char *cmd)
 {
 	char	**args;
