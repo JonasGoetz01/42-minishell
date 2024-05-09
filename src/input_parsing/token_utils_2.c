@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:50:43 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 13:43:55 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 14:51:32 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	print_tokens(t_token *tokens, t_global *global)
 		printf("Tokens:\n");
 		while (tokens != NULL)
 		{
-			printf("Type: %d, Value: %s\n", tokens->type, tokens->value);
+			printf("Type: %d, Value: %s, BE-Value: %s\n", tokens->type,
+				tokens->value, tokens->be_value);
 			tokens = tokens->next;
 		}
 	}
