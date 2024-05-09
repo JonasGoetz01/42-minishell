@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 12:16:42 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 13:26:34 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	expand_variables_1(t_token **current, t_global *global, int i)
 	char	*remind;
 	char	*remind2;
 	char	*tmp;
+	char	*tmp2;
 
 	remind = ft_substr((*current)->value, 0, i);
 	remind2 = ft_substr((*current)->value, i
@@ -66,9 +67,15 @@ void	expand_variables_1(t_token **current, t_global *global, int i)
 	if (tmp)
 	{
 		free((*current)->value);
-		(*current)->value = ft_strjoin(remind, ft_strjoin(tmp, remind2));
+		tmp2 = ft_strjoin(tmp, remind2);
+		(*current)->value = ft_strjoin(remind, tmp2);
+		free(tmp2);
 		free(tmp);
 	}
+	if (remind)
+		free(remind);
+	if (remind2)
+		free(remind2);
 }
 
 void	expand_variables_2(t_token **current, t_global *global, int i)

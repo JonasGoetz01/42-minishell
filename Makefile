@@ -2,7 +2,7 @@ NAME	:=	minishell
 
 CC		:=	cc
 CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
-DEBUG ?=  1
+DEBUG ?=  0
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
 LIBFT	:=	lib/libft

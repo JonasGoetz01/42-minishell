@@ -1,7 +1,7 @@
 #include "../../inc/minishell.h"
 
-void	ft_execute_nodes(t_ast_node *node,
-	t_ast_node *ast, bool wait, t_global *global)
+void	ft_execute_nodes(t_ast_node *node, t_ast_node *ast, bool wait,
+		t_global *global)
 {
 	t_exec_flags	exec_flags;
 
@@ -31,11 +31,12 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	global->exit_status = 0;
 	signal(SIGINT, handle_exec);
 	signal(SIGQUIT, handle_exec);
-	print_ast(&node, 0);
+	print_ast(&node, 0, global);
 	ft_org_tokens(node);
-	if (DEBUG)
+	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
+				global->envv)[0] == '1'))
 		printf("-----\n");
-	print_ast(&node, 0);
+	print_ast(&node, 0, global);
 	ft_execute_nodes(node, node, true, global);
 	ft_close_all_fds(global);
 	signal(SIGINT, handle_sigint);
