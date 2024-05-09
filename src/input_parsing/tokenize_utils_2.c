@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:49 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 19:03:50 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 08:52:12 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,11 @@ int	handle_dq(const char *input, t_token **tokens, t_tokenize_helper *h)
 
 	if (input[h->i] == '\"')
 	{
-		if (input[(h->i) + 1] == '\"')
+		if (input[(h->i) + 1] == '\"' && !((h->i > 0 && input[(h->i)
+					- 1] == ' ') || (input[(h->i) + 2] == ' ')))
+		{
 			return (handle_empty_double_quote(tokens), (h->i) += 2, 1);
+		}
 		h->type = TOKEN_DOUBLE_QUOTE;
 		h->value = ft_strdup("\"");
 		new_token = create_token(h->type, h->value);
@@ -111,7 +114,7 @@ bool	handle_spaces(const char *input, int *i, t_token **tokens)
 	t_token_type	type;
 	char			*value;
 
-	if (input[*i] == ' ')
+	if (input[*i] == ' ' || input[*i] == '\t')
 	{
 		type = TOKEN_SPACE;
 		value = ft_substr(input, *i, 1);
