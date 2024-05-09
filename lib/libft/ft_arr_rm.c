@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:43:11 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/05/09 12:56:35 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:52:39 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ bool	ft_arr_rm(size_t ind, char ***arr)
 	(*arr)[ind] = NULL;
 	if (!ft_arr_cpy(*arr, new))
 		return (free(new), (*arr)[ind] = tmp, false);
-	if (!ft_arr_cpy(&((*arr)[ind + 1]), &(new[ind - 1])))
+	if (!ft_arr_cpy(&((*arr)[ind + 1]), &(new[ind])))
 		return (ft_arr_free((void **) new), (*arr)[ind] = tmp, false);
 	new[len - 1] = NULL;
+	(*arr)[ind] = tmp;
 	ft_arr_free((void **) *arr);
-	free(tmp);
 	*arr = new;
 	return (true);
 }
