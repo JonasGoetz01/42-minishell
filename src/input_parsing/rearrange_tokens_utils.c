@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 09:57:31 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/08 09:09:08 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 13:03:43 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,20 @@ void	combine_words(t_token **c)
 		if (current->next && (current->next->type == TOKEN_DOUBLE_QUOTE
 				|| current->next->type == TOKEN_SINGLE_QUOTE))
 		{
-			tmp = current->next->next;
-			free(current->next->value);
-			free(current->next);
-			current->next = tmp;
+			if (!current->next->next || (current->next->next
+					&& current->next->next->type != TOKEN_DOUBLE_QUOTE
+					&& current->next->next->type != TOKEN_SINGLE_QUOTE
+					&& (current->next->next->type != TOKEN_WORD
+						|| current->next->next->value[0] != '\0')))
+			{
+				printf("drin\n");
+				tmp = current->next->next;
+				free(current->next->value);
+				free(current->next);
+				current->next = tmp;
+			}
+			else
+				current = current->next->next->next;
 		}
 		else if (current->type == TOKEN_SPACE)
 			current = current->next;
