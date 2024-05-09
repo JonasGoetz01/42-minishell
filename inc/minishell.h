@@ -154,6 +154,7 @@ int						show_prompt(t_global *global);
 char					*ft_build_prompt(void);
 void					ft_init_t_global(t_global *global, char **envv);
 void					ft_increase_shlvl(t_global *global);
+bool					ft_is_debug(t_global *global);
 
 void					handle_sigint(int sig);
 void					handle_exec(int sig);

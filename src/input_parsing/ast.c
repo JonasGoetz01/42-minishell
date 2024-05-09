@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 16:28:00 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 17:17:43 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,7 @@ void	print_ast(t_ast_node **root, int level, t_global *global)
 	ast = *root;
 	if (ast == NULL)
 		return ;
-	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'))
+	if (ft_is_debug(global))
 	{
 		print_ast(&(ast->right), level + 1, global);
 		token = ast->token;

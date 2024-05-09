@@ -12,8 +12,7 @@ static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
 	process = ft_create_process(cmd, args, node, ast);
 	if (process == NULL)
 		return (NULL);
-	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'))
+	if (ft_is_debug(global))
 		printf("executing %s: in %d out %d\n", process->cmd,
 			ft_get_fd(process->fd_in[PIPE_READ]),
 			ft_get_fd(process->fd_out[PIPE_WRITE]));

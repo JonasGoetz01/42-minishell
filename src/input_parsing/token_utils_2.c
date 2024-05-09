@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:50:43 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 14:51:32 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 17:17:49 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 // Print the tokens
 void	print_tokens(t_token *tokens, t_global *global)
 {
-	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'))
+	if (ft_is_debug(global))
 	{
 		printf("Tokens:\n");
 		while (tokens != NULL)
