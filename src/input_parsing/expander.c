@@ -265,7 +265,7 @@ int	ft_strlen_til_space(char *str)
 	if (str && str[i] == '$')
 		i++;
 	while (str[i] && (str[i] != ' ' && str[i] != '\'' && str[i] != '\"'
-			&& str[i] != '$'))
+			&& str[i] != '$' && str[i] != ':' && str[i] != '.'))
 		i++;
 	return (i);
 }
@@ -273,7 +273,6 @@ int	ft_strlen_til_space(char *str)
 void	ft_expand_tokens(t_token *tokens, t_global *global)
 {
 	t_token	*current;
-	t_token	*temp;
 	char	*tmp;
 	char	*remind;
 	char	*remind2;
@@ -281,6 +280,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 	bool	in_single_quotes;
 	bool	in_double_quotes;
 	int		i;
+	t_token	*temp;
 
 	current = tokens;
 	temp = NULL;
@@ -310,15 +310,20 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			else if (current->type == TOKEN_WORD && !in_single_quotes
 				&& !in_double_quotes && current->next
 				&& (current->next->type == TOKEN_SINGLE_QUOTE
-					|| current->next->type == TOKEN_DOUBLE_QUOTE))
+					|| current->next->type == TOKEN_DOUBLE_QUOTE)
+				&& (ft_strchr(current->value, '$') || ft_strchr(current->value,
+						'~')))
 			{
 				prev_link_list(&tokens);
-				current->prev->next = current->next;
+				if (!current->prev)
+					tokens = current->next;
+				else if (current->prev)
+					current->prev->next = current->next;
 				temp = current->next;
 				free(current->value);
 				free(current);
 				prev_link_list(&tokens);
-				current = temp;
+				current = temp->prev;
 			}
 			else if (current->type == TOKEN_WORD && !in_single_quotes
 				&& !in_double_quotes && !current->next)
@@ -405,6 +410,7 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 		{
 			in_double_quotes = !in_double_quotes;
 		}
-		current = current->next;
+		if (current)
+			current = current->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:35 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 19:03:41 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 08:17:31 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_token	*tokenize(const char *input, t_token **tokens, int rv)
 	*tokens = NULL;
 	while (h.i < (int)ft_strlen(input) && input[h.i] != '\0')
 	{
-		if (ft_strchr("()<>|&\"' ", input[h.i]))
+		if (ft_strchr("()<>|&\"' \t", input[h.i]))
 		{
 			rv = handle_dq(input, tokens, &h);
 			if (rv != 0)
@@ -85,7 +85,7 @@ t_token	*tokenize(const char *input, t_token **tokens, int rv)
 			h.i++;
 		}
 		else
-			handle_word(&(h.i), input, "()<>|&\"' ", tokens);
+			handle_word(&(h.i), input, "()<>|&\"' \t", tokens);
 	}
 	return (*tokens);
 }
