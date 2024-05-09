@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_validator_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:42:12 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 17:43:21 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 16:52:27 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,29 +28,39 @@ bool	first_is_pipe_second_operator(t_token **prev, t_token **current,
 	return (false);
 }
 
-bool	pipe_after_pipe(t_token **current)
+bool	pipe_after_pipe(t_token *current)
 {
-	if ((*current)->type == TOKEN_PIPE
-		&& get_next_type((*current)->next) == TOKEN_PIPE)
+	if (current->type == TOKEN_PIPE
+		&& get_next_type(current->next) == TOKEN_PIPE)
 		return (true);
 	return (false);
 }
 
-bool	redirect_has_no_file(t_token **current)
+bool	redirect_has_no_file(t_token *current)
 {
-	if (((*current)->type == TOKEN_GREATER
-			|| (*current)->type == TOKEN_DOUBLE_GREATER) && (((*current)->next
-				&& next_is_operator((*current)->next))
-			|| next_is_newline((*current)->next)))
+	if ((current->type == TOKEN_GREATER
+			|| current->type == TOKEN_DOUBLE_GREATER) && ((current->next
+				&& next_is_operator(current->next))
+			|| next_is_newline(current->next)))
 		return (true);
 	return (false);
 }
 
-bool	no_file_for_indirect(t_token **current)
+bool	no_file_for_indirect(t_token *current)
 {
-	if ((*current)->type == TOKEN_LESS && (((*current)->next
-				&& next_is_operator((*current)->next))
-			|| next_is_newline((*current)->next)))
+	if (current->type == TOKEN_LESS && ((current->next
+				&& next_is_operator(current->next))
+			|| next_is_newline(current->next)))
 		return (true);
+	return (false);
+}
+
+bool	ft_no_lim_heredoc(t_token *current)
+{
+	if (current->type == TOKEN_DOUBLE_LESS)
+	{
+		if (next_is_operator(current->next) || next_is_newline(current->next))
+			return (true);
+	}
 	return (false);
 }
