@@ -12,8 +12,7 @@ static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
 	process = ft_create_process(cmd, args, node, ast);
 	if (process == NULL)
 		return (NULL);
-	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'))
+	if (ft_is_debug(global))
 		printf("executing %s: in %d out %d\n", process->cmd,
 			ft_get_fd(process->fd_in[PIPE_READ]),
 			ft_get_fd(process->fd_out[PIPE_WRITE]));
@@ -36,15 +35,11 @@ static void	ft_parseon_fds(t_ast_node *node, t_token_type type,
 {
 	if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
 	{
-		if (node->right)
-		{
-			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-		}
 		if (node->left)
 		{
 			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+			node->left->file_out = node->file_out;
 		}
 		exec_flags->wait = false;
 	}
