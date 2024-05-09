@@ -30,14 +30,6 @@
 # define PIPE_READ 0
 # define PIPE_WRITE 1
 
-typedef enum e_g_signal
-{
-	SIGNAL_NONE,
-	SIGNAL_INT
-}						t_g_signal;
-
-extern t_g_signal		g_signal;
-
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -102,8 +94,8 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					*file_in;
-	int *(fd_out[2]);
-	int *(fd_in[2]);
+	int					*(fd_out[2]);
+	int					*(fd_in[2]);
 	int					*file_out;
 	int					exit_status;
 	t_process			*process;
