@@ -4,10 +4,8 @@ static bool	ft_process_line(char *line, bool should_expand,
 							t_heredoc *heredoc, t_global *global)
 {
 	char	*expanded;
+	bool	stop;
 
-	if (ft_strncmp(line, heredoc->limiter,
-			ft_strlen(heredoc->limiter) + 1) == 0)
-		return (false);
 	expanded = NULL;
 	if (should_expand)
 	{
@@ -15,11 +13,16 @@ static bool	ft_process_line(char *line, bool should_expand,
 		if (expanded)
 			line = expanded;
 	}
-	ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
-	ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
+	stop = ft_strncmp(line, heredoc->limiter,
+			ft_strlen(heredoc->limiter) + 1) == 0;
+	if (stop == false)
+	{
+		ft_putstr_fd(line, heredoc->fd_pipe[PIPE_WRITE]);
+		ft_putchar_fd('\n', heredoc->fd_pipe[PIPE_WRITE]);
+	}
 	if (expanded)
 		free(expanded);
-	return (true);
+	return (!stop);
 }
 
 static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
