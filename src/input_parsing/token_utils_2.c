@@ -6,16 +6,17 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:50:43 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 17:51:00 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 13:43:55 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 // Print the tokens
-void	print_tokens(t_token *tokens)
+void	print_tokens(t_token *tokens, t_global *global)
 {
-	if (DEBUG)
+	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
+				global->envv)[0] == '1'))
 	{
 		printf("Tokens:\n");
 		while (tokens != NULL)

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/07 10:06:30 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 13:43:51 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	gen_ast(&(ast->right), right_arm);
 }
 
-void	print_ast(t_ast_node **root, int level)
+void	print_ast(t_ast_node **root, int level, t_global *global)
 {
 	t_ast_node	*ast;
 	t_token		*token;
@@ -64,9 +64,10 @@ void	print_ast(t_ast_node **root, int level)
 	ast = *root;
 	if (ast == NULL)
 		return ;
-	if (DEBUG)
+	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
+				global->envv)[0] == '1'))
 	{
-		print_ast(&(ast->right), level + 1);
+		print_ast(&(ast->right), level + 1, global);
 		token = ast->token;
 		while (token != NULL)
 		{
@@ -79,6 +80,6 @@ void	print_ast(t_ast_node **root, int level)
 				precedence_node(ast));
 			token = token->next;
 		}
-		print_ast(&(ast->left), level + 1);
+		print_ast(&(ast->left), level + 1, global);
 	}
 }

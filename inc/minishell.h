@@ -169,7 +169,7 @@ void					handle_sigint_heredoc(int sig);
 void					ft_env_buildin(char **envv);
 void					ft_pwd_buildin(t_process *process);
 char					*get_hostname(void);
-void					print_tokens(t_token *tokens);
+void					print_tokens(t_token *tokens, t_global *global);
 void					print_tokens_value(t_token *tokens);
 void					remove_unused_spaces(t_token **tokens);
 char					*execute_command(const char *command);
@@ -244,7 +244,8 @@ void					*ft_recalloc(void *ptr, size_t old_size,
 							size_t new_size);
 
 void					gen_ast(t_ast_node **root, t_token *tokens);
-void					print_ast(t_ast_node **root, int level);
+void					print_ast(t_ast_node **root, int level,
+							t_global *global);
 
 void					rearrange_tokens(t_token **tokens);
 
