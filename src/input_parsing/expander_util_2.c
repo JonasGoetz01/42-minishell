@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 10:44:48 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 12:16:42 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@ void	single_char_with_quotes(t_token **current, t_token **tokens);
 void	single_char_no_next(t_token **current, t_global *global);
 
 void	single_char(t_token **current, t_token **tokens, t_global *global,
-		bool *in_single_quotes, bool *in_double_quotes)
+		t_expander_helper *h)
 {
-	if ((*current)->type == TOKEN_WORD && !*in_single_quotes && (*current)->next
-		&& ((*current)->next->type != TOKEN_SINGLE_QUOTE
+	if ((*current)->type == TOKEN_WORD && !h->in_single_quotes
+		&& (*current)->next && ((*current)->next->type != TOKEN_SINGLE_QUOTE
 			&& (*current)->next->type != TOKEN_DOUBLE_QUOTE))
 		single_word_no_quotes(current, global);
-	else if ((*current)->type == TOKEN_WORD && !*in_single_quotes
-		&& !*in_double_quotes && (*current)->next
+	else if ((*current)->type == TOKEN_WORD && !h->in_single_quotes
+		&& !h->in_double_quotes && (*current)->next
 		&& ((*current)->next->type == TOKEN_SINGLE_QUOTE
 			|| (*current)->next->type == TOKEN_DOUBLE_QUOTE)
 		&& (ft_strchr((*current)->value, '$') || ft_strchr((*current)->value,
 				'~')))
 		single_char_with_quotes(current, tokens);
-	else if ((*current)->type == TOKEN_WORD && !*in_single_quotes
-		&& !*in_double_quotes && !(*current)->next)
+	else if ((*current)->type == TOKEN_WORD && !h->in_single_quotes
+		&& !h->in_double_quotes && !(*current)->next)
 		single_char_no_next(current, global);
 }
 

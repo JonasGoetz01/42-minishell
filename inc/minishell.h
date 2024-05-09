@@ -145,6 +145,12 @@ typedef struct s_tokenize_helper
 	int					i;
 }						t_tokenize_helper;
 
+typedef struct s_expander_helper
+{
+	bool				in_single_quotes;
+	bool				in_double_quotes;
+}						t_expander_helper;
+
 typedef struct s_heredoc
 {
 	char				*limiter;
@@ -267,7 +273,7 @@ void					ft_free_nodes(t_ast_node *node);
 void					ft_free_global(t_global *global);
 void					prev_link_list(t_token **tokens);
 
-//env
+// env
 bool					ft_env_contains(char *name, char **env);
 bool					ft_set_env_export(char *name, char *value,
 							char ***envv);
