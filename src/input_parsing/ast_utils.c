@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:58:13 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 16:28:00 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 17:59:30 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	get_highest_token(t_token **highest_token, t_token **current_token)
 		if ((*highest_token) == NULL
 			|| precedence(*(*current_token)) > precedence(*(*highest_token))
 			|| (precedence(*(*current_token)) == precedence(*(*highest_token))
-				&& brackets_level <= highest_token_brackets_level))
+				&& brackets_level <= highest_token_brackets_level)
+			|| (brackets_level < highest_token_brackets_level))
 		{
 			(*highest_token) = (*current_token);
 			highest_token_brackets_level = brackets_level;
