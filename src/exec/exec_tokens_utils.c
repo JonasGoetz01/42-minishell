@@ -1,7 +1,7 @@
 #include "../../inc/minishell.h"
 
-static t_process	*ft_exec_cmd(t_token *token,
-	t_ast_node *node, t_ast_node *ast, t_global *global)
+static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
+		t_ast_node *ast, t_global *global)
 {
 	char		*cmd;
 	char		**args;
@@ -12,7 +12,8 @@ static t_process	*ft_exec_cmd(t_token *token,
 	process = ft_create_process(cmd, args, node, ast);
 	if (process == NULL)
 		return (NULL);
-	if (DEBUG)
+	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
+				global->envv)[0] == '1'))
 		printf("executing %s: in %d out %d\n", process->cmd,
 			ft_get_fd(process->fd_in[PIPE_READ]),
 			ft_get_fd(process->fd_out[PIPE_WRITE]));
@@ -30,8 +31,8 @@ static t_process	*ft_exec_cmd(t_token *token,
 	return (process);
 }
 
-static void	ft_parseon_fds(t_ast_node *node,
-	t_token_type type, t_exec_flags *exec_flags)
+static void	ft_parseon_fds(t_ast_node *node, t_token_type type,
+		t_exec_flags *exec_flags)
 {
 	if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
 	{
@@ -60,7 +61,7 @@ static void	ft_parseon_fds(t_ast_node *node,
 }
 
 static bool	ft_handle_redirects(t_ast_node *node, t_global *global,
-	t_token_type type, t_exec_flags *exec_flags)
+		t_token_type type, t_exec_flags *exec_flags)
 {
 	if (type == TOKEN_LESS)
 		ft_open_in_file(node, global);
@@ -83,7 +84,7 @@ static bool	ft_handle_redirects(t_ast_node *node, t_global *global,
 }
 
 bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
-	t_exec_flags *exec_flags, t_global *global)
+		t_exec_flags *exec_flags, t_global *global)
 {
 	while (token)
 	{
@@ -97,14 +98,12 @@ bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 				return (false);
 			exec_flags->next_wait = false;
 		}
-		else if (exec_flags->tok_typ == TOKEN_CMD
-			&& ft_get_fd(node->file_in) != -2
-			&& ft_get_fd(node->file_out) != -2 && !node->process)
+		else if (exec_flags->tok_typ == TOKEN_CMD && ft_get_fd(node->file_in) !=
+			-2 && ft_get_fd(node->file_out) != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, exec_flags->ast, global);
 		else if (exec_flags->tok_typ == TOKEN_CMD
-			&& (ft_get_fd(node->file_in) == -2
-				|| ft_get_fd(node->file_out) == -2)
-			&& !node->process)
+			&& (ft_get_fd(node->file_in) == -2 || ft_get_fd(node->file_out) ==
+				-2) && !node->process)
 			node->exit_status = 1;
 		token = token->next;
 	}

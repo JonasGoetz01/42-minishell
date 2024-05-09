@@ -27,13 +27,13 @@ void	process_input(char *input, t_global *global)
 	ft_set_env_export("PWD", cwd, &global->env_export);
 	free(cwd);
 	tokenize(input, &tokens, 0);
-	print_tokens(tokens);
+	print_tokens(tokens, global);
 	ft_expand_tokens(tokens, global);
-	print_tokens(tokens);
+	print_tokens(tokens, global);
 	retokenize(&tokens);
-	print_tokens(tokens);
+	print_tokens(tokens, global);
 	rearrange_tokens(&tokens);
-	print_tokens(tokens);
+	print_tokens(tokens, global);
 	if (input_validation(&tokens))
 		return (global->exit_status = 2, (void)0);
 	gen_ast(&ast, tokens);
