@@ -36,15 +36,11 @@ static void	ft_parseon_fds(t_ast_node *node, t_token_type type,
 {
 	if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
 	{
-		if (node->right)
-		{
-			node->right->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->right->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-		}
 		if (node->left)
 		{
 			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
 			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
+			node->left->file_out = node->file_out;
 		}
 		exec_flags->wait = false;
 	}
