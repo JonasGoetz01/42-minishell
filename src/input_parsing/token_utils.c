@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:51:44 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/05 17:51:45 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 14:43:32 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_token	*create_token(t_token_type type, char *value)
 	{
 		token->type = type;
 		token->value = value;
+		token->be_value = NULL;
 		token->next = NULL;
 	}
 	return (token);
@@ -48,6 +49,8 @@ void	free_tokens(t_token *tokens)
 		next = tokens->next;
 		if (tokens->value)
 			free(tokens->value);
+		if (tokens->be_value)
+			free(tokens->be_value);
 		free(tokens);
 		tokens = NULL;
 		tokens = next;
