@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_arr_rm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:43:11 by pgrossma          #+#    #+#             */
-/*   Updated: 2024/04/26 15:41:57 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/09 14:52:39 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ bool	ft_arr_rm(size_t ind, char ***arr)
 {
 	char	**new;
 	size_t	len;
+	char	*tmp;
 
 	len = ft_arr_len(*arr);
 	if (ind > len - 1)
@@ -23,18 +24,14 @@ bool	ft_arr_rm(size_t ind, char ***arr)
 	new = ft_arr_create_len(len);
 	if (!new)
 		return (false);
+	tmp = (*arr)[ind];
 	(*arr)[ind] = NULL;
 	if (!ft_arr_cpy(*arr, new))
-	{
-		free(new);
-		return (false);
-	}
+		return (free(new), (*arr)[ind] = tmp, false);
 	if (!ft_arr_cpy(&((*arr)[ind + 1]), &(new[ind])))
-	{
-		ft_arr_free((void **) new);
-		return (false);
-	}
+		return (ft_arr_free((void **) new), (*arr)[ind] = tmp, false);
 	new[len - 1] = NULL;
+	(*arr)[ind] = tmp;
 	ft_arr_free((void **) *arr);
 	*arr = new;
 	return (true);
