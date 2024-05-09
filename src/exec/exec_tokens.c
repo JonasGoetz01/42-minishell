@@ -28,7 +28,7 @@ void	ft_execute_nodes(t_ast_node *node,
 
 void	ft_exec_all(t_ast_node *node, t_global *global)
 {
-	global->exit_status = -1;
+	global->exit_status = 0;
 	signal(SIGINT, handle_exec);
 	signal(SIGQUIT, handle_exec);
 	print_ast(&node, 0);
