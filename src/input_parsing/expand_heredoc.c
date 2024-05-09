@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:07:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 19:07:28 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 12:37:10 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,7 @@ static char	*ft_combine_str(t_token *token)
 bool	ft_should_expand_heredoc(t_ast_node *node)
 {
 	t_token	*token;
-	bool	is_in_single_quotes;
-	bool	is_in_double_quotes;
 
-	is_in_single_quotes = false;
-	is_in_double_quotes = false;
 	if (node->right)
 	{
 		if (node->right->token)
@@ -54,12 +50,9 @@ bool	ft_should_expand_heredoc(t_ast_node *node)
 			token = node->right->token;
 			while (token)
 			{
-				if (token->type == TOKEN_ARG)
-					return (!(is_in_double_quotes || is_in_single_quotes));
-				else if (token->type == TOKEN_SINGLE_QUOTE)
-					is_in_single_quotes = !is_in_single_quotes;
-				else if (token->type == TOKEN_DOUBLE_QUOTE)
-					is_in_double_quotes = !is_in_double_quotes;
+				if (token->type == TOKEN_SINGLE_QUOTE
+					|| token->type == TOKEN_DOUBLE_QUOTE)
+					return (false);
 				token = token->next;
 			}
 		}
