@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:49 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 08:52:12 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 10:40:46 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int	handle_dq(const char *input, t_token **tokens, t_tokenize_helper *h)
 
 	if (input[h->i] == '\"')
 	{
-		if (input[(h->i) + 1] == '\"' && !((h->i > 0 && input[(h->i)
-					- 1] == ' ') || (input[(h->i) + 2] == ' ')))
+		if (input[(h->i) + 1] == '\"' && !((h->i > 0 && true && true && true
+					&& input[(h->i) - 1] == ' ') || (input[(h->i) + 2] == ' ')))
 		{
 			return (handle_empty_double_quote(tokens), (h->i) += 2, 1);
 		}

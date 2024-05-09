@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/08 09:51:16 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 10:39:03 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	move_on(t_token **tokens, t_token **current, t_token **after_file);
 void	skip_to_first_redirect(t_token **tokens, t_token **current);
 int		count_words_after(t_token **c);
 void	combine_words(t_token **c);
+void	update_h(t_rearrange_helper *h);
 
 bool	get_file(t_token **current, t_token **redirect, t_token **file,
 		t_token **tmp)
@@ -118,7 +119,6 @@ void	rearrange_tokens(t_token **tokens)
 			|| h->current->type == TOKEN_DOUBLE_LESS))
 	{
 		prev_link_list(tokens);
-		// printf("%d\n", count_words_after(&(h->current)));
 		if (!bcw(&(h->current)) || count_words_after(&(h->current)) > 1)
 		{
 			combine_words(&(h->current));
@@ -127,9 +127,7 @@ void	rearrange_tokens(t_token **tokens)
 				return ;
 			get_end(&(h->end), &(h->before_end), &(h->after_file));
 			move_on(tokens, &(h->current), &(h->after_file));
-			h->before_end->next = h->redirect;
-			h->redirect->next = h->file;
-			h->file->next = h->end;
+			update_h(h);
 		}
 	}
 }

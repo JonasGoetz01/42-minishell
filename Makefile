@@ -40,6 +40,8 @@ SOURCES	:=	main.c \
 			input_validator.c \
 			input_validator_utils.c \
 			expander.c \
+			expander_util.c \
+			expander_util_2.c \
 			token_utils.c \
 			ctrl.c \
 			fd_utils.c \
@@ -65,6 +67,7 @@ SOURCES	:=	main.c \
 			precedence.c \
 			rearrange_tokens.c \
 			rearrange_tokens_utils.c \
+			rearrange_tokens_utils_2.c \
 			next_is.c \
 			retokenize.c \
 			retokenize_utils.c \
