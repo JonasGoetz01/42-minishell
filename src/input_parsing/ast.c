@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 13:43:51 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 16:28:00 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	print_ast(t_ast_node **root, int level, t_global *global)
 		token = ast->token;
 		while (token != NULL)
 		{
+			i = 0;
 			while (i < level)
 			{
 				printf("    ");
