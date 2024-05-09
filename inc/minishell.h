@@ -146,7 +146,7 @@ typedef struct s_expander_helper
 
 typedef struct s_heredoc
 {
-	char				*limiter;
+	char				*lim;
 	int					fd_pipe[2];
 }						t_heredoc;
 
@@ -177,6 +177,7 @@ void					ft_echo_buildin(t_process *process);
 void					ft_exit_buildin(t_process *process, t_global *global);
 void					ft_export_buildin(t_process *process, t_global *global);
 void					ft_unset_buildin(t_process *process, t_global *global);
+t_token					*ft_get_file_token(t_ast_node *node);
 char					*ft_get_file_name(t_ast_node *node);
 char					**ft_fill_args(t_token *token, char *cmd);
 void					ft_handle_verify_process_error(t_process *process);
@@ -207,6 +208,7 @@ void					ft_exec_here_doc(t_ast_node *node, t_ast_node *ast,
 char					*ft_expand_heredoc(char *str, t_global *global);
 bool					ft_should_expand_heredoc(t_ast_node *node);
 void					ft_error_heredoc(char *limiter);
+char					*ft_get_limiter(t_ast_node *node);
 char					*ft_test_compatible_readline(t_global *global);
 void					ft_wait_for_processes(t_ast_node *node,
 							t_global *global);
