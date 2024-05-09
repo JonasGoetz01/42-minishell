@@ -181,6 +181,21 @@ void	expand_variables(t_token **current, t_global *global)
 	}
 }
 
+void	update_quotes(t_token **current, bool *in_single_quotes,
+		bool *in_double_quotes)
+{
+	if ((*current)->type == TOKEN_SINGLE_QUOTE)
+		*in_single_quotes = !*in_single_quotes;
+	else if ((*current)->type == TOKEN_DOUBLE_QUOTE)
+		*in_double_quotes = !*in_double_quotes;
+}
+
+void	update_current(t_token **current)
+{
+	if ((*current))
+		*current = (*current)->next;
+}
+
 void	ft_expand_tokens(t_token *tokens, t_global *global)
 {
 	t_token	*current;
@@ -204,11 +219,8 @@ void	ft_expand_tokens(t_token *tokens, t_global *global)
 			&& (current->value[ft_strchr(current->value, '$') - current->value
 				+ 1] != '/'))
 			expand_variables(&current, global);
-		else if (current->type == TOKEN_SINGLE_QUOTE)
-			in_single_quotes = !in_single_quotes;
-		else if (current->type == TOKEN_DOUBLE_QUOTE)
-			in_double_quotes = !in_double_quotes;
-		if (current)
-			current = current->next;
+		else
+			update_quotes(&current, &in_single_quotes, &in_double_quotes);
+		update_current(&current);
 	}
 }
