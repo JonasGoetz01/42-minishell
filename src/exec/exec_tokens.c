@@ -33,8 +33,7 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	signal(SIGQUIT, handle_exec);
 	print_ast(&node, 0, global);
 	ft_org_tokens(node);
-	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'))
+	if (ft_is_debug(global))
 		printf("-----\n");
 	print_ast(&node, 0, global);
 	ft_execute_nodes(node, node, true, global);

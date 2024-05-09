@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 18:10:18 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/09 18:16:10 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,19 +123,15 @@ void	print_ast(t_ast_node **root, int level, t_global *global)
 	ast = *root;
 	if (ast == NULL)
 		return ;
-	if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'))
+	if (ft_is_debug(global))
 	{
 		print_ast(&(ast->right), level + 1, global);
 		token = ast->token;
 		while (token != NULL)
 		{
 			i = 0;
-			while (i < level)
-			{
+			while (i++ < level)
 				printf("    ");
-				i++;
-			}
 			printf("Type: %d, Value: %s Prio: %d\n", token->type, token->value,
 				precedence_node(ast));
 			token = token->next;

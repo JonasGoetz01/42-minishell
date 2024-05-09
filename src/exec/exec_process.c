@@ -33,6 +33,7 @@ static void	ft_exec_buildin(t_process *process, t_global *global)
 
 void	ft_execute_process(t_process *process, t_global *global)
 {
+	ft_set_env_env("_", ft_strdup(process->cmd), &global->envv);
 	if (!ft_exec_buildin_in_fork(process))
 	{
 		ft_exec_buildin(process, global);
@@ -61,8 +62,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	ft_wait_for_processes(node->right, global);
 	if (node->process)
 	{
-		if (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-					global->envv)[0] == '1'))
+		if (ft_is_debug(global))
 			printf("waiting for %s...\n", node->process->cmd);
 		if ((node->process->type == PROCESS_FORK
 				|| node->process->type == PROCESS_BUILDIN_FORK)
