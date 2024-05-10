@@ -104,3 +104,15 @@ bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 	}
 	return (true);
 }
+
+void	ft_set_underscore_env(char *cmd, t_global *global)
+{
+	char	*value;
+
+	value = ft_strdup(cmd);
+	if (value)
+	{
+		ft_set_env_env("_", value, &global->envv);
+		free(value);
+	}
+}
