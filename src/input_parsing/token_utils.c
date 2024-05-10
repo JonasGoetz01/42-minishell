@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:51:44 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 14:43:32 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:03:12 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	free_tokens(t_token *tokens)
 			free(tokens->value);
 		if (tokens->be_value)
 			free(tokens->be_value);
+		tokens->be_value = NULL;
 		free(tokens);
 		tokens = NULL;
 		tokens = next;

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 18:16:10 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:21:03 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	remove_brackets(t_token **tokens)
 	current = *tokens;
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
+	if (!current)
+		return ;
 	closing_bracket = last_is_bracket(current->next);
 	if (current && current->type == TOKEN_BRACKET_L && closing_bracket
 		&& closing_bracket->type == TOKEN_BRACKET_R)

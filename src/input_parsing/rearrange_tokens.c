@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rearrange_tokens.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 17:34:45 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/10 09:11:25 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file,
 
 bool	get_after_file(t_token **after_file, t_token **file)
 {
-
 	*after_file = *file;
 	while ((*after_file)->next && (*after_file)->next->type != TOKEN_SPACE)
 		(*after_file) = (*after_file)->next;
@@ -84,6 +83,9 @@ void	combine_words_util(t_token **current, t_token **tmp)
 	(*current)->type = TOKEN_WORD;
 	(*tmp) = (*current)->next->next;
 	free((*current)->next->value);
+	if ((*current)->next->be_value)
+		free((*current)->next->be_value);
+	(*current)->next->be_value = NULL;
 	free((*current)->next);
 	(*current)->next = (*tmp);
 }

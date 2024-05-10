@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:50:43 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 17:17:49 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/10 09:11:46 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ void	free_token(t_token **tokens)
 		temp = current;
 		current = current->next;
 		free(temp->value);
+		if (temp->be_value)
+			free(temp->be_value);
+		temp->be_value = NULL;
 		free(temp);
 		temp = NULL;
 	}

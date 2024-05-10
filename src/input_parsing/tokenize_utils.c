@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:52 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 15:36:32 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/10 09:19:20 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,16 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 {
 	*value = ft_substr(input, *i, 1);
 	if (handle_brackets(input, i, type))
-		;
+		free(*value);
 	else if (handle_greater_less(input, i, type, value))
 		;
 	else if (handle_pipe(input, i, type, value))
 		;
 	else if (handle_and(input, i, type, value))
-		;
+		free(*value);
 	else
+	{
 		*type = TOKEN_WORD;
+		free(*value);
+	}
 }
