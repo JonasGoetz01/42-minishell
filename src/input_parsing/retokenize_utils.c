@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 10:05:18 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 10:34:04 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:11:35 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ void	skip_multiple_spaces(t_token **current, t_token **temp)
 		(*temp) = (*current)->next;
 		(*current)->next = (*temp)->next;
 		free((*temp)->value);
+		if ((*temp)->be_value)
+			free((*temp)->be_value);
+		(*temp)->be_value = NULL;
 		free((*temp));
 		(*temp) = NULL;
 	}

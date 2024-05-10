@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 14:56:48 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:17:00 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ void	single_char(t_token **current, t_token **tokens, t_global *global,
 void	expand_tilde(t_token **current, t_global *global)
 {
 	char	*expanded_word;
+	char	*sub;
 
-	expanded_word = ft_strjoin(ft_get_env("HOME", global->envv),
-			ft_substr((*current)->value, 1, ft_strlen((*current)->value)));
+	sub = ft_substr((*current)->value, 1, ft_strlen((*current)->value));
+	expanded_word = ft_strjoin(ft_get_env("HOME", global->envv), sub);
+	free(sub);
 	if (expanded_word)
 	{
-		// free((*current)->value);
 		(*current)->be_value = (*current)->value;
 		(*current)->value = expanded_word;
 	}

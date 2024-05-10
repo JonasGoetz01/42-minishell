@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 14:56:16 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:09:55 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ void	single_char_with_quotes(t_token **current, t_token **tokens)
 		(*current)->prev->next = (*current)->next;
 	temp = (*current)->next;
 	free((*current)->value);
+	if ((*current)->be_value)
+		free((*current)->be_value);
+	(*current)->be_value = NULL;
 	free((*current));
 	prev_link_list(tokens);
 	(*current) = temp->prev;

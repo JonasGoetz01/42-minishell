@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 09:57:31 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 13:12:51 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:11:02 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,9 @@ void	combine_words(t_token **c)
 			{
 				tmp = current->next->next;
 				free(current->next->value);
+				if (current->next->be_value)
+					free(current->next->be_value);
+				current->next->be_value = NULL;
 				free(current->next);
 				current->next = tmp;
 			}

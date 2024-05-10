@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:58:13 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 17:59:30 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:14:16 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,9 @@ bool	handle_highest_token(t_ast_node **ast, t_token **highest_token,
 				prev_token = prev_token->next;
 			prev_token->next = NULL;
 			free((*current_token)->value);
+			if ((*current_token)->be_value)
+				free((*current_token)->be_value);
+			(*current_token)->be_value = NULL;
 			free((*current_token));
 			(*current_token) = NULL;
 			(*current_token) = prev_token;
