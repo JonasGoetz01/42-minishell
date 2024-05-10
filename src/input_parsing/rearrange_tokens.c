@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:40:23 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:11:25 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:28:54 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ bool	get_file(t_token **current, t_token **redirect, t_token **file,
 		return (true);
 	if ((*file)->next && ((*file)->next->type == TOKEN_SINGLE_QUOTE
 			|| (*file)->next->type == TOKEN_DOUBLE_QUOTE))
-	{
 		ft_set_free_get_file(file, tmp);
-	}
 	else if ((*file)->next && (*file)->next->type == TOKEN_WORD)
 		(*file) = (*file)->next;
 	return (false);

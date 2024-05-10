@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 09:57:31 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:10:36 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 09:30:37 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,14 @@ void	ft_set_free_get_file(t_token **file, t_token **tmp)
 	(*tmp) = (*file)->next;
 	if ((*tmp)->next)
 		(*file)->next = (*tmp)->next;
+	else
+		(*file)->next = NULL;
 	free((*tmp)->value);
 	if ((*tmp)->be_value)
 		free((*tmp)->be_value);
 	(*tmp)->be_value = NULL;
 	free((*tmp));
+	(*tmp) = NULL;
 }
 
 void	ft_inner_loop_after_file(t_token **after_file)
