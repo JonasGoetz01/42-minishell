@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:09:55 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 19:03:20 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_expand_word(char *word, t_global *global)
 		if (word[1] == '\0')
 			return (word);
 		if (word[1] == '?')
-			return (ft_itoa(global->old_exit_status));
+			return (free(word), ft_itoa(global->old_exit_status));
 		else
 		{
 			env_value = ft_get_env(&word[1], global->envv);
