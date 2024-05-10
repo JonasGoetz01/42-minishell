@@ -33,7 +33,7 @@ static void	ft_exec_buildin(t_process *process, t_global *global)
 
 void	ft_execute_process(t_process *process, t_global *global)
 {
-	ft_set_env_env("_", ft_strdup(process->cmd), &global->envv);
+	ft_set_underscore_env(process->cmd, global);
 	if (!ft_exec_buildin_in_fork(process))
 	{
 		ft_exec_buildin(process, global);

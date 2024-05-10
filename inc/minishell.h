@@ -185,6 +185,7 @@ void					ft_handle_verify_process_error(t_process *process);
 bool					ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 							t_exec_flags *exec_flags, t_global *global);
 int						ft_wait_pid(pid_t pid);
+void					ft_set_underscore_env(char *cmd, t_global *global);
 
 t_token					*tokenize(const char *input, t_token **tokens, int rv);
 
