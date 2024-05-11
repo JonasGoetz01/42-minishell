@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:58:13 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:14:16 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 13:36:05 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	get_highest_token(t_token **highest_token, t_token **current_token)
 {
-	int	highest_token_brackets_level;
 	int	brackets_level;
+	int	highest_token_brackets_level;
 
 	highest_token_brackets_level = 0;
 	brackets_level = 0;
@@ -26,10 +26,13 @@ void	get_highest_token(t_token **highest_token, t_token **current_token)
 		else if ((*current_token)->type == TOKEN_BRACKET_R)
 			brackets_level--;
 		if ((*highest_token) == NULL
-			|| precedence(*(*current_token)) > precedence(*(*highest_token))
+			|| ((precedence(*(*current_token)) > precedence(*(*highest_token))
+					&& (brackets_level <= highest_token_brackets_level)))
 			|| (precedence(*(*current_token)) == precedence(*(*highest_token))
 				&& brackets_level <= highest_token_brackets_level)
-			|| (brackets_level < highest_token_brackets_level))
+			|| (brackets_level < highest_token_brackets_level
+				&& (*current_token)->type != TOKEN_BRACKET_L
+				&& (*current_token)->type != TOKEN_BRACKET_R))
 		{
 			(*highest_token) = (*current_token);
 			highest_token_brackets_level = brackets_level;
