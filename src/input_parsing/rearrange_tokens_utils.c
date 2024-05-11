@@ -6,13 +6,15 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 09:57:31 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:11:02 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 16:10:24 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 void	combine_words_util(t_token **current, t_token **tmp);
+void	combine_words_util1(t_token **current, t_token **tmp);
+void	combine_words_util_2(t_token **current, t_token **tmp);
 
 bool	bcw(t_token **token)
 {
@@ -77,22 +79,12 @@ void	combine_words(t_token **c)
 					&& current->next->next->type != TOKEN_SINGLE_QUOTE
 					&& (current->next->next->type != TOKEN_WORD
 						|| current->next->next->value[0] != '\0')))
-			{
-				tmp = current->next->next;
-				free(current->next->value);
-				if (current->next->be_value)
-					free(current->next->be_value);
-				current->next->be_value = NULL;
-				free(current->next);
-				current->next = tmp;
-			}
+				combine_words_util1(&current, &tmp);
 			else
 				current = current->next->next->next;
 		}
-		else if (current->type == TOKEN_SPACE)
-			current = current->next;
-		else if (current->next && current->next->type == TOKEN_WORD)
-			combine_words_util(&current, &tmp);
+		else
+			combine_words_util_2(&current, &tmp);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:40:35 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 10:11:32 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:24:34 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ void	handle_parenthesis_and_brackets(t_token **current, int *parenthesis,
 		(*parenthesis)--;
 }
 
+void	initialize_vars(int *quote, int *dquote, int *parenthesis)
+{
+	*quote = 0;
+	*dquote = 0;
+	*parenthesis = 0;
+}
+
 int	input_validation(t_token **tokens)
 {
 	t_token	*current;
@@ -87,9 +94,7 @@ int	input_validation(t_token **tokens)
 
 	current = *tokens;
 	prev = NULL;
-	quote = 0;
-	dquote = 0;
-	parenthesis = 0;
+	initialize_vars(&quote, &dquote, &parenthesis);
 	while (current)
 	{
 		if (first_is_pipe_second_operator(&prev, &current, tokens)

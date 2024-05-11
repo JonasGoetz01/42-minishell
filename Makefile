@@ -36,12 +36,14 @@ SOURCES	:=	main.c \
 			prompt.c \
 			tokenize.c \
 			tokenize_utils.c \
+			tokenize_utils_1.c \
 			tokenize_utils_2.c \
 			input_validator.c \
 			input_validator_utils.c \
 			expander.c \
 			expander_util.c \
 			expander_util_2.c \
+			expander_util_3.c \
 			token_utils.c \
 			ctrl.c \
 			fd_utils.c \
@@ -64,16 +66,19 @@ SOURCES	:=	main.c \
 			error_msg.c \
 			file_utils.c \
 			ast.c \
+			ast_utils.c \
+			ast_utils_1.c \
 			precedence.c \
 			rearrange_tokens.c \
 			rearrange_tokens_utils.c \
+			rearrange_tokens_utils_1.c \
 			rearrange_tokens_utils_2.c \
 			next_is.c \
 			retokenize.c \
 			retokenize_utils.c \
+			retokenize_utils_1.c \
 			token_utils_2.c \
 			cleanup.c \
-			ast_utils.c \
 			expand_heredoc.c \
 			exec_heredoc_utils.c \
 			wildcards.c \
@@ -120,6 +125,9 @@ leaks: no-debug
 	cd 42_minishell_tester-master && bash tester.sh vm
 
 bonus: no-debug
+	cd 42_minishell_tester-master && bash tester.sh b
+
+bonus-leaks: no-debug
 	cd 42_minishell_tester-master && bash tester.sh b
 
 unit: $(TESTS) $(TESTOBJECTS) $(INC)
