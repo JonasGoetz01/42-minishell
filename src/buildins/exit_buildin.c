@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_buildin.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:22:25 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:22:25 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static void	ft_start_exit(int exit_status, t_process *process, t_global *global)
@@ -45,5 +57,5 @@ void	ft_exit_buildin(t_process *process, t_global *global)
 		ft_start_exit(2, process, global);
 	}
 	else
-		ft_start_exit((unsigned char) ft_atoi(arg1), process, global);
+		ft_start_exit((unsigned char)ft_atoi(arg1), process, global);
 }

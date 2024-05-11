@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_tokens_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:24 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:25:20 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
@@ -93,12 +105,12 @@ bool	ft_exec_tokens_loop(t_ast_node *node, t_token *token,
 				return (false);
 			exec_flags->next_wait = false;
 		}
-		else if (exec_flags->tok_typ == TOKEN_CMD && ft_get_fd(node->file_in)
-			!= -2 && ft_get_fd(node->file_out) != -2 && !node->process)
+		else if (exec_flags->tok_typ == TOKEN_CMD && ft_get_fd(node->file_in) !=
+			-2 && ft_get_fd(node->file_out) != -2 && !node->process)
 			node->process = ft_exec_cmd(token, node, exec_flags->ast, global);
 		else if (exec_flags->tok_typ == TOKEN_CMD
-			&& (ft_get_fd(node->file_in) == -2 || ft_get_fd(node->file_out)
-				== -2) && !node->process)
+			&& (ft_get_fd(node->file_in) == -2 || ft_get_fd(node->file_out) ==
+				-2) && !node->process)
 			node->exit_status = 1;
 		token = token->next;
 	}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:27 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:23:28 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static char	**ft_init_args_arr(char *cmd)
@@ -10,7 +22,7 @@ static char	**ft_init_args_arr(char *cmd)
 	args[0] = ft_strdup(cmd);
 	if (args[0] == NULL)
 	{
-		ft_arr_free((void **) args);
+		ft_arr_free((void **)args);
 		return (NULL);
 	}
 	return (args);
@@ -31,10 +43,10 @@ char	**ft_fill_args(t_token *token, char *cmd)
 		{
 			tmp = ft_strdup(token->value);
 			if (tmp == NULL)
-				return (ft_arr_free((void **) args), NULL);
+				return (ft_arr_free((void **)args), NULL);
 			if (!ft_arr_add(tmp, &args))
 			{
-				ft_arr_free((void **) args);
+				ft_arr_free((void **)args);
 				return (NULL);
 			}
 		}

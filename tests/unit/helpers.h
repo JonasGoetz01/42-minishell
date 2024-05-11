@@ -1,11 +1,23 @@
-#ifndef HELPERS_H
-# define HELPERS_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   helpers.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:25:02 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:25:03 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include "../../inc/minishell.h"
-# include <stdarg.h>
+// #ifndef HELPERS_H
+// # define HELPERS_H
 
-t_token	**create_token_list(int count, ...);
+// # include "../../inc/minishell.h"
+// # include <stdarg.h>
 
-void	free_token_list(t_token **head);
+// t_token	**create_token_list(int count, ...);
 
-#endif
+// void	free_token_list(t_token **head);
+
+// #endif

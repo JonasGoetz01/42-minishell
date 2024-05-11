@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_check.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:22:48 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:22:49 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 bool	ft_env_contains(char *name, char **env)
@@ -11,8 +23,8 @@ bool	ft_env_contains(char *name, char **env)
 		find_temp = ft_trim_to_equal(*env);
 		if (!find_temp)
 			return (true);
-		if (len_str == ft_strlen(find_temp)
-			&& ft_strncmp(find_temp, name, len_str + 1) == 0)
+		if (len_str == ft_strlen(find_temp) && ft_strncmp(find_temp, name,
+				len_str + 1) == 0)
 			return (free(find_temp), true);
 		free(find_temp);
 		env++;

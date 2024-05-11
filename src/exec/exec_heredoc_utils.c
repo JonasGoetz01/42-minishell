@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_heredoc_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:10 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:25:18 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 void	ft_error_heredoc(char *limiter)
@@ -6,7 +18,8 @@ void	ft_error_heredoc(char *limiter)
 	char	*tmp;
 
 	tmp = ft_strjoin("here-document at line 1 \
-			delimited by end-of-file (wanted `", limiter);
+			delimited by end-of-file (wanted `",
+						limiter);
 	if (tmp == NULL)
 		return ;
 	msg = ft_strjoin(tmp, "')");

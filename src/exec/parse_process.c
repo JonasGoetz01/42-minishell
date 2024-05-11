@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_process.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:33 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:23:34 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 char	*ft_check_cmd_path(char **dirs, char *cmd, int ind)
@@ -45,29 +57,24 @@ static char	*ft_loop_check_path(char *cmd, char *path)
 
 char	*ft_get_cmd_path(char *cmd, char *path)
 {
-	if (ft_is_directory(cmd)
-		&& ft_strncmp(cmd, ".", 2) != 0
-		&& ft_strncmp(cmd, "..", 3) != 0)
+	if (ft_is_directory(cmd) && ft_strncmp(cmd, ".", 2) != 0 && ft_strncmp(cmd,
+			"..", 3) != 0)
 		return (errno = 21, NULL);
-	if (access(cmd, F_OK | X_OK) == 0
-		&& ft_strncmp(cmd, ".", 2) != 0
+	if (access(cmd, F_OK | X_OK) == 0 && ft_strncmp(cmd, ".", 2) != 0
 		&& ft_strncmp(cmd, "..", 3) != 0)
 		return (ft_strdup(cmd));
 	if (path == NULL || path[0] == 0 || ft_strncmp(cmd, "./", 2) == 0
-		|| ft_strncmp(cmd, "../", 3) == 0
-		|| ft_strnstr(cmd, "/", ft_strlen(cmd) != 0))
+		|| ft_strncmp(cmd, "../", 3) == 0 || ft_strnstr(cmd, "/",
+			ft_strlen(cmd) != 0))
 		return (NULL);
 	return (ft_loop_check_path(cmd, path));
 }
 
 bool	ft_is_buildin_cmd(char *cmd)
 {
-	return (ft_strncmp(cmd, "echo", 5) == 0
-		|| ft_strncmp(cmd, "cd", 3) == 0
-		|| ft_strncmp(cmd, "pwd", 4) == 0
-		|| ft_strncmp(cmd, "export", 7) == 0
-		|| ft_strncmp(cmd, "unset", 6) == 0
-		|| ft_strncmp(cmd, "env", 4) == 0
+	return (ft_strncmp(cmd, "echo", 5) == 0 || ft_strncmp(cmd, "cd", 3) == 0
+		|| ft_strncmp(cmd, "pwd", 4) == 0 || ft_strncmp(cmd, "export", 7) == 0
+		|| ft_strncmp(cmd, "unset", 6) == 0 || ft_strncmp(cmd, "env", 4) == 0
 		|| ft_strncmp(cmd, "exit", 5) == 0);
 }
 

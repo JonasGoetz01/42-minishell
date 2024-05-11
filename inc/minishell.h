@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:25:27 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:25:54 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -94,8 +106,8 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					*file_in;
-	int					*(fd_out[2]);
-	int					*(fd_in[2]);
+	int *(fd_out[2]);
+	int *(fd_in[2]);
 	int					*file_out;
 	int					exit_status;
 	t_process			*process;
