@@ -122,6 +122,9 @@ leaks: no-debug
 bonus: no-debug
 	cd 42_minishell_tester-master && bash tester.sh b
 
+bonus-leaks: no-debug
+	cd 42_minishell_tester-master && bash tester.sh b
+
 unit: $(TESTS) $(TESTOBJECTS) $(INC)
 	make -C $(LIBFT)
 	$(CC) $(CFLAGS) $(TESTOBJECTS) $(TESTS) $(LDFLAGS) -o $(TESTNAME) -L $(LIBFT)

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 10:57:53 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 14:34:09 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,45 @@ t_token	*last_is_bracket(t_token *tokens)
 		else if (current->type == TOKEN_SPACE)
 			;
 		else if (current->type == TOKEN_BRACKET_L)
-			return (NULL);
+			ret = NULL;
 		else
 			ret = NULL;
 		current = current->next;
 	}
 	return (ret);
+}
+
+bool	second_open_bracket(t_token **tokens)
+{
+	t_token	*current;
+	int		brackets_level;
+
+	current = *tokens;
+	brackets_level = 0;
+	while (current)
+	{
+		if (current->type == TOKEN_BRACKET_L)
+			brackets_level++;
+		else if (current->type == TOKEN_BRACKET_R)
+			brackets_level--;
+		current = current->next;
+	}
+	if (brackets_level > 0)
+		return (true);
+	else
+		return (false);
+}
+
+void	pt(t_token *token)
+{
+	t_token	*current;
+
+	current = token;
+	while (current)
+	{
+		printf("type: %d, value: %s\n", current->type, current->value);
+		current = current->next;
+	}
 }
 
 // if the tokens have brackets at the beginning and end, remove them
@@ -55,6 +88,8 @@ void	remove_brackets(t_token **tokens)
 	while (current && current->type == TOKEN_SPACE)
 		current = current->next;
 	if (!current)
+		return ;
+	if (second_open_bracket(&(current)))
 		return ;
 	closing_bracket = last_is_bracket(current->next);
 	if (current && current->type == TOKEN_BRACKET_L && closing_bracket
@@ -74,8 +109,6 @@ void	remove_brackets(t_token **tokens)
 		else
 			*tokens = current;
 		prev_link_list(tokens);
-		printf("%p, %p, %p\n", closing_bracket, closing_bracket->prev,
-			closing_bracket->next);
 		if (closing_bracket->prev && closing_bracket->next)
 		{
 			closing_bracket->prev->next = closing_bracket->next;
@@ -84,10 +117,18 @@ void	remove_brackets(t_token **tokens)
 				free(closing_bracket->be_value);
 			free(closing_bracket);
 		}
-		else if (!closing_bracket->prev || !closing_bracket->next)
+		else if (!closing_bracket->prev)
 		{
 			free_tokens(*tokens);
 			*tokens = NULL;
+		}
+		else if (!closing_bracket->next)
+		{
+			closing_bracket->prev->next = NULL;
+			free(closing_bracket->value);
+			if (closing_bracket->be_value)
+				free(closing_bracket->be_value);
+			free(closing_bracket);
 		}
 	}
 }
@@ -114,12 +155,17 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	if (!tokens)
 		return ;
 	get_highest_token(&highest_token, &current_token);
+	// printf("highest token: %s\n", highest_token->value);
 	create_ast(&ast, root, &highest_token);
 	if (handle_highest_token(&ast, &highest_token, &tokens, &current_token)
 		|| highest_token->next == NULL)
 		return ;
 	create_arms(&right_arm, &tokens, &current_token, &highest_token);
 	left_arm = tokens;
+	// printf("left arm\n");
+	// pt(left_arm);
+	// printf("right arm\n");
+	// pt(right_arm);
 	ast->token->next = NULL;
 	if (left_arm == highest_token)
 		left_arm = NULL;
