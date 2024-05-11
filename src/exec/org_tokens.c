@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   org_tokens.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:24:12 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:24:12 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 17:00:06 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	ft_set_token_type_redirs(t_ast_node *node, t_token *token)
 	}
 }
 
-void	ft_org_tokens(t_ast_node *node)
+void	ft_org_tokens_for_exec(t_ast_node *node)
 {
 	t_token	*token;
 
@@ -96,11 +96,11 @@ void	ft_org_tokens(t_ast_node *node)
 	token = node->token;
 	if (!token)
 		return ;
+	ft_combine_words(token);
 	ft_expand_wildcards(token);
 	ft_set_token_type_redirs(node, token);
-	ft_combine_words(token);
 	token = ft_first_valid_token(token);
 	ft_set_token_type_args(token);
-	ft_org_tokens(node->left);
-	ft_org_tokens(node->right);
+	ft_org_tokens_for_exec(node->left);
+	ft_org_tokens_for_exec(node->right);
 }

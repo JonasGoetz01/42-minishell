@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:23:55 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:23:55 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 16:57:46 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@ void	ft_exec_all(t_ast_node *node, t_global *global)
 	global->exit_status = 0;
 	signal(SIGINT, handle_exec);
 	signal(SIGQUIT, handle_exec);
-	print_ast(&node, 0, global);
-	ft_org_tokens(node);
-	if (ft_is_debug(global))
-		printf("-----\n");
-	print_ast(&node, 0, global);
 	ft_execute_nodes(node, node, true, global);
 	ft_close_all_fds(global);
 	signal(SIGINT, handle_sigint);

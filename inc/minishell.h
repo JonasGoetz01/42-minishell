@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:25:27 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:25:54 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 17:00:04 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ void					ft_close_all_fds(t_global *global);
 t_fd					*ft_add_t_fd(t_global *global);
 int						ft_get_fd(int *fd);
 
-void					ft_org_tokens(t_ast_node *token);
+void					ft_org_tokens_for_exec(t_ast_node *token);
 t_token					*ft_first_valid_token(t_token *token);
 void					ft_execute_process(t_process *process,
 							t_global *global);
