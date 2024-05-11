@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   expander_util.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
 /*   Updated: 2024/05/11 15:19:47 by vscode           ###   ########.fr       */
@@ -19,7 +19,7 @@ char	*ft_expand_word(char *word, t_global *global)
 	if (word[0] == '$')
 	{
 		if (word[1] == '\0')
-			return (word);
+			return (ft_strdup(word));
 		if (word[1] == '?')
 			return (free(word), ft_itoa(global->old_exit_status));
 		else
@@ -37,7 +37,7 @@ char	*ft_expand_word(char *word, t_global *global)
 		if (word[1] == '\0' || word[1] == '/')
 			return (ft_get_env("HOME", global->envv));
 	}
-	return (word);
+	return (ft_strdup(word));
 }
 
 int	ft_strlen_til_space(char *str)
@@ -69,6 +69,7 @@ void	single_word_no_quotes(t_token **current, t_global *global)
 				free((*current)->value);
 			(*current)->value = ft_strdup(expanded_word);
 		}
+		free(expanded_word);
 	}
 }
 
@@ -105,5 +106,6 @@ void	single_char_no_next(t_token **current, t_global *global)
 			(*current)->be_value = (*current)->value;
 			(*current)->value = ft_strdup(expanded_word);
 		}
+		free(expanded_word);
 	}
 }
