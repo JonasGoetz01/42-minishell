@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:50:43 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:11:46 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:04:30 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	print_tokens(t_token *tokens, t_global *global)
 // Check if the token is an operator
 int	is_operator(t_token token)
 {
-	return (token.type == TOKEN_AMPERSAND || token.type == TOKEN_BRACKET_L
-		|| token.type == TOKEN_BRACKET_R || token.type == TOKEN_DOUBLE_AMPERSAND
+	return (token.type == TOKEN_AMPERSAND
+		|| token.type == TOKEN_DOUBLE_AMPERSAND
 		|| token.type == TOKEN_DOUBLE_GREATER || token.type == TOKEN_DOUBLE_LESS
 		|| token.type == TOKEN_DOUBLE_PIPE || token.type == TOKEN_GREATER
 		|| token.type == TOKEN_LESS || token.type == TOKEN_PIPE);

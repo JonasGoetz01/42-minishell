@@ -116,6 +116,12 @@ test: no-debug
 tester: no-debug
 	cd 42_minishell_tester-master && bash tester.sh m
 
+leaks: no-debug
+	cd 42_minishell_tester-master && bash tester.sh vm
+
+bonus: no-debug
+	cd 42_minishell_tester-master && bash tester.sh b
+
 unit: $(TESTS) $(TESTOBJECTS) $(INC)
 	make -C $(LIBFT)
 	$(CC) $(CFLAGS) $(TESTOBJECTS) $(TESTS) $(LDFLAGS) -o $(TESTNAME) -L $(LIBFT)

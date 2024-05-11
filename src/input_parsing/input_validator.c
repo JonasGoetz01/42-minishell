@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   input_validator.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:40:35 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 16:45:40 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/11 10:11:32 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	first_is_pipe_second_operator(t_token **prev, t_token **current,
-			t_token **tokens);
-bool	pipe_after_pipe(t_token *current);
-bool	redirect_has_no_file(t_token *current);
-bool	no_file_for_indirect(t_token *current);
-bool	ft_no_lim_heredoc(t_token *current);
+bool			first_is_pipe_second_operator(t_token **prev, t_token **current,
+					t_token **tokens);
+bool			pipe_after_pipe(t_token *current);
+bool			redirect_has_no_file(t_token *current);
+bool			no_file_for_indirect(t_token *current);
+bool			ft_no_lim_heredoc(t_token *current);
 
 t_token_type	get_next_type(t_token *token)
 {
@@ -67,9 +67,6 @@ int	validator(char *input)
 void	handle_parenthesis_and_brackets(t_token **current, int *parenthesis,
 		int *quote, int *dquote)
 {
-	*quote = 0;
-	*dquote = 0;
-	*parenthesis = 0;
 	if ((*current)->type == TOKEN_SINGLE_QUOTE && !dquote)
 		*quote = !*quote;
 	else if ((*current)->type == TOKEN_DOUBLE_QUOTE && !quote)
@@ -90,6 +87,9 @@ int	input_validation(t_token **tokens)
 
 	current = *tokens;
 	prev = NULL;
+	quote = 0;
+	dquote = 0;
+	parenthesis = 0;
 	while (current)
 	{
 		if (first_is_pipe_second_operator(&prev, &current, tokens)
