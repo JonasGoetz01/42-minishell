@@ -3,29 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:39:45 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 18:16:30 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 17:00:04 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+static void	ft_set_current_pwd(t_global *global)
+{
+	char		*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+		return ;
+	ft_set_env_env("PWD", cwd, &global->envv);
+	ft_set_env_export("PWD", cwd, &global->env_export);
+	free(cwd);
+}
+
 void	process_input(char *input, t_global *global)
 {
 	t_token		*tokens;
 	t_ast_node	*ast;
-	char		*cwd;
 
 	ast = NULL;
-	cwd = getcwd(NULL, 0);
-	if (cwd == NULL)
-		return ;
 	tokens = NULL;
-	ft_set_env_env("PWD", cwd, &global->envv);
-	ft_set_env_export("PWD", cwd, &global->env_export);
-	free(cwd);
+	ft_set_current_pwd(global);
 	tokenize(input, &tokens, 0);
 	print_tokens(tokens, global);
 	ft_expand_tokens(tokens, global);
@@ -37,6 +43,11 @@ void	process_input(char *input, t_global *global)
 	if (input_validation(&tokens))
 		return (global->exit_status = 2, free_tokens(tokens), (void)0);
 	gen_ast(&ast, tokens);
+	print_ast(&ast, 0, global);
+	ft_org_tokens_for_exec(ast);
+	if (ft_is_debug(global))
+		printf("-----\n");
+	print_ast(&ast, 0, global);
 	ft_exec_all(ast, global);
 	ft_free_nodes(ast);
 }
