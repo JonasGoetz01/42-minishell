@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_heredoc_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:23:10 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:25:18 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 16:50:38 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void	ft_error_heredoc(char *limiter)
 	char	*tmp;
 
 	tmp = ft_strjoin("here-document at line 1 \
-			delimited by end-of-file (wanted `",
-						limiter);
+			delimited by end-of-file (wanted `", limiter);
 	if (tmp == NULL)
 		return ;
 	msg = ft_strjoin(tmp, "')");
