@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 10:05:18 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 09:16:58 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:15:35 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	split_words_with_spaces(t_token **current, t_token **new_token,
 	bool	last_space;
 	bool	first_space;
 
+	if (!(*current))
+		return ;
 	if ((*current)->value[0] == ' ')
 		first_space = true;
 	else

@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:52 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 18:22:44 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:16:01 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ bool	handle_and(const char *input, int *i, t_token_type *type, char **value)
 		{
 			*type = TOKEN_DOUBLE_AMPERSAND;
 			free(*value);
-			*value = ft_substr(input, *i, 2);
+			*value = ft_strdup("&&");
 			(*i)++;
 		}
 		else
@@ -94,13 +94,13 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 {
 	*value = ft_substr(input, *i, 1);
 	if (handle_brackets(input, i, type))
-		free(*value);
+		;
 	else if (handle_greater_less(input, i, type, value))
 		;
 	else if (handle_pipe(input, i, type, value))
 		;
 	else if (handle_and(input, i, type, value))
-		free(*value);
+		;
 	else
 	{
 		*type = TOKEN_WORD;
