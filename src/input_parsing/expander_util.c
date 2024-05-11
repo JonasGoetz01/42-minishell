@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_util.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 19:03:20 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 12:32:40 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ void	single_word_no_quotes(t_token **current, t_global *global)
 		{
 			if ((*current)->value)
 				free((*current)->value);
-			(*current)->value = ft_strdup(expanded_word);
+			(*current)->value = expanded_word;
 		}
+		else
+			free(expanded_word);
 	}
 }
 
@@ -105,7 +107,9 @@ void	single_char_no_next(t_token **current, t_global *global)
 			// if ((*current)->value)
 			// 	free((*current)->value);
 			(*current)->be_value = (*current)->value;
-			(*current)->value = ft_strdup(expanded_word);
+			(*current)->value = expanded_word;
 		}
+		else
+			free(expanded_word);
 	}
 }
