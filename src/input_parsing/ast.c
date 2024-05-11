@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 10:57:53 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:07:43 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ void	remove_brackets(t_token **tokens)
 		else
 			*tokens = current;
 		prev_link_list(tokens);
-		printf("%p, %p, %p\n", closing_bracket, closing_bracket->prev,
-			closing_bracket->next);
 		if (closing_bracket->prev && closing_bracket->next)
 		{
 			closing_bracket->prev->next = closing_bracket->next;
