@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 19:33:06 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:59:38 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,31 @@ void	expand_tilde(t_token **current, t_global *global)
 	}
 }
 
+void	expand_variables_1_util(char *tmp, char *remind, char *remind2)
+{
+	if (tmp)
+		free(tmp);
+	if (remind)
+		free(remind);
+	if (remind2)
+		free(remind2);
+}
+
+void	expand_variables_1_util_1(t_token **current, char **tmp3)
+{
+	*tmp3 = NULL;
+	if ((*current)->be_value)
+	{
+		*tmp3 = ft_strjoin((*current)->be_value, (*current)->value);
+		free((*current)->be_value);
+		free((*current)->value);
+	}
+	if (tmp3)
+		(*current)->be_value = *tmp3;
+	else
+		(*current)->be_value = (*current)->value;
+}
+
 void	expand_variables_1(t_token **current, t_global *global, int i)
 {
 	char	*remind;
@@ -70,29 +95,14 @@ void	expand_variables_1(t_token **current, t_global *global, int i)
 	tmp = ft_expand_word(tmp3, global);
 	if (tmp)
 	{
-		tmp3 = NULL;
-		if ((*current)->be_value)
-		{
-			tmp3 = ft_strjoin((*current)->be_value, (*current)->value);
-			free((*current)->be_value);
-			free((*current)->value);
-		}
-		if (tmp3)
-			(*current)->be_value = tmp3;
-		else
-			(*current)->be_value = (*current)->value;
+		expand_variables_1_util_1(current, &tmp3);
 		tmp2 = ft_strjoin(tmp, remind2);
 		(*current)->value = ft_strjoin(remind, tmp2);
 		free(tmp2);
 		free(tmp);
 		tmp = NULL;
 	}
-	if (tmp)
-		free(tmp);
-	if (remind)
-		free(remind);
-	if (remind2)
-		free(remind2);
+	expand_variables_1_util(tmp, remind, remind2);
 }
 
 void	expand_variables_2(t_token **current, t_global *global, int i)
