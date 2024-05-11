@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:52 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 10:16:01 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:52:16 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 {
 	*value = ft_substr(input, *i, 1);
 	if (handle_brackets(input, i, type))
-		;
+	{
+		free(*value);
+		*value = NULL;
+	}
 	else if (handle_greater_less(input, i, type, value))
 		;
 	else if (handle_pipe(input, i, type, value))

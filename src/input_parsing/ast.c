@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 16:55:28 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:21:03 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:57:53 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,21 @@ void	remove_brackets(t_token **tokens)
 		else
 			*tokens = current;
 		prev_link_list(tokens);
-		closing_bracket->prev->next = closing_bracket->next;
-		free(closing_bracket->value);
-		if (closing_bracket->be_value)
-			free(closing_bracket->be_value);
-		free(closing_bracket);
+		printf("%p, %p, %p\n", closing_bracket, closing_bracket->prev,
+			closing_bracket->next);
+		if (closing_bracket->prev && closing_bracket->next)
+		{
+			closing_bracket->prev->next = closing_bracket->next;
+			free(closing_bracket->value);
+			if (closing_bracket->be_value)
+				free(closing_bracket->be_value);
+			free(closing_bracket);
+		}
+		else if (!closing_bracket->prev || !closing_bracket->next)
+		{
+			free_tokens(*tokens);
+			*tokens = NULL;
+		}
 	}
 }
 
@@ -101,6 +111,8 @@ void	gen_ast(t_ast_node **root, t_token *tokens)
 	current_token = tokens;
 	ast = *root;
 	remove_brackets(&tokens);
+	if (!tokens)
+		return ;
 	get_highest_token(&highest_token, &current_token);
 	create_ast(&ast, root, &highest_token);
 	if (handle_highest_token(&ast, &highest_token, &tokens, &current_token)
