@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_tokens.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:07:16 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 19:07:16 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 12:22:40 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	ft_expand_wildcard_token(t_token *token)
 	if (files == NULL)
 		return ;
 	ft_fill_tokens(token, NULL, files, NULL);
+	ft_arr_free((void **) files);
 }
 
 void	ft_expand_wildcards(t_token *token)
