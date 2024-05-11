@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 12:32:40 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/11 12:38:50 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_expand_word(char *word, t_global *global)
 		if (word[1] == '\0' || word[1] == '/')
 			return (ft_get_env("HOME", global->envv));
 	}
-	return (word);
+	return (ft_strdup(word));
 }
 
 int	ft_strlen_til_space(char *str)
