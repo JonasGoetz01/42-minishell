@@ -55,6 +55,7 @@ SOURCES	:=	main.c \
 			exec_process_utils.c \
 			exec_utils.c \
 			exec_files.c \
+			exec_tokens_utils_parseon.c \
 			parse_process.c \
 			parse_process_utils.c \
 			init_utils.c \

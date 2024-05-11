@@ -1,5 +1,8 @@
 #include "../../inc/minishell.h"
 
+void	ft_parseon_fds(t_ast_node *node, t_token_type type,
+			t_exec_flags *exec_flags);
+
 static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
 		t_ast_node *ast, t_global *global)
 {
@@ -28,31 +31,6 @@ static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
 		ft_handle_verify_process_error(process);
 	node->exit_status = process->exit_status;
 	return (process);
-}
-
-static void	ft_parseon_fds(t_ast_node *node, t_token_type type,
-		t_exec_flags *exec_flags)
-{
-	if (type == TOKEN_LESS || type == TOKEN_DOUBLE_LESS)
-	{
-		if (node->left)
-		{
-			node->left->fd_out[PIPE_READ] = node->fd_out[PIPE_READ];
-			node->left->fd_out[PIPE_WRITE] = node->fd_out[PIPE_WRITE];
-			node->left->file_out = node->file_out;
-		}
-		exec_flags->wait = false;
-	}
-	else if (type == TOKEN_GREATER || type == TOKEN_DOUBLE_GREATER)
-	{
-		if (node->left)
-		{
-			node->left->fd_in[PIPE_READ] = node->fd_in[PIPE_READ];
-			node->left->fd_in[PIPE_WRITE] = node->fd_in[PIPE_WRITE];
-			node->left->file_out = node->file_out;
-		}
-		exec_flags->wait = false;
-	}
 }
 
 static bool	ft_handle_redirects(t_ast_node *node, t_global *global,
