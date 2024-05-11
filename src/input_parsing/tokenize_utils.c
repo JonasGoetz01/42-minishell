@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:52 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 10:52:16 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:36:43 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,25 @@ bool	handle_brackets(const char *input, int *i, t_token_type *type)
 		return (*type = TOKEN_BRACKET_L, true);
 	else if (input[*i] == ')')
 		return (*type = TOKEN_BRACKET_R, true);
+	return (false);
+}
+
+bool	handle_greater_less_util(const char *input, int *i, t_token_type *type,
+		char **value)
+{
+	if (input[*i] == '>')
+	{
+		if (input[*i + 1] == '>')
+		{
+			*type = TOKEN_DOUBLE_GREATER;
+			free(*value);
+			*value = ft_substr(input, *i, 2);
+			(*i)++;
+		}
+		else
+			*type = TOKEN_GREATER;
+		return (true);
+	}
 	return (false);
 }
 
@@ -37,20 +56,8 @@ bool	handle_greater_less(const char *input, int *i, t_token_type *type,
 			*type = TOKEN_LESS;
 		return (true);
 	}
-	else if (input[*i] == '>')
-	{
-		if (input[*i + 1] == '>')
-		{
-			*type = TOKEN_DOUBLE_GREATER;
-			free(*value);
-			*value = ft_substr(input, *i, 2);
-			(*i)++;
-		}
-		else
-			*type = TOKEN_GREATER;
-		return (true);
-	}
-	return (false);
+	else
+		return (handle_greater_less_util(input, i, type, value));
 }
 
 bool	handle_pipe(const char *input, int *i, t_token_type *type, char **value)

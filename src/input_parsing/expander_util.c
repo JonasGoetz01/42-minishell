@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 19:03:20 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:19:47 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ void	single_char_no_next(t_token **current, t_global *global)
 			|| ft_strncmp(expanded_word, (*current)->value,
 				ft_strlen(expanded_word)) != 0)
 		{
-			// if ((*current)->value)
-			// 	free((*current)->value);
 			(*current)->be_value = (*current)->value;
 			(*current)->value = ft_strdup(expanded_word);
 		}

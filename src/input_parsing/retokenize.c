@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 10:05:18 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 10:53:22 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 15:34:26 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,45 @@ void	split_words_with_spaces_next_words(t_token **current,
 	(*current) = (*current)->next;
 }
 
+void	split_words_with_spaces_util(bool *last_space, t_token **new_token,
+		t_token **current)
+{
+	if (last_space)
+	{
+		(*new_token) = create_token(TOKEN_SPACE, ft_strdup(" "));
+		(*new_token)->next = (*current)->next;
+		(*current)->next = (*new_token);
+		(*current) = (*current)->next;
+	}
+}
+
+void	split_words_with_spaces_util_1(t_token **new_token, t_token **current,
+		char ***split, int *i)
+{
+	if ((*split)[*i + 1] != NULL)
+	{
+		(*new_token) = create_token(TOKEN_SPACE, ft_strdup(" "));
+		(*new_token)->next = (*current)->next;
+		(*current)->next = (*new_token);
+		(*current) = (*current)->next;
+	}
+}
+
+void	split_words_with_spaces_util_2(t_token **current, bool *first_space,
+		bool *last_space)
+{
+	if (!(*current) || !(*current)->value)
+		return ;
+	if ((*current)->value[0] == ' ')
+		(*first_space) = true;
+	else
+		(*first_space) = false;
+	if ((*current)->value[ft_strlen((*current)->value) - 1] == ' ')
+		(*last_space) = true;
+	else
+		(*last_space) = false;
+}
+
 void	split_words_with_spaces(t_token **current, t_token **new_token,
 		char ***split)
 {
@@ -49,16 +88,7 @@ void	split_words_with_spaces(t_token **current, t_token **new_token,
 	bool	last_space;
 	bool	first_space;
 
-	if (!(*current) || !(*current)->value)
-		return ;
-	if ((*current)->value[0] == ' ')
-		first_space = true;
-	else
-		first_space = false;
-	if ((*current)->value[ft_strlen((*current)->value) - 1] == ' ')
-		last_space = true;
-	else
-		last_space = false;
+	split_words_with_spaces_util_2(current, &first_space, &last_space);
 	if ((*current)->type == TOKEN_WORD && ft_strchr((*current)->value, ' '))
 	{
 		(*split) = ft_split((*current)->value, ' ');
@@ -71,22 +101,10 @@ void	split_words_with_spaces(t_token **current, t_token **new_token,
 			else
 				split_words_with_spaces_next_words(current, new_token, split,
 					i);
-			if ((*split)[i + 1] != NULL)
-			{
-				(*new_token) = create_token(TOKEN_SPACE, ft_strdup(" "));
-				(*new_token)->next = (*current)->next;
-				(*current)->next = (*new_token);
-				(*current) = (*current)->next;
-			}
+			split_words_with_spaces_util_1(new_token, current, split, &i);
 			i++;
 		}
-		if (last_space)
-		{
-			(*new_token) = create_token(TOKEN_SPACE, ft_strdup(" "));
-			(*new_token)->next = (*current)->next;
-			(*current)->next = (*new_token);
-			(*current) = (*current)->next;
-		}
+		split_words_with_spaces_util(&last_space, new_token, current);
 		free(*split);
 	}
 }
