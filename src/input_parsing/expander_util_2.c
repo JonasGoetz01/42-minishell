@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:17:00 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 19:33:06 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,37 @@ void	expand_variables_1(t_token **current, t_global *global, int i)
 	char	*remind2;
 	char	*tmp;
 	char	*tmp2;
+	char	*tmp3;
 
 	remind = ft_substr((*current)->value, 0, i);
 	remind2 = ft_substr((*current)->value, i
 			+ ft_strlen_til_space(&(*current)->value[i]),
 			ft_strlen((*current)->value));
-	tmp = ft_expand_word(ft_substr(&(*current)->value[i],
-				ft_strchr(&(*current)->value[i], '$') - &(*current)->value[i],
-				ft_strlen_til_space(&(*current)->value[i])), global);
+	tmp3 = ft_substr(&(*current)->value[i], ft_strchr(&(*current)->value[i],
+				'$') - &(*current)->value[i],
+			ft_strlen_til_space(&(*current)->value[i]));
+	tmp = ft_expand_word(tmp3, global);
 	if (tmp)
 	{
-		(*current)->be_value = (*current)->value;
-		// free((*current)->value);
+		tmp3 = NULL;
+		if ((*current)->be_value)
+		{
+			tmp3 = ft_strjoin((*current)->be_value, (*current)->value);
+			free((*current)->be_value);
+			free((*current)->value);
+		}
+		if (tmp3)
+			(*current)->be_value = tmp3;
+		else
+			(*current)->be_value = (*current)->value;
 		tmp2 = ft_strjoin(tmp, remind2);
 		(*current)->value = ft_strjoin(remind, tmp2);
 		free(tmp2);
 		free(tmp);
+		tmp = NULL;
 	}
+	if (tmp)
+		free(tmp);
 	if (remind)
 		free(remind);
 	if (remind2)

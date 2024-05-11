@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:03:52 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/10 09:19:20 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:52:16 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ bool	handle_greater_less(const char *input, int *i, t_token_type *type,
 		if (input[*i + 1] == '<')
 		{
 			*type = TOKEN_DOUBLE_LESS;
+			free(*value);
 			*value = ft_substr(input, *i, 2);
 			(*i)++;
 		}
@@ -41,6 +42,7 @@ bool	handle_greater_less(const char *input, int *i, t_token_type *type,
 		if (input[*i + 1] == '>')
 		{
 			*type = TOKEN_DOUBLE_GREATER;
+			free(*value);
 			*value = ft_substr(input, *i, 2);
 			(*i)++;
 		}
@@ -58,6 +60,7 @@ bool	handle_pipe(const char *input, int *i, t_token_type *type, char **value)
 		if (input[*i + 1] == '|')
 		{
 			*type = TOKEN_DOUBLE_PIPE;
+			free(*value);
 			*value = ft_substr(input, *i, 2);
 			(*i)++;
 		}
@@ -75,7 +78,8 @@ bool	handle_and(const char *input, int *i, t_token_type *type, char **value)
 		if (input[*i + 1] == '&')
 		{
 			*type = TOKEN_DOUBLE_AMPERSAND;
-			*value = ft_substr(input, *i, 2);
+			free(*value);
+			*value = ft_strdup("&&");
 			(*i)++;
 		}
 		else
@@ -90,13 +94,16 @@ void	handle_other_delimiters(char **value, const char *input, int *i,
 {
 	*value = ft_substr(input, *i, 1);
 	if (handle_brackets(input, i, type))
+	{
 		free(*value);
+		*value = NULL;
+	}
 	else if (handle_greater_less(input, i, type, value))
 		;
 	else if (handle_pipe(input, i, type, value))
 		;
 	else if (handle_and(input, i, type, value))
-		free(*value);
+		;
 	else
 	{
 		*type = TOKEN_WORD;

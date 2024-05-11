@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:39:45 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 17:43:42 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/10 18:16:30 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	process_input(char *input, t_global *global)
 	rearrange_tokens(&tokens);
 	print_tokens(tokens, global);
 	if (input_validation(&tokens))
-		return (global->exit_status = 2, (void)0);
+		return (global->exit_status = 2, free_tokens(tokens), (void)0);
 	gen_ast(&ast, tokens);
 	ft_exec_all(ast, global);
 	ft_free_nodes(ast);

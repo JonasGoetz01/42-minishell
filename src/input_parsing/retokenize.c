@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 10:05:18 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/06 10:33:59 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 10:53:22 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,27 @@ void	skip_quote_content(t_token **current, t_token **temp);
 void	skip_multiple_spaces(t_token **current, t_token **temp);
 
 void	split_words_with_spaces_first_word(t_token **current, char ***split,
-		int i)
+		int i, bool first_space)
 {
+	t_token	*new_token;
+
 	free((*current)->value);
-	(*current)->value = ft_strdup((*split)[i]);
+	if (!first_space)
+		(*current)->value = (*split)[i];
+	else
+	{
+		(*current)->value = ft_strdup(" ");
+		new_token = create_token(TOKEN_WORD, (*split)[i]);
+		new_token->next = (*current)->next;
+		(*current)->next = new_token;
+		(*current) = (*current)->next;
+	}
 }
 
 void	split_words_with_spaces_next_words(t_token **current,
 		t_token **new_token, char ***split, int i)
 {
-	(*new_token) = create_token(TOKEN_WORD, ft_strdup((*split)[i]));
+	(*new_token) = create_token(TOKEN_WORD, (*split)[i]);
 	(*new_token)->next = (*current)->next;
 	(*current)->next = (*new_token);
 	(*current) = (*current)->next;
@@ -34,8 +45,20 @@ void	split_words_with_spaces_next_words(t_token **current,
 void	split_words_with_spaces(t_token **current, t_token **new_token,
 		char ***split)
 {
-	int	i;
+	int		i;
+	bool	last_space;
+	bool	first_space;
 
+	if (!(*current) || !(*current)->value)
+		return ;
+	if ((*current)->value[0] == ' ')
+		first_space = true;
+	else
+		first_space = false;
+	if ((*current)->value[ft_strlen((*current)->value) - 1] == ' ')
+		last_space = true;
+	else
+		last_space = false;
 	if ((*current)->type == TOKEN_WORD && ft_strchr((*current)->value, ' '))
 	{
 		(*split) = ft_split((*current)->value, ' ');
@@ -43,7 +66,8 @@ void	split_words_with_spaces(t_token **current, t_token **new_token,
 		while ((*split)[i])
 		{
 			if (i == 0)
-				split_words_with_spaces_first_word(current, split, i);
+				split_words_with_spaces_first_word(current, split, i,
+					first_space);
 			else
 				split_words_with_spaces_next_words(current, new_token, split,
 					i);
@@ -56,6 +80,14 @@ void	split_words_with_spaces(t_token **current, t_token **new_token,
 			}
 			i++;
 		}
+		if (last_space)
+		{
+			(*new_token) = create_token(TOKEN_SPACE, ft_strdup(" "));
+			(*new_token)->next = (*current)->next;
+			(*current)->next = (*new_token);
+			(*current) = (*current)->next;
+		}
+		free(*split);
 	}
 }
 
