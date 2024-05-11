@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:04 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 12:38:50 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/11 13:17:52 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_expand_word(char *word, t_global *global)
 	if (word[0] == '$')
 	{
 		if (word[1] == '\0')
-			return (word);
+			return (ft_strdup(word));
 		if (word[1] == '?')
 			return (free(word), ft_itoa(global->old_exit_status));
 		else
@@ -67,10 +67,9 @@ void	single_word_no_quotes(t_token **current, t_global *global)
 		{
 			if ((*current)->value)
 				free((*current)->value);
-			(*current)->value = expanded_word;
+			(*current)->value = ft_strdup(expanded_word);
 		}
-		else
-			free(expanded_word);
+		free(expanded_word);
 	}
 }
 
@@ -107,9 +106,8 @@ void	single_char_no_next(t_token **current, t_global *global)
 			// if ((*current)->value)
 			// 	free((*current)->value);
 			(*current)->be_value = (*current)->value;
-			(*current)->value = expanded_word;
+			(*current)->value = ft_strdup(expanded_word);
 		}
-		else
-			free(expanded_word);
+		free(expanded_word);
 	}
 }
