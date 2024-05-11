@@ -6,7 +6,7 @@
 /*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 19:06:52 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/09 16:00:26 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/11 12:20:44 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,10 @@ static bool	ft_expand_wildcard_loop(char ***arr, char **files, char *str)
 		if (ft_check_file(&ind_str, &ind_file, str, files))
 		{
 			tmp = ft_strdup(*files);
-			if (tmp == NULL || !ft_arr_add(tmp, arr))
+			if (tmp == NULL)
 				return (false);
+			if (!ft_arr_add(tmp, arr))
+				return (free(tmp), false);
 		}
 		files++;
 	}
@@ -98,8 +100,10 @@ char	**ft_expand_wildcard(char *str)
 	if (ft_strnstr(str, "*", ft_strlen(str)) == NULL)
 	{
 		tmp = ft_strdup(str);
-		if (tmp == NULL || !ft_arr_add(tmp, &arr))
+		if (tmp == NULL)
 			return (ft_arr_free((void **)arr), NULL);
+		if (!ft_arr_add(tmp, &arr))
+			return (free(tmp), ft_arr_free((void **)arr), NULL);
 		return (arr);
 	}
 	files = ft_get_files(str[0] == '.');
