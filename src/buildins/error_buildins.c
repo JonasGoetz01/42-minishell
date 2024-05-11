@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_buildins.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:22:20 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:22:20 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-void	ft_error_buildin(const char *msg, const char *arg,
-			t_process *process, int exit_status)
+void	ft_error_buildin(const char *msg, const char *arg, t_process *process,
+		int exit_status)
 {
 	process->exit_status = exit_status;
 	ft_putstr_fd("minishell: ", 2);

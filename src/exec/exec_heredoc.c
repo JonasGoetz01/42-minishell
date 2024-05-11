@@ -1,12 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_heredoc.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:44 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:23:45 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static bool	ft_process_line(char *line, bool should_expand,
-							t_heredoc *heredoc, t_global *global)
+static bool	ft_process_line(char *line, bool should_expand, t_heredoc *heredoc,
+		t_global *global)
 {
 	char	*expanded;
 
-	if (ft_strncmp(line, heredoc->lim,
-			ft_strlen(heredoc->lim) + 1) == 0)
+	if (ft_strncmp(line, heredoc->lim, ft_strlen(heredoc->lim) + 1) == 0)
 		return (false);
 	expanded = NULL;
 	if (should_expand)
@@ -23,7 +34,7 @@ static bool	ft_process_line(char *line, bool should_expand,
 }
 
 static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
-								t_global *global)
+		t_global *global)
 {
 	char	*line;
 	char	**lines;
@@ -48,12 +59,12 @@ static void	ft_read_here_doc(t_heredoc *heredoc, bool should_expand,
 			ind++;
 		}
 		free(line);
-		ft_arr_free((void **) lines);
+		ft_arr_free((void **)lines);
 	}
 }
 
 static void	ft_child_here_doc(t_heredoc *heredoc, bool should_expand,
-	t_ast_node *ast, t_global *global)
+		t_ast_node *ast, t_global *global)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
@@ -67,7 +78,7 @@ static void	ft_child_here_doc(t_heredoc *heredoc, bool should_expand,
 }
 
 static void	ft_init_here_doc(t_heredoc *heredoc, bool should_expand,
-	t_ast_node *ast, t_global *global)
+		t_ast_node *ast, t_global *global)
 {
 	pid_t	pid;
 	int		exit_code;

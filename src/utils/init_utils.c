@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:24:32 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:24:33 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static bool	ft_env_cpy(char **src, char ***dst)
@@ -67,10 +79,10 @@ void	ft_init_t_global(t_global *global, char **envv)
 		return (free(global->envv), exit(1));
 	global->env_export = ft_arr_create();
 	if (!global->env_export)
-		return (ft_arr_free((void **) global->envv), exit(1));
+		return (ft_arr_free((void **)global->envv), exit(1));
 	if (!ft_env_cpy(global->envv, &global->env_export))
-		return (free(global->envv),
-			ft_arr_free((void **) global->envv), exit(1));
+		return (free(global->envv), ft_arr_free((void **)global->envv),
+			exit(1));
 	ft_unset_env("_", global);
 	global->exit_status = 0;
 	global->old_exit_status = 0;

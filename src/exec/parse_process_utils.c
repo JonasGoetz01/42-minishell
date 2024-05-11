@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_process_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:37 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:23:37 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-t_process	*ft_create_process(char *cmd, char **args,
-			t_ast_node *node, t_ast_node *ast)
+t_process	*ft_create_process(char *cmd, char **args, t_ast_node *node,
+		t_ast_node *ast)
 {
 	t_process	*process;
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_buildin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:21:51 by vscode            #+#    #+#             */
+/*   Updated: 2024/05/11 16:21:52 by vscode           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static char	*ft_cd_dir_rel(t_process *process)
@@ -25,7 +37,7 @@ static char	*ft_cd_env(const char *env, t_process *process, t_global *global)
 	char	*new_pwd;
 	char	*err_msg;
 
-	new_pwd = ft_get_env((char *) env, global->envv);
+	new_pwd = ft_get_env((char *)env, global->envv);
 	if (!new_pwd)
 	{
 		err_msg = ft_strjoin(env, " not set");
