@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 15:59:38 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/11 16:04:53 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int		ft_strlen_til_space(char *str);
 void	single_word_no_quotes(t_token **current, t_global *global);
 void	single_char_with_quotes(t_token **current, t_token **tokens);
 void	single_char_no_next(t_token **current, t_global *global);
+void	expand_variables_1_util(char *tmp, char *remind, char *remind2);
+void	expand_variables_1_util_1(t_token **current, char **tmp3);
 
 void	single_char(t_token **current, t_token **tokens, t_global *global,
 		t_expander_helper *h)
@@ -50,31 +52,6 @@ void	expand_tilde(t_token **current, t_global *global)
 		(*current)->be_value = (*current)->value;
 		(*current)->value = expanded_word;
 	}
-}
-
-void	expand_variables_1_util(char *tmp, char *remind, char *remind2)
-{
-	if (tmp)
-		free(tmp);
-	if (remind)
-		free(remind);
-	if (remind2)
-		free(remind2);
-}
-
-void	expand_variables_1_util_1(t_token **current, char **tmp3)
-{
-	*tmp3 = NULL;
-	if ((*current)->be_value)
-	{
-		*tmp3 = ft_strjoin((*current)->be_value, (*current)->value);
-		free((*current)->be_value);
-		free((*current)->value);
-	}
-	if (tmp3)
-		(*current)->be_value = *tmp3;
-	else
-		(*current)->be_value = (*current)->value;
 }
 
 void	expand_variables_1(t_token **current, t_global *global, int i)
@@ -115,7 +92,6 @@ void	expand_variables_2(t_token **current, t_global *global, int i)
 				ft_strlen((*current)->value)), global);
 	if (tmp)
 	{
-		// free((*current)->value);
 		(*current)->be_value = (*current)->value;
 		(*current)->value = ft_strjoin(remind, tmp);
 		free(tmp);
