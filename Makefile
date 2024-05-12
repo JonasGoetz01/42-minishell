@@ -1,7 +1,7 @@
 NAME	:=	minishell
 
 CC		:=	cc
-CFLAGS	?=  -Wextra -Wall -Werror -g -fsanitize=address -O1
+CFLAGS	?=  -Wextra -Wall -Werror
 DEBUG ?=  0
 CFLAGS += -DDEBUG=$(DEBUG)
 LDFLAGS	:=	-lreadline -lft
@@ -15,8 +15,7 @@ VPATH	:=	src \
 			src/utils \
 			src/exec \
 			src/env \
-			inc \
-			tests/unit
+			inc
 
 INC		:=	colors.h \
 			minishell.h
@@ -91,15 +90,6 @@ SOURCES	:=	main.c \
 OBJDIR	:=	obj
 OBJECTS	:=	$(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
 
-TESTSSRC	:=	$(TESTDIR)/test.c \
-				$(TESTDIR)/helpers.c
-
-TESTDIR := test/unit
-TESTS	:=	$(addprefix $(OBJDIR), $(TESTSSRC:.c=.o))
-
-TESTOBJECTS := $(filter-out $(OBJDIR)/main.o, $(OBJECTS))
-TESTNAME := test
-
 all: $(NAME)
 
 $(NAME): $(OBJECTS) $(INC)
@@ -117,35 +107,8 @@ fclean: clean
 
 re: fclean all
 
-test: no-debug
-	valgrind --leak-check=full ./$(NAME)
-
-tester: no-debug
-	cd 42_minishell_tester-master && bash tester.sh m
-
-leaks: no-debug
-	cd 42_minishell_tester-master && bash tester.sh vm
-
-bonus: no-debug
-	cd 42_minishell_tester-master && bash tester.sh b
-
-bonus-leaks: no-debug
-	cd 42_minishell_tester-master && bash tester.sh b
-
-unit: $(TESTS) $(TESTOBJECTS) $(INC)
-	make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(TESTOBJECTS) $(TESTS) $(LDFLAGS) -o $(TESTNAME) -L $(LIBFT)
-	./$(TESTNAME)
-
-$(TESTDIR)/%.o: %.c $(INC)
-	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
 $(OBJDIR)/%.o: %.c $(INC)
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
-
-no-debug:
-	make CFLAGS="-Wextra -Wall -Werror -DDEBUG=0" re
 
 .PHONY: all clean fclean re
