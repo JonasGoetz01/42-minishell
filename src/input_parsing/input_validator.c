@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:40:35 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 15:24:34 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/12 10:46:24 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ bool			pipe_after_pipe(t_token *current);
 bool			redirect_has_no_file(t_token *current);
 bool			no_file_for_indirect(t_token *current);
 bool			ft_no_lim_heredoc(t_token *current);
+bool			operator_has_no_right_side(t_token *current);
+bool			empty_bracket(t_token *current);
+bool			open_bracket_after_closing(t_token *current);
+bool			check_invalids(t_token **tokens, t_token **prev,
+					t_token **current);
 
 t_token_type	get_next_type(t_token *token)
 {
@@ -97,11 +102,7 @@ int	input_validation(t_token **tokens)
 	initialize_vars(&quote, &dquote, &parenthesis);
 	while (current)
 	{
-		if (first_is_pipe_second_operator(&prev, &current, tokens)
-			|| pipe_after_pipe(current) || ((current == *tokens)
-				&& (get_next_type(current) == TOKEN_PIPE))
-			|| redirect_has_no_file(current) || no_file_for_indirect(current)
-			|| ft_no_lim_heredoc(current))
+		if (check_invalids(tokens, &prev, &current))
 			return (ft_print_error("syntax error", NULL), 1);
 		handle_parenthesis_and_brackets(&current, &parenthesis, &quote,
 			&dquote);
