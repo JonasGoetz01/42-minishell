@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec_tokens_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:23:24 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:50:21 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/12 11:13:24 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	ft_parseon_fds(t_ast_node *node, t_token_type type,
-			t_exec_flags *exec_flags);
+void				ft_parseon_fds(t_ast_node *node, t_token_type type,
+						t_exec_flags *exec_flags);
 
 static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
 		t_ast_node *ast, t_global *global)
@@ -27,7 +27,7 @@ static t_process	*ft_exec_cmd(t_token *token, t_ast_node *node,
 	process = ft_create_process(cmd, args, node, ast);
 	if (process == NULL)
 		return (NULL);
-	if (ft_is_debug(global))
+	if (ft_is_debug())
 		printf("executing %s: in %d out %d\n", process->cmd,
 			ft_get_fd(process->fd_in[PIPE_READ]),
 			ft_get_fd(process->fd_out[PIPE_WRITE]));

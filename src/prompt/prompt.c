@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:39:45 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 17:00:04 by pgrossma         ###   ########.fr       */
+/*   Updated: 2024/05/12 10:54:28 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	ft_set_current_pwd(t_global *global)
 {
-	char		*cwd;
+	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
@@ -33,19 +33,19 @@ void	process_input(char *input, t_global *global)
 	tokens = NULL;
 	ft_set_current_pwd(global);
 	tokenize(input, &tokens, 0);
-	print_tokens(tokens, global);
+	print_tokens(tokens);
 	ft_expand_tokens(tokens, global);
-	print_tokens(tokens, global);
+	print_tokens(tokens);
 	retokenize(&tokens);
-	print_tokens(tokens, global);
+	print_tokens(tokens);
 	rearrange_tokens(&tokens);
-	print_tokens(tokens, global);
+	print_tokens(tokens);
 	if (input_validation(&tokens))
 		return (global->exit_status = 2, free_tokens(tokens), (void)0);
 	gen_ast(&ast, tokens);
 	print_ast(&ast, 0, global);
 	ft_org_tokens_for_exec(ast);
-	if (ft_is_debug(global))
+	if (ft_is_debug())
 		printf("-----\n");
 	print_ast(&ast, 0, global);
 	ft_exec_all(ast, global);

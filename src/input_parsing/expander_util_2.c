@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_util_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:04:53 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/12 10:40:24 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		ft_strlen_til_space(char *str);
 void	single_word_no_quotes(t_token **current, t_global *global);
 void	single_char_with_quotes(t_token **current, t_token **tokens);
 void	single_char_no_next(t_token **current, t_global *global);
-void	expand_variables_1_util(char *tmp, char *remind, char *remind2);
+void	expand_variables_1_util(char **tmp, char **remind, char **remind2);
 void	expand_variables_1_util_1(t_token **current, char **tmp3);
 
 void	single_char(t_token **current, t_token **tokens, t_global *global,
@@ -43,10 +43,13 @@ void	expand_tilde(t_token **current, t_global *global)
 {
 	char	*expanded_word;
 	char	*sub;
+	char	*home;
 
 	sub = ft_substr((*current)->value, 1, ft_strlen((*current)->value));
-	expanded_word = ft_strjoin(ft_get_env("HOME", global->envv), sub);
+	home = ft_get_env("HOME", global->envv);
+	expanded_word = ft_strjoin(home, sub);
 	free(sub);
+	free(home);
 	if (expanded_word)
 	{
 		(*current)->be_value = (*current)->value;
@@ -79,7 +82,7 @@ void	expand_variables_1(t_token **current, t_global *global, int i)
 		free(tmp);
 		tmp = NULL;
 	}
-	expand_variables_1_util(tmp, remind, remind2);
+	expand_variables_1_util(&tmp, &remind, &remind2);
 }
 
 void	expand_variables_2(t_token **current, t_global *global, int i)
