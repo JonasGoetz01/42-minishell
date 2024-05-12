@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_util_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pgrossma <pgrossma@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 10:34:07 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/12 09:35:46 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/12 10:40:24 by pgrossma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,13 @@ void	expand_tilde(t_token **current, t_global *global)
 {
 	char	*expanded_word;
 	char	*sub;
+	char	*home;
 
 	sub = ft_substr((*current)->value, 1, ft_strlen((*current)->value));
-	expanded_word = ft_strjoin(ft_get_env("HOME", global->envv), sub);
+	home = ft_get_env("HOME", global->envv);
+	expanded_word = ft_strjoin(home, sub);
 	free(sub);
+	free(home);
 	if (expanded_word)
 	{
 		(*current)->be_value = (*current)->value;
