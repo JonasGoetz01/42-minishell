@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:24:22 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:24:23 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/12 10:52:12 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	ft_print_error(const char *msg, const char *arg)
 	ft_putstr_fd("\n", 2);
 }
 
-bool	ft_is_debug(t_global *global)
+bool	ft_is_debug(void)
 {
-	return (DEBUG || (ft_get_env("DEBUG", global->envv) && ft_get_env("DEBUG",
-				global->envv)[0] == '1'));
+	return (DEBUG);
 }

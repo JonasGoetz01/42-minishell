@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:23:17 by vscode            #+#    #+#             */
-/*   Updated: 2024/05/11 16:23:18 by vscode           ###   ########.fr       */
+/*   Updated: 2024/05/12 10:53:08 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	ft_wait_for_processes(t_ast_node *node, t_global *global)
 	ft_wait_for_processes(node->right, global);
 	if (node->process)
 	{
-		if (ft_is_debug(global))
+		if (ft_is_debug())
 			printf("waiting for %s...\n", node->process->cmd);
 		if ((node->process->type == PROCESS_FORK
 				|| node->process->type == PROCESS_BUILDIN_FORK)
